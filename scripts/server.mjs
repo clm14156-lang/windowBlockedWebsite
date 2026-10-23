@@ -1,0 +1,44 @@
+import http from 'node:http';
+import { readFile, stat } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { resolvePage } from '../src/routes.js';
+import { renderDocument } from './document.mjs';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const portIndex = process.argv.indexOf('--port');
+const port = Number(process.env.PORT || (portIndex >= 0 ? process.argv[portIndex + 1] : 5173));
+const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.json': 'application/json; charset=utf-8' };
+export function createPreviewServer() {
+  return http.createServer(async (req, res) => {
+  try {
+    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+    const page = resolvePage(pathname);
+    if (page) {
+      if (pathname !== '/' && pathname !== page.path && pathname !== '/index.html') {
+        res.writeHead(301, { Location: page.path }).end(); return;
+      }
+      const template = await readFile(path.join(root, 'index.html'), 'utf8');
+      const html = renderDocument(template, page);
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
+      res.end(req.method === 'HEAD' ? undefined : html); return;
+    }
+    const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+    const target = path.resolve(root, relative);
+    const inside = path.relative(root, target);
+    if (inside.startsWith('..') || path.isAbsolute(inside) || inside.split(path.sep).some(p => p.startsWith('.'))) {
+      res.writeHead(403).end('Forbidden'); return;
+    }
+    if (!(await stat(target)).isFile()) throw new Error('Not found');
+    const data = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] || 'application/octet-stream', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
+    res.end(req.method === 'HEAD' ? undefined : data);
+  } catch {
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('页面不存在');
+  }
+  });
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  createPreviewServer().listen(port, '127.0.0.1', () => console.log(`专注官网 Local: http://127.0.0.1:${port}`));
+}

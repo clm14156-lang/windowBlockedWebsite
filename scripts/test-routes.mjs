@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { createPreviewServer } from './server.mjs';
+import { pages } from '../src/routes.js';
+
+const server = createPreviewServer();
+server.listen(0, '127.0.0.1');
+await once(server, 'listening');
+const base = `http://127.0.0.1:${server.address().port}`;
+try {
+  for (const page of pages) {
+    const response = await fetch(base + page.path);
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get('content-type'), /text\/html/);
+    const html = await response.text();
+    assert(html.includes(`<title>${page.title}</title>`));
+    assert(html.includes(`class="page-${page.id}`));
+    for (const alias of [page.path.slice(0, -1), `${page.path}index.html`]) {
+      const redirect = await fetch(base + alias, { redirect: 'manual' });
+      assert.equal(redirect.status, 301);
+      assert.equal(redirect.headers.get('location'), page.path);
+      await redirect.text();
+    }
+    const head = await fetch(base + page.path, { method: 'HEAD' });
+    assert.equal(head.status, 200);
+    assert.equal(await head.text(), '');
+  }
+  const home = await fetch(base + '/');
+  assert.equal(home.status, 200);
+  assert((await home.text()).includes('class="page-features"'));
+  for (const [pathname, status] of [['/missing/', 404], ['/missing.js', 404], ['/.git/config', 403]]) {
+    const response = await fetch(base + pathname);
+    assert.equal(response.status, status, pathname);
+    await response.text();
+  }
+  for (const pathname of ['/styles.css', '/src/app.js', '/src/routes.js', '/assets/favicon.svg']) {
+    const response = await fetch(base + pathname);
+    assert.equal(response.status, 200, pathname);
+    assert((await response.text()).length > 0);
+  }
+  console.log('Passed: direct HTTP access to all pages, canonical redirects, refresh/HEAD requests, home alias, assets, 404s and hidden-file protection.');
+} finally {
+  server.closeAllConnections();
+  await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+}

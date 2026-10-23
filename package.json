@@ -1,0 +1,15 @@
+{
+  "name": "focus-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "专注 · Windows 专注工具产品官网",
+  "scripts": {
+    "dev": "node scripts/server.mjs",
+    "start": "node scripts/server.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node scripts/check.mjs && node scripts/test-floating.mjs && node scripts/test-routes.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
