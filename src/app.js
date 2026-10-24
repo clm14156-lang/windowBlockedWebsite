@@ -2,6 +2,10 @@ import { renderSite } from './components.js';
 import { icon, brand } from './icons.js';
 import { initFloatingDemo } from './floating-demo.js';
 import { resolvePage } from './routes.js';
+import { settingSteps } from './setting-steps.js';
+import { initSettingDemo } from './setting-demo.js';
+import { initStatisticsCarousel } from './statistics-carousel.js';
+import { heroDuration, initHeroTimer } from './hero-timer.js';
 
 const page = resolvePage(location.pathname);
 if (!page) throw new Error('页面不存在');
@@ -20,10 +24,12 @@ const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': 
 const formatTime = seconds => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 const demoDuration = 30 * 60;
 const state = {
-  selectedPlan: 'pro', heroTime: 293, heroRunning: true,
+  selectedPlan: 'pro', heroTime: heroDuration, heroRunning: true,
   demoTime: demoDuration, demoRunning: false, demoTab: 'timer',
   tasks: [false, false, false, false],
+  blockingTime: 4 * 60 + 36,
 };
+const heroTimer = initHeroTimer($('.hero-focus'), state, icon);
 let toastTimeout;
 function toast(message) {
   clearTimeout(toastTimeout);
@@ -138,9 +144,7 @@ document.addEventListener('click', event => {
   }
   else if (target.matches('[data-demo-reset]')) { state.demoRunning = false; state.demoTime = demoDuration; $('[data-demo-clock]').textContent = formatTime(state.demoTime); $('[data-demo-run]').innerHTML = `${icon('play')}开始专注`; }
   else if (target.matches('[data-hero-toggle]')) {
-    state.heroRunning = !state.heroRunning;
-    if (state.heroTime <= 0) state.heroTime = 293;
-    target.innerHTML = `${icon(state.heroRunning ? 'stop' : 'play', state.heroRunning ? 'focus-stop-icon' : '')}<span>${state.heroRunning ? '结束专注' : '开始专注'}</span>`;
+    heroTimer.toggle();
     toast(state.heroRunning ? '已开始专注计时演示' : '本次专注已结束，随时可以重新开始');
   }
   else if (target.matches('[data-chart-period]')) updateChart(target.dataset.chartPeriod);
@@ -204,10 +208,12 @@ window.addEventListener('resize', () => { if (innerWidth > 700) { $('#mobile-nav
 // All clocks are lightweight frontend demos, paused while the document is hidden.
 setInterval(() => {
   if (document.hidden) return;
-  if ($('[data-hero-time]') && state.heroRunning && state.heroTime > 0) {
-    state.heroTime--; $('[data-hero-time]').textContent = formatTime(state.heroTime);
-    if (state.heroTime === 0) { state.heroRunning = false; $('[data-hero-toggle]').innerHTML = `${icon('play')}<span>重新开始</span>`; }
+  const blockingClock = $('[data-blocking-time]');
+  if (blockingClock && state.blockingTime > 0) {
+    const bounds = blockingClock.getBoundingClientRect();
+    if (bounds.bottom > 0 && bounds.top < innerHeight) blockingClock.textContent = formatTime(--state.blockingTime);
   }
+  heroTimer?.tick();
   if (dialog.open && dialogKind === 'demo' && state.demoRunning && state.demoTime > 0) {
     state.demoTime--;
     if ($('[data-demo-clock]')) $('[data-demo-clock]').textContent = formatTime(state.demoTime);
@@ -216,3 +222,5 @@ setInterval(() => {
 }, 1000);
 
 if ($('#floating')) initFloatingDemo($('#floating'));
+if ($('[data-setting-track]')) initSettingDemo($('#features'), settingSteps);
+if ($('#statistics')) initStatisticsCarousel($('#statistics'));

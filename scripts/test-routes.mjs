@@ -33,12 +33,19 @@ try {
     assert.equal(response.status, status, pathname);
     await response.text();
   }
+  for (const retired of ['blocking', 'goals']) {
+    for (const pathname of [`/${retired}`, `/${retired}/`, `/${retired}/index.html`]) {
+      const response = await fetch(base + pathname, { redirect: 'manual' });
+      assert.equal(response.status, 404, `Removed standalone page: ${pathname}`);
+      await response.text();
+    }
+  }
   for (const pathname of ['/styles.css', '/src/app.js', '/src/routes.js', '/assets/favicon.svg']) {
     const response = await fetch(base + pathname);
     assert.equal(response.status, 200, pathname);
     assert((await response.text()).length > 0);
   }
-  console.log('Passed: direct HTTP access to all pages, canonical redirects, refresh/HEAD requests, home alias, assets, 404s and hidden-file protection.');
+  console.log('Passed: four retained pages, removed blocking/goals routes return 404, canonical redirects, refresh/HEAD requests, home alias, assets and hidden-file protection.');
 } finally {
   server.closeAllConnections();
   await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));

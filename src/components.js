@@ -1,24 +1,31 @@
 import { icon, brand } from './icons.js';
 import { plans, faqs } from './data.js';
 import { pages } from './routes.js';
+import { settingSteps } from './setting-steps.js';
+import { statisticsSlides } from './statistics-slides.js';
+import { blockingPreview } from './blocking-preview.js';
+import { goalsPreview } from './goals-preview.js';
+import { impactSection } from './impact-section.js';
+import { heroDuration } from './hero-timer.js';
 
 const controls = (maximizable = true) => `<span class="window-controls" aria-hidden="true"><i>−</i>${maximizable ? '<i>□</i>' : ''}<i>×</i></span>`;
 const sidebar = (active = 'shield') => `<aside class="app-sidebar" aria-label="软件界面装饰"><img src="/assets/favicon.svg" alt="" width="25" height="25"/><div>${['home', 'shield', 'clock', 'settings'].map(i => `<span class="${i === active ? 'active' : ''}">${icon(i)}</span>`).join('')}</div><span class="avatar"></span></aside>`;
 const windowShell = (className, title, content, active) => `<div class="app-window ${className}">${sidebar(active)}<div class="app-content"><div class="app-title"><strong>${title}</strong>${controls()}</div>${content}</div></div>`;
 
 function focusWindow(floating = false) {
-  return `<div class="focus-window${floating ? ' floating-focus' : ''}"${floating ? ' id="floating-focus" role="group" aria-label="完整的专注窗口" aria-describedby="floating-hint"' : ''}>
-    <div class="focus-scene" aria-hidden="true"><img src="/assets/focus_scene01.png" alt="" width="1672" height="941" draggable="false"/></div>
+  const heroLabel = `${String(Math.floor(heroDuration / 60)).padStart(2, '0')}:${String(heroDuration % 60).padStart(2, '0')}`;
+  return `<div class="focus-window${floating ? ' floating-focus' : ' hero-focus'}"${floating ? ' id="floating-focus" role="group" aria-label="完整的专注窗口" aria-describedby="floating-hint"' : ' role="group" aria-label="专注计时演示窗口"'}>
+    <div class="focus-scene" aria-hidden="true"><img src="/assets/${floating ? 'focus_scene01.png' : 'focus02.png'}" alt="" width="${floating ? 1672 : 1536}" height="${floating ? 941 : 1024}" draggable="false"/></div>
     <div class="focus-topbar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>${controls(false)}</div>
-    <div class="night-greeting"><span class="moon" aria-hidden="true"></span><div><h3>夜深了</h3><p>一天快结束了，给今天一个好收尾。</p></div></div>
-    <div class="focus-time" ${floating ? 'data-floating-time' : 'data-hero-time'}>${floating ? '14:47' : '04:53'}</div>
+    <div class="night-greeting"><span class="${floating ? 'moon' : 'day-sun'}" aria-hidden="true">${floating ? '' : icon('sun')}</span><div><h3>${floating ? '夜深了' : '下午好'}</h3><p>一天快结束了，给今天一个好收尾。</p></div></div>
+    <div class="focus-time" ${floating ? 'data-floating-time' : 'data-hero-time'}>${floating ? '14:47' : heroLabel}</div>
     <p class="focus-task">${icon('language')}<span>学习英语</span></p>
     <div class="focus-toolbar">
-      ${floating ? `<div class="focus-toolbar-item">${icon('stop', 'focus-stop-icon')}<span>结束专注</span></div>` : `<button data-hero-toggle>${icon('stop', 'focus-stop-icon')}<span>结束专注</span></button>`}
+      ${floating ? `<div class="focus-toolbar-item">${icon('stop', 'focus-stop-icon')}<span>结束专注</span></div>` : `<button data-hero-toggle aria-pressed="true">${icon('stop', 'focus-stop-icon')}<span>结束专注</span></button>`}
       <span class="focus-toolbar-divider" aria-hidden="true"></span>
       ${floating ? `<div class="focus-toolbar-item">${icon('list')}<span>查看任务 (4)</span></div>` : `<button data-demo="tasks">${icon('list')}<span>查看任务 (4)</span></button>`}
     </div>
-    ${floating ? '' : '<button class="mini-timer hero-mini" data-demo aria-label="体验悬浮专注计时器"><span class="timer-ring"></span><span>03:53</span></button>'}
+    ${floating ? '' : `<button class="mini-timer hero-mini" data-demo aria-label="体验悬浮专注计时器，剩余 ${heroLabel}"><span class="timer-ring" aria-hidden="true"></span><span data-hero-time>${heroLabel}</span></button>`}
   </div>`;
 }
 
@@ -42,6 +49,10 @@ export function hero() {
     <div class="hero-copy">
       <h1 id="hero-title">让专注，自然发生。</h1>
       <p>一款 Windows 专注软件，自动屏蔽分心的网站与应用，<br class="desktop-break"/>帮你减少打断，把时间留给重要的事情。</p>
+      <div class="hero-actions">
+        <button type="button" class="button hero-start" data-demo aria-haspopup="dialog">开始使用${icon('chevron')}</button>
+        <a class="button hero-download" href="/download/">${icon('windows')}<span>立即下载</span>${icon('arrow', 'hero-download-arrow')}</a>
+      </div>
     </div>
     <div class="hero-stage">
       ${focusWindow()}
@@ -51,10 +62,20 @@ export function hero() {
 }
 
 export function setup() {
-  return `<section class="section feature-section setup-section" id="features" aria-labelledby="setup-title"><div class="section-inner setup-layout"><div class="feature-copy reveal"><h2 id="setup-title">两步设置，<br/>立即开始<span class="accent">专注。</span></h2><p class="lead">快速屏蔽分心的网站与应用，让你更专注高效。</p><ol class="setup-steps"><li><span class="step-number">01</span><span class="feature-icon">${icon('plus')}</span><div><h3>添加网站与应用</h3><p>将容易分心的内容加入屏蔽列表</p></div></li><li><span class="step-number">02</span><span class="feature-icon">${icon('play')}</span><div><h3>一键开始专注</h3><p>选择专注时长，点击即可开始</p></div></li></ol><div class="setup-assurance">${icon('shield')}<div><h3>自动屏蔽干扰，无需额外操作</h3><p>专注期间自动拦截已添加的网站与应用</p></div></div></div><div class="setup-showcase" aria-label="软件设置界面展示">
-      <figure class="setup-shot setup-shot-blocklist"><img src="/assets/app-blocklist.webp" alt="访问控制软件界面截图" width="1200" height="1065" loading="lazy" draggable="false"/></figure>
-      <figure class="setup-shot setup-shot-start"><img src="/assets/app-start.webp" alt="开始专注软件界面截图" width="1200" height="1065" loading="lazy" draggable="false"/></figure>
-    </div></div></section>`;
+  return `<section class="section setup-section setting-section" id="features" aria-labelledby="setup-title" data-setting-step="1">
+    <div class="setting-scroll-track" data-setting-track><div class="setting-sticky"><div class="section-inner setting-inner">
+      <header class="setting-heading"><span class="setting-eyebrow">设置流程</span><h2 id="setup-title">三步设置，开始专注。</h2><p>从添加网站到开始专注，设置只需三步。</p></header>
+      <div class="setting-grid">
+        <ol class="setting-steps" aria-label="设置步骤">${settingSteps.map((step, index) => `<li class="setting-step${index === 0 ? ' is-active' : ''}" data-setting-item="${index}"${index === 0 ? ' aria-current="step"' : ''}><span class="setting-step-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><div><h3 id="setting-step-${step.id}">${step.title}</h3><p aria-hidden="${index !== 0}">${step.description}</p></div></li>`).join('')}</ol>
+        <div class="setting-display" role="group" aria-label="设置流程界面展示" aria-describedby="setting-scroll-hint">
+          <div class="setting-window-bar" aria-hidden="true"><span class="setting-window-dots"><i></i><i></i><i></i></span><span data-setting-window-title>${settingSteps[0].windowTitle}</span><span data-setting-counter>01 / 03</span></div>
+          <div class="setting-screen">${settingSteps.map((step, index) => `<figure class="setting-panel${index === 0 ? ' is-active' : ''}" data-setting-panel="${index}" aria-hidden="${index !== 0}" aria-labelledby="setting-step-${step.id}"><img src="${step.image}" alt="${step.alt}" width="${step.width}" height="${step.height}" loading="eager" decoding="async" fetchpriority="low" draggable="false"/></figure>`).join('')}</div>
+        </div>
+      </div>
+      <div class="setting-footer"><p>专注期间，自动拦截已添加的网站与应用。</p><p class="setting-scroll-prompt" id="setting-scroll-hint"><span>随滚动逐步了解</span><span class="setting-progress-track" aria-hidden="true"><i></i></span></p></div>
+      <span class="visually-hidden" data-setting-status role="status" aria-live="polite">第 1 步，共 3 步：添加网站。将容易分心的网站加入屏蔽列表。</span>
+    </div></div></div>
+  </section>`;
 }
 
 export function floating() {
@@ -88,7 +109,23 @@ function goalsWindow() {
 }
 
 export function statistics() {
-  return `<section class="section feature-section statistics-section" id="statistics" aria-labelledby="statistics-title"><div class="section-inner statistics-layout"><div class="feature-copy reveal"><span class="eyebrow">专注统计</span><h2 id="statistics-title">时间花在哪里，<br/><span class="accent">一目了然。</span></h2><p class="lead">自动汇总专注时长、投入趋势与目标记录，<br class="desktop-break"/>清楚知道时间投入了多少，又花在了哪里。</p><div class="stat-features">${[['chart', '投入趋势', '掌握专注变化'], ['calendar', '日历记录', '回顾每天的专注'], ['target', '目标统计', '清晰追踪进度']].map(([i, t, p]) => `<div><span class="feature-icon">${icon(i)}</span><h3>${t}</h3><p>${p}</p></div>`).join('')}</div></div><div class="statistics-showcase reveal">${calendarWindow()}${goalsWindow()}${chartWindow()}<span class="interaction-hint">切换周 / 月 / 年，查看不同周期的投入趋势</span></div></div></section>`;
+  const windows = [chartWindow(), calendarWindow(), goalsWindow()];
+  return `<section class="section feature-section statistics-section" id="statistics" aria-label="专注功能展示" aria-roledescription="轮播图"><div class="section-inner statistics-layout">
+    <div class="feature-copy reveal">
+      <div class="statistics-copy-panels">${statisticsSlides.map((slide, i) => `<div class="statistics-copy-panel${i === 0 ? ' is-active' : ''}" data-stat-copy="${i}" aria-hidden="${i !== 0}"${i !== 0 ? ' inert' : ''}><span class="eyebrow">${slide.label}</span><h2 id="statistics-title${i ? `-${slide.id}` : ''}">${slide.title}<br/><span class="accent">${slide.accent}</span></h2><p class="lead">${slide.description.join('<br class="desktop-break"/>')}</p></div>`).join('')}</div>
+      <div class="stat-features" role="group" aria-label="选择展示功能" data-stat-selector-group>${statisticsSlides.map((slide, i) => `<button type="button" class="stat-feature" data-stat-select="${i}" aria-pressed="${i === 0}" aria-controls="statistics-stage"><span class="feature-icon">${icon(slide.icon)}</span><span class="stat-feature-text"><strong>${slide.label}</strong><small>${slide.summary}</small></span></button>`).join('')}</div>
+    </div>
+    <div class="statistics-showcase reveal">
+      <div class="statistics-stage" id="statistics-stage">${statisticsSlides.map((slide, i) => `<div class="statistics-slide" data-stat-slide="${i}" data-position="${i === 0 ? 'current' : i === 1 ? 'next' : 'previous'}" role="group" aria-roledescription="幻灯片" aria-label="${i + 1} / 3：${slide.label}" aria-hidden="${i !== 0}"${i !== 0 ? ' inert' : ''}>${windows[i]}</div>`).join('')}</div>
+      <div class="statistics-navigation" role="group" aria-label="轮播控制">
+        <button type="button" class="statistics-arrow statistics-previous" data-stat-direction="-1" aria-label="上一页" aria-controls="statistics-stage">${icon('chevron')}</button>
+        <div class="statistics-dots" role="group" aria-label="选择轮播页面" data-stat-selector-group>${statisticsSlides.map((slide, i) => `<button type="button" class="statistics-dot" data-stat-select="${i}" aria-pressed="${i === 0}" aria-label="第 ${i + 1} 页：${slide.label}" aria-controls="statistics-stage"><span></span></button>`).join('')}</div>
+        <button type="button" class="statistics-arrow statistics-next" data-stat-direction="1" aria-label="下一页" aria-controls="statistics-stage">${icon('chevron')}</button>
+        <button type="button" class="statistics-rotation" data-stat-rotation aria-label="暂停自动轮播" aria-pressed="true">${icon('pause', 'rotation-pause')}${icon('play', 'rotation-play')}</button>
+      </div>
+    </div>
+    <span class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-stat-status>第 1 页，共 3 页：专注统计</span>
+  </div></section>`;
 }
 
 export function pricing() {
@@ -99,16 +136,15 @@ export function faq() {
   return `<section class="section faq-section" id="faq" aria-labelledby="faq-title"><div class="faq-inner"><div class="faq-heading reveal"><h1 class="section-heading" id="faq-title">常见问题</h1><p>关于安装、使用与数据保存，你可能想知道的事情。</p></div><div class="faq-grid">${faqs.map(([title, body], i) => `<details class="faq-item reveal" open style="--reveal-delay:${i % 2 * 70}ms"><summary><span>${title}</span><span class="faq-toggle">${icon('plus')}</span></summary><div class="faq-answer"><p>${body}</p></div></details>`).join('')}</div></div></section>`;
 }
 
-export function downloadPage() {
-  return `<section class="section closing-section download-section" id="download" aria-labelledby="closing-title">
-    <div class="closing-copy reveal"><h1 id="closing-title">愿你拥有，不被打扰的时光</h1><p>把纷扰留在外面，把这一刻留给自己。</p><a class="button button-moonlight" href="#download-details">${icon('windows')}<span>下载 Windows 版</span>${icon('arrow')}</a></div>
-    <div class="download-panel reveal" id="download-details" aria-labelledby="download-title">
-      <h2 id="download-title">为专注，留一点空间。</h2><p class="dialog-description">让每一刻投入，都回到你真正想做的事情上。</p>
-      <div class="dialog-info">${icon('windows')}<div><strong>专注 · Windows 版</strong><small>适用于 Windows 10 / 11 · 64 位</small></div></div>
-      <p class="dialog-note">当前为产品官网前端演示，暂未接入 Windows 安装包。你可以先体验专注计时与任务清单。</p>
-      <button class="button button-light dialog-full" data-demo>${icon('play')}体验功能演示</button><a class="dialog-subtle" href="/features/">了解如何开始 ${icon('arrow')}</a>
-    </div><span class="meteor-note">看，有一颗流星为你而来。</span>
+export function closing() {
+  return `<section class="section closing-section" id="closing" aria-labelledby="closing-title">
+    <div class="closing-copy reveal"><h2 id="closing-title">愿你拥有，不被打扰的时光</h2><p>把纷扰留在外面，把这一刻留给自己。</p><a class="button button-moonlight" href="/download/">${icon('windows')}<span>下载 Windows 版</span>${icon('arrow')}</a></div>
+    <span class="meteor-note">看，有一颗流星为你而来。</span>
   </section>`;
+}
+
+export function downloadPage() {
+  return `<section class="section download-placeholder-section" id="download" aria-labelledby="download-title"><h1 class="visually-hidden" id="download-title">下载软件</h1><img class="download-placeholder-image" src="/assets/download-placeholder.svg" alt="下载页面占位，敬请期待" width="960" height="540"/></section>`;
 }
 
 export function footer() {
@@ -121,11 +157,11 @@ export function overlays() {
 
 export function renderSite(page = 'features') {
   const content = {
-    features: () => hero() + setup() + floating() + statistics(),
+    features: () => hero() + setup() + blockingPreview() + floating() + goalsPreview() + statistics() + impactSection() + closing(),
     download: downloadPage,
     membership: pricing,
     help: faq,
   }[page];
   if (!content) throw new Error(`Unknown page: ${page}`);
-  return `${header(page)}<main id="main" class="page-${page}${['membership', 'help'].includes(page) ? ' standalone-page' : ''}">${content()}</main>${footer()}${overlays()}`;
+  return `${header(page)}<main id="main" class="page-${page}${['download', 'membership', 'help'].includes(page) ? ' standalone-page' : ''}">${content()}</main>${footer()}${overlays()}`;
 }

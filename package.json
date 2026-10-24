@@ -9,7 +9,7 @@
     "start": "node scripts/server.mjs",
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node scripts/check.mjs && node scripts/test-floating.mjs && node scripts/test-routes.mjs"
+    "test": "node scripts/check.mjs && node scripts/test-setting.mjs && node scripts/test-floating.mjs && node scripts/test-hero-timer.mjs && node scripts/test-routes.mjs"
   },
   "engines": { "node": ">=18" }
 }
