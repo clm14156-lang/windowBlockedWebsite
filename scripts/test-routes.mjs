@@ -40,12 +40,16 @@ try {
       await response.text();
     }
   }
-  for (const pathname of ['/styles.css', '/src/app.js', '/src/routes.js', '/assets/favicon.svg']) {
+  const missing = await fetch(base+'/missing/');
+  assert.match(missing.headers.get('content-type'),/text\/html/);
+  const missingHtml = await missing.text();
+  assert(missingHtml.includes('回到首页')&&missingHtml.includes('noindex,follow'));
+  for (const pathname of ['/styles.css', '/styles/product.css', '/src/app.js', '/src/routes.js', '/src/product-tabs.js', '/assets/favicon.svg', '/assets/focus02.webp']) {
     const response = await fetch(base + pathname);
     assert.equal(response.status, 200, pathname);
     assert((await response.text()).length > 0);
   }
-  console.log('Passed: four retained pages, removed blocking/goals routes return 404, canonical redirects, refresh/HEAD requests, home alias, assets and hidden-file protection.');
+  console.log('Passed: four pages, native route aliases, HEAD/refresh, branded 404, metadata, optimized assets and hidden-file protection.');
 } finally {
   server.closeAllConnections();
   await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));

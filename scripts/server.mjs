@@ -2,7 +2,7 @@ import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolvePage } from '../src/routes.js';
+import { resolvePage, notFoundPage } from '../src/routes.js';
 import { renderDocument } from './document.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -34,7 +34,12 @@ export function createPreviewServer() {
     res.writeHead(200, { 'Content-Type': types[path.extname(target)] || 'application/octet-stream', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
     res.end(req.method === 'HEAD' ? undefined : data);
   } catch {
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('页面不存在');
+    const pathname = new URL(req.url, 'http://localhost').pathname;
+    if (!path.extname(pathname) || pathname.endsWith('/index.html') || pathname === '/404.html') {
+      const template = await readFile(path.join(root,'index.html'),'utf8');
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
+      res.end(req.method === 'HEAD' ? undefined : renderDocument(template,notFoundPage));
+    } else res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('资源不存在');
   }
   });
 }

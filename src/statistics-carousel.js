@@ -12,7 +12,7 @@ export function initStatisticsCarousel(root) {
   let inView = false;
   let hovered = false;
   let focused = root.contains(document.activeElement);
-  let playing = !motion.matches;
+  let playing = false;
 
   function schedule() {
     window.clearTimeout(timer);
@@ -65,7 +65,7 @@ export function initStatisticsCarousel(root) {
   root.addEventListener('focusin', () => { focused = true; schedule(); });
   root.addEventListener('focusout', event => { focused = root.contains(event.relatedTarget); schedule(); });
   document.addEventListener('visibilitychange', schedule);
-  motion.addEventListener('change', () => { playing = !motion.matches; updateRotation(); });
+  motion.addEventListener('change', () => { if (motion.matches) playing = false; updateRotation(); });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
       inView = entries[0].intersectionRatio >= .25;

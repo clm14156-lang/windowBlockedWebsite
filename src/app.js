@@ -1,23 +1,18 @@
 import { renderSite } from './components.js';
 import { icon, brand } from './icons.js';
 import { initFloatingDemo } from './floating-demo.js';
-import { resolvePage } from './routes.js';
-import { settingSteps } from './setting-steps.js';
-import { initSettingDemo } from './setting-demo.js';
+import { resolvePage, notFoundPage } from './routes.js';
+import { initProductTabs } from './product-tabs.js';
 import { initStatisticsCarousel } from './statistics-carousel.js';
 import { heroDuration, initHeroTimer } from './hero-timer.js';
+import { publicUrl, siteConfig } from './site-config.js';
 
-const page = resolvePage(location.pathname);
-if (!page) throw new Error('页面不存在');
+const page = resolvePage(location.pathname) || notFoundPage;
 const app = document.querySelector('#app');
 if (!app.childElementCount) app.innerHTML = renderSite(page.id);
 document.title = page.title;
 document.querySelector('meta[name="description"]').content = page.description;
-history.scrollRestoration = 'manual';
-// Also reset cached documents when using the browser's Back / Forward buttons.
-window.addEventListener('pageshow', () => {
-  window.scrollTo({ top: 0, behavior: 'instant' });
-});
+history.scrollRestoration = 'auto';
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
@@ -65,11 +60,12 @@ function selectPlan(plan, announce = true) {
   state.selectedPlan = plan;
   $$('[data-plan-card]').forEach(card => card.classList.toggle('selected', card.dataset.planCard === plan));
   $$('[data-plan]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.plan === plan)));
-  if (announce) toast(`已选择${plan === 'pro' ? '专业版 · ¥68 / 年' : '免费版 · 永久免费'}`);
+  if (announce) toast(`正在查看${plan === 'pro' ? '专业版' : '免费版'}方案`);
 }
 function showUpgrade() {
   selectPlan('pro', false);
-  openDialog('upgrade', `<div class="dialog-brand">${brand()}</div><h2 id="dialog-title">更完整的专注体验。</h2><p class="dialog-description">专业版，为长期专注的你而准备。</p><div class="dialog-summary"><div><b>专业版 · 年度方案</b><p>约 ¥5.6 / 月 · 支持多设备使用</p></div><strong>¥68<small> / 年</small></strong></div><ul class="dialog-feature-list">${['免费版的全部功能', '目标管理、进度追踪与详细统计', '更多个性化设置与专属技术支持'].map(t => `<li>${icon('check')}${t}</li>`).join('')}</ul><p class="dialog-note">当前为前端方案选择演示，确认后会保留本次选择，不会创建订单或产生扣费。</p><button class="button button-orange dialog-full" data-confirm-plan>确认选择专业版${icon('arrow')}</button>`);
+  const checkout = publicUrl(siteConfig.checkoutUrl);
+  openDialog('upgrade', `<span class="demo-label">专业版方案</span><h2 id="dialog-title">为长期投入，准备完整工具。</h2><p class="dialog-description">从目标计划到专注回顾，保持清楚的节奏。</p><div class="dialog-summary"><div><b>专业版 · 年度方案</b><p>当前为价格与权益示意</p></div><strong>¥68<small> / 年</small></strong></div><ul class="dialog-feature-list">${['免费版的全部功能', '目标与任务管理、进度追踪', '详细统计、日历与历史记录'].map(t => `<li>${icon('check')}${t}</li>`).join('')}</ul><p class="dialog-note">${checkout ? '下单前请在购买页面确认正式价格、授权范围与服务条款。' : '购买入口暂未开放，此处不会创建订单或产生扣费。'}</p>${checkout ? `<a class="button button-orange dialog-full" href="${escapeHTML(checkout)}" rel="noopener">前往购买${icon('arrow')}</a>` : `<button class="button button-orange dialog-full" data-demo>先体验核心功能${icon('arrow')}</button>`}`);
 }
 
 function renderDemoPanel() {
@@ -130,7 +126,6 @@ document.addEventListener('click', event => {
   else if (target.matches('[data-dialog-close]')) closeDialog();
   else if (target.matches('[data-upgrade]')) showUpgrade();
   else if (target.matches('[data-plan]')) selectPlan(target.dataset.plan);
-  else if (target.matches('[data-confirm-plan]')) { closeDialog(); toast('已选择专业版 · 当前为演示，未产生订单或扣费'); }
   else if (target.matches('[data-demo-tab]')) {
     state.demoTab = target.dataset.demoTab;
     $$('[data-demo-tab]').forEach(b => { const active = b.dataset.demoTab === state.demoTab; b.classList.toggle('active', active); b.setAttribute('aria-selected', String(active)); });
@@ -153,7 +148,7 @@ document.addEventListener('click', event => {
     target.setAttribute('aria-expanded', String(open)); target.setAttribute('aria-label', open ? '关闭导航' : '打开导航'); target.innerHTML = icon(open ? 'close' : 'menu'); $('#mobile-nav').hidden = !open;
   }
   else if (target.matches('.back-top')) window.scrollTo({ top: 0, behavior: 'smooth' });
-  else if (target.matches('[data-privacy]')) openDialog('privacy', `<div class="dialog-brand">${brand()}</div><h2 id="dialog-title">你的专注，只属于你。</h2><p class="dialog-description">当前官网为纯前端展示，不要求注册，不收集账户或支付信息。</p><ul class="dialog-feature-list"><li>${icon('shield')}交互演示数据仅保存在当前页面内存中。</li><li>${icon('lock')}刷新页面即可重置计时与任务。</li><li>${icon('globe')}未接入第三方统计、广告或追踪脚本。</li></ul><p class="dialog-note">正式软件的隐私政策、授权和退款说明，可在接入真实下载与支付服务时替换。</p>`);
+  else if (target.matches('[data-privacy]')) openDialog('privacy', `<span class="demo-label">本网站隐私说明</span><h2 id="dialog-title">体验之后，不留下多余的信息。</h2><p class="dialog-description">本说明适用于专注时光官网的浏览和交互演示。</p><ul class="dialog-feature-list"><li>${icon('shield')}演示计时、任务勾选和方案选择保存在当前页面内存中。</li><li>${icon('refresh')}刷新页面后，演示状态会重置。</li><li>${icon('globe')}网站未接入第三方广告、分析脚本、注册或支付表单。</li></ul><p class="dialog-note">网站托管服务可能保留正常访问日志。正式软件及未来购买服务的数据处理规则，应以届时提供的独立说明为准。</p>`);
   if (target.matches('a[href^="#"], .trial-button') || target.closest('#mobile-nav')) {
     if (target.closest('#mobile-nav') && dialog.open) lastFocused = $('.mobile-menu');
     $('#mobile-nav').hidden = true; $('.mobile-menu').setAttribute('aria-expanded', 'false'); $('.mobile-menu').setAttribute('aria-label', '打开导航'); $('.mobile-menu').innerHTML = icon('menu');
@@ -182,19 +177,12 @@ document.addEventListener('submit', event => {
 // Arrow key support for the demo tabs.
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && !$('#mobile-nav').hidden) { $('#mobile-nav').hidden = true; $('.mobile-menu').setAttribute('aria-expanded', 'false'); $('.mobile-menu').innerHTML = icon('menu'); $('.mobile-menu').focus(); }
-  if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || !event.target.matches('[role="tab"]')) return;
+  if (event.defaultPrevented || !['ArrowLeft', 'ArrowRight'].includes(event.key) || !event.target.matches('[data-demo-tab]')) return;
   const tabs = $$('[role="tab"]', event.target.closest('[role="tablist"]'));
   const next = tabs[(tabs.indexOf(event.target) + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
   event.preventDefault(); next.focus(); next.click();
 });
 
-if ('IntersectionObserver' in window) {
-  const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (entry.isIntersecting) { entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target); }
-  }), { threshold: .08 });
-  $$('.reveal').forEach(el => revealObserver.observe(el));
-  document.documentElement.classList.add('js-ready');
-}
 let scrollQueued = false;
 function updateScroll() {
   $('#site-header').classList.toggle('scrolled', scrollY > 24);
@@ -222,5 +210,6 @@ setInterval(() => {
 }, 1000);
 
 if ($('#floating')) initFloatingDemo($('#floating'));
-if ($('[data-setting-track]')) initSettingDemo($('#features'), settingSteps);
+initProductTabs($('#features'), '[data-setting-tab]', '[data-setting-panel]');
+initProductTabs($('#goals'), '[data-goal-tab]', '[data-goal-panel]');
 if ($('#statistics')) initStatisticsCarousel($('#statistics'));

@@ -34,4 +34,4 @@ const paths = {
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/>',
 };
 export const icon = (name, className = '') => `<svg class="icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.globe}</svg>`;
-export const brand = (small = false) => `<span class="brand${small ? ' brand-small' : ''}"><img src="/assets/shiguang-logo.png" width="128" height="128" alt=""/><span>专注</span></span>`;
+export const brand = (small = false) => `<span class="brand${small ? ' brand-small' : ''}"><img src="/assets/shiguang-logo.png" width="128" height="128" alt=""/><span>专注时光</span></span>`;
