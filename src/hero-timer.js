@@ -1,11 +1,13 @@
 export const heroDuration = 293;
 
-// One state drives both clock displays and the remaining-time ring.
+// One state drives the visible clock and any optional compact preview.
 export function initHeroTimer(root, state, icon) {
   if (!root) return null;
   const clocks = [...root.querySelectorAll('[data-hero-time]')];
   const control = root.querySelector('[data-hero-toggle]');
   const preview = root.querySelector('.hero-mini');
+  const stopLabel = control.dataset?.heroStopLabel || '结束专注';
+  const startLabel = control.dataset?.heroStartLabel || '开始专注';
 
   function render() {
     const label = `${String(Math.floor(state.heroTime / 60)).padStart(2, '0')}:${String(state.heroTime % 60).padStart(2, '0')}`;
@@ -13,8 +15,8 @@ export function initHeroTimer(root, state, icon) {
     root.style.setProperty('--hero-progress', `${Math.max(0, Math.min(1, state.heroTime / heroDuration)) * 100}%`);
     root.dataset.running = String(state.heroRunning);
     control.setAttribute('aria-pressed', String(state.heroRunning));
-    control.innerHTML = `${icon(state.heroRunning ? 'stop' : 'play', state.heroRunning ? 'focus-stop-icon' : '')}<span>${state.heroRunning ? '结束专注' : state.heroTime === 0 ? '重新开始' : '开始专注'}</span>`;
-    preview.setAttribute('aria-label', `体验悬浮专注计时器，剩余 ${label}${state.heroRunning ? '' : '，已停止'}`);
+    control.innerHTML = `${icon(state.heroRunning ? 'stop' : 'play', state.heroRunning ? 'focus-stop-icon' : '')}<span>${state.heroRunning ? stopLabel : state.heroTime === 0 ? '重新开始' : startLabel}</span>`;
+    preview?.setAttribute('aria-label', `体验悬浮专注计时器，剩余 ${label}${state.heroRunning ? '' : '，已停止'}`);
   }
 
   render();

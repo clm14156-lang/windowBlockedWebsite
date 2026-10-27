@@ -2,20 +2,40 @@ import { icon, brand } from './icons.js';
 import { plans, faqs } from './data.js';
 import { pages } from './routes.js';
 import { publicUrl, siteConfig } from './site-config.js';
+import { heroThemes } from './hero-theme.js';
 
 const primaryActions = () => `<div class="hero-actions"><button type="button" class="button button-orange hero-start" data-demo aria-haspopup="dialog">开始使用${icon('chevron')}</button><a class="button button-secondary hero-download" href="/download/">${icon('windows')}<span>立即下载</span>${icon('arrow', 'hero-download-arrow')}</a></div>`;
 
 export function header(page = 'features') {
   const nav = pages.map(item => `<a class="nav-item${item.id === page ? ' active' : ''}" href="${item.path}" data-nav="${item.id}"${item.id === page ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
-  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-demo aria-haspopup="dialog">在线体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
+  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-demo aria-haspopup="dialog">领取免费体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
 }
 
 export function heroShell(window) {
-  return `<section class="section hero-section" id="home" aria-labelledby="hero-title"><div class="hero-copy"><span class="hero-eyebrow">${icon('windows')}为 Windows 而设计</span><h1 id="hero-title">让专注，<span>自然发生。</span></h1><p>屏蔽分心的网站与应用，把目标拆成每天的行动。<br class="desktop-break"/>少一点打扰，把时间留给真正重要的事。</p>${primaryActions()}<span class="hero-meta">网站与应用屏蔽<span>·</span>目标与任务<span>·</span>专注记录</span></div><div class="hero-stage">${window}<div class="product-caption"><span>软件界面预览</span><span>试试计时与任务交互${icon('arrow')}</span></div></div><div class="feature-index" aria-label="浏览产品功能">${[['shield','屏蔽干扰','blocking'],['clock','轻巧悬浮','floating'],['target','目标与任务','goals'],['chart','记录投入','statistics']].map(([name,label,id]) => `<a href="#${id}">${icon(name)}<span>${label}</span>${icon('chevron')}</a>`).join('')}</div></section>`;
+  return `<section class="section hero-section" id="home" aria-labelledby="hero-title"><div class="hero-copy"><h1 id="hero-title">让专注，<span>自然发生。</span></h1><p>屏蔽分心的网站与应用，把目标拆成每天的行动。<br class="desktop-break"/>少一点打扰，把时间留给真正重要的事。</p>${primaryActions()}</div>
+    <div class="hero-scroll-track" data-hero-scroll-track><div class="hero-stage" data-hero-scroll-stage>
+      <div class="hero-product-viewport" data-hero-presentation data-presentation-state="home">
+        <div class="hero-product-plane">
+          <div class="hero-start-view" data-hero-start-view><img src="/assets/product/image1.png" alt="专注时光软件首页：开始专注、专注时长选择及当前屏蔽的网站与应用" width="867" height="756" fetchpriority="high" decoding="async" draggable="false"/></div>
+          <div class="hero-countdown-view" data-hero-focus-view aria-hidden="true" inert>${window}</div>
+        </div>
+      </div>
+      <div class="hero-focus-controls" data-hero-focus-controls aria-hidden="true" inert><div class="hero-theme-switch" role="group" aria-label="软件演示的白天与夜晚模式">${heroThemes.map((theme,i) => `<button type="button" data-hero-mode="${theme.id}" aria-pressed="${i === 0}" aria-controls="hero-focus-window">${icon(i === 0 ? 'sun' : 'moon')}<span>${theme.label}</span></button>`).join('')}</div><span class="visually-hidden" role="status" aria-live="polite" data-hero-theme-status></span><div class="product-caption"><span>软件界面预览</span><span>试试计时与任务交互${icon('arrow')}</span></div></div>
+      <span class="visually-hidden" role="status" aria-live="polite" data-hero-presentation-status>软件首页预览，向下滚动显示专注倒计时。</span>
+    </div></div>
+    <div class="feature-index" aria-label="浏览产品功能">${[['shield','屏蔽干扰','blocking'],['clock','轻巧悬浮','floating'],['target','目标与任务','goals'],['chart','记录投入','statistics']].map(([name,label,id]) => `<a href="#${id}">${icon(name)}<span>${label}</span>${icon('chevron')}</a>`).join('')}</div></section>`;
 }
 
 export function closing() {
-  return `<section class="section closing-section" id="closing" aria-labelledby="closing-title"><div class="closing-inner"><div><span class="section-kicker">把这一刻，留给自己</span><h2 id="closing-title">愿你拥有，不被打扰的时光。</h2><p>从下一段专注开始，让重要的事慢慢发生。</p></div>${primaryActions()}</div></section>`;
+  const download = publicUrl(siteConfig.downloadUrl) || '/download/';
+  return `<section class="section closing-section" id="closing" aria-labelledby="closing-title">
+    <picture class="closing-landscape" aria-hidden="true"><source srcset="/assets/last_page.webp" type="image/webp"/><img src="/assets/last_page.png" alt="" width="1672" height="941" loading="lazy" decoding="async" draggable="false"/></picture>
+    <div class="closing-inner">
+      <h2 id="closing-title"><span class="closing-title-intro">愿你拥有，</span><span class="closing-title-ending"><span>不被打扰</span>的时光。</span></h2>
+      <p>把纷扰留在外面，把这一刻留给自己。</p>
+      <a class="button button-orange closing-download" href="${download}"${download.startsWith('https:') ? ' rel="noopener"' : ''} data-closing-download>${icon('windows')}<span>下载 Windows 版</span>${icon('arrow')}</a>
+    </div>
+  </section>`;
 }
 
 export function pricing() {

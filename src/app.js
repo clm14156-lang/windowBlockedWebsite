@@ -3,8 +3,12 @@ import { icon, brand } from './icons.js';
 import { initFloatingDemo } from './floating-demo.js';
 import { resolvePage, notFoundPage } from './routes.js';
 import { initProductTabs } from './product-tabs.js';
+import { initSetupCarousel } from './setup-carousel.js';
 import { initStatisticsCarousel } from './statistics-carousel.js';
 import { heroDuration, initHeroTimer } from './hero-timer.js';
+import { initHeroTheme } from './hero-theme.js';
+import { initHeroPresentation } from './hero-presentation.js';
+import { focusCharacters } from './focus-characters.js';
 import { publicUrl, siteConfig } from './site-config.js';
 
 const page = resolvePage(location.pathname) || notFoundPage;
@@ -22,7 +26,6 @@ const state = {
   selectedPlan: 'pro', heroTime: heroDuration, heroRunning: true,
   demoTime: demoDuration, demoRunning: false, demoTab: 'timer',
   tasks: [false, false, false, false],
-  blockingTime: 4 * 60 + 36,
 };
 const heroTimer = initHeroTimer($('.hero-focus'), state, icon);
 let toastTimeout;
@@ -185,22 +188,22 @@ document.addEventListener('keydown', event => {
 
 let scrollQueued = false;
 function updateScroll() {
-  $('#site-header').classList.toggle('scrolled', scrollY > 24);
+  const header = $('#site-header');
+  header.classList.toggle('scrolled', scrollY > 0);
+  const impact = $('#impact');
+  const impactBounds = impact?.getBoundingClientRect();
+  const marker = Math.min(innerHeight * .35, 280);
+  header.classList.toggle('impact-view', Boolean(impactBounds && impactBounds.top <= marker && impactBounds.bottom > marker));
   $('.back-top').hidden = scrollY < 650;
   scrollQueued = false;
 }
 window.addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(updateScroll); } }, { passive: true });
 updateScroll();
-window.addEventListener('resize', () => { if (innerWidth > 700) { $('#mobile-nav').hidden = true; $('.mobile-menu').setAttribute('aria-expanded', 'false'); $('.mobile-menu').setAttribute('aria-label', '打开导航'); $('.mobile-menu').innerHTML = icon('menu'); } });
+window.addEventListener('resize', () => { if (innerWidth > 700) { $('#mobile-nav').hidden = true; $('.mobile-menu').setAttribute('aria-expanded', 'false'); $('.mobile-menu').setAttribute('aria-label', '打开导航'); $('.mobile-menu').innerHTML = icon('menu'); } updateScroll(); });
 
 // All clocks are lightweight frontend demos, paused while the document is hidden.
 setInterval(() => {
   if (document.hidden) return;
-  const blockingClock = $('[data-blocking-time]');
-  if (blockingClock && state.blockingTime > 0) {
-    const bounds = blockingClock.getBoundingClientRect();
-    if (bounds.bottom > 0 && bounds.top < innerHeight) blockingClock.textContent = formatTime(--state.blockingTime);
-  }
   heroTimer?.tick();
   if (dialog.open && dialogKind === 'demo' && state.demoRunning && state.demoTime > 0) {
     state.demoTime--;
@@ -210,6 +213,9 @@ setInterval(() => {
 }, 1000);
 
 if ($('#floating')) initFloatingDemo($('#floating'));
-initProductTabs($('#features'), '[data-setting-tab]', '[data-setting-panel]');
+initSetupCarousel($('#features'));
 initProductTabs($('#goals'), '[data-goal-tab]', '[data-goal-panel]');
+initHeroTheme($('#home'));
+initHeroPresentation($('#home'));
+initHeroTheme($('#personalization'), { characters: focusCharacters });
 if ($('#statistics')) initStatisticsCarousel($('#statistics'));

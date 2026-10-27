@@ -1,37 +1,37 @@
 import { icon } from './icons.js';
 
-const trafficLights = '<span class="blocking-traffic-lights" aria-hidden="true"><i></i><i></i><i></i></span>';
-const siteIcon = (className = '') => `<svg class="blocking-site-icon ${className}" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m13 5 4 6m10-6-4 6"/><rect x="7" y="12" width="26" height="22" rx="6"/><path d="M14 20v5m12-5v5M16 30h8"/></svg>`;
-const browserToolbar = () => `<div class="blocking-browser-toolbar" aria-hidden="true"><span class="blocking-browser-back">${icon('arrow')}</span><span class="blocking-browser-forward">${icon('arrow')}</span>${icon('refresh')}<div class="blocking-address">${icon('lock')}<span>bilibili.com</span><span class="blocking-bookmark">☆</span></div><span class="blocking-browser-menu">⋮</span></div>`;
+const normalBrowser = () => `<img class="blocking-normal-image" src="/assets/product/哔哩哔哩动漫首页浏览器界面.png" alt="哔哩哔哩正常访问的浏览器界面，包含地址栏、网站导航、动漫横幅和视频列表" width="1448" height="1086" loading="lazy" decoding="async" draggable="false"/>`;
+const benefits = [
+  { icon: 'shield', color: 'orange', title: '自动拦截', description: '访问已屏蔽的网站时自动触发，不需要手动操作。' },
+  { icon: 'clock', color: 'blue', title: '专注不中断', description: '清楚展示拦截提示与剩余专注时间，保持专注状态。' },
+  { icon: 'grid', color: 'purple', title: '支持多网站和应用', description: '可自定义屏蔽的网站与应用，打造适合自己的专注环境。' },
+];
 
 export function blockingPreview() {
   return `<section class="section blocking-section" id="blocking" aria-labelledby="blocking-title">
     <div class="section-inner blocking-inner">
-      <header class="section-copy blocking-heading">
-        <span class="section-kicker">网站与应用屏蔽</span>
-        <h2 id="blocking-title">给分心的念头，<br/>留一道边界。</h2>
-        <p>先选好需要暂时放下的网站与应用。专注期间，让容易分心的入口停在专属提示页。</p>
-        <ul class="feature-checklist"><li>${icon('check')}按自己的需要管理屏蔽清单</li><li>${icon('check')}访问受限网站时显示专注提示</li><li>${icon('check')}保留当前专注状态与剩余时间</li></ul>
+      <header class="section-heading-block blocking-heading">
+        <span class="section-kicker">WEBSITE BLOCKING</span>
+        <h2 id="blocking-title">分心的网站，<span>到此为止。</span></h2>
+        <p>访问已屏蔽的网站时，自动显示专注提示页，让注意力回到手头的事情。</p>
       </header>
-      <div class="blocking-composition" role="group" aria-label="访问被屏蔽网站后，浏览器显示专属提示页">
-        <div class="blocking-request"><span>${icon('globe')}bilibili.com</span><span>${icon('shield')}已在屏蔽清单中</span></div>
-        <div class="blocking-browser blocking-browser-result" role="group" aria-label="步骤 2：bilibili.com 已被屏蔽，显示专注提示与倒计时">
-          <div class="blocking-browser-tabs" aria-hidden="true">${trafficLights}<span class="blocking-browser-tab">${icon('shield')}<span></span><span>×</span></span><span class="blocking-new-tab">+</span></div>
-          ${browserToolbar()}
-          <div class="blocking-scene">
-            <picture><source srcset="/assets/blocked_background.webp" type="image/webp"/><img class="blocking-landscape" src="/assets/blocked_background.png" alt="" width="1666" height="944" loading="lazy" decoding="async" draggable="false"/></picture>
-            <div class="blocking-notice">
-              <span class="blocking-product-brand"><img src="/assets/shiguang-logo.png" alt="" width="128" height="128"/><span>专注时光</span></span>
-              <h3>此网站<span>已被屏蔽</span></h3>
-              <p>为了减少干扰，专注时光已在专注期间限制访问此网站。</p>
-              <div class="blocking-site-details">
-                <div class="blocking-site-row"><span class="blocking-site-mark">${siteIcon()}</span><div class="blocking-site-domain"><strong>bilibili.com</strong><span>www.bilibili.com</span></div><span class="blocking-status"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m5 5 10 10"/></svg>已屏蔽</span></div>
-                <div class="blocking-countdown">${icon('clock')}<span>距离专注结束</span><strong data-blocking-time>04:36</strong></div>
-              </div>
-            </div>
+      <div class="blocking-comparison" role="group" aria-label="访问分心网站后自动拦截的前后对比">
+        <figure class="blocking-comparison-item blocking-before">
+          <div class="blocking-preview-frame blocking-normal-surface">${normalBrowser()}</div>
+          <figcaption class="visually-hidden">拦截前：访问分心网站 bilibili.com。</figcaption>
+        </figure>
+        <div class="blocking-flow" aria-hidden="true">
+          <span class="blocking-flow-label">自动拦截</span>
+          <svg class="blocking-flow-arrow" viewBox="0 0 120 80" fill="none"><path d="M5 10C20 35 42 44 81 43L80 29L114 51L83 76V60C43 58 18 44 5 10Z" fill="currentColor" stroke="white" stroke-width="3" stroke-linejoin="round"/></svg>
+        </div>
+        <figure class="blocking-comparison-item blocking-after">
+          <div class="blocking-preview-frame blocking-blocked-surface">
+            <img class="blocking-blocked-image" src="/assets/blocked01.png" alt="此网站已被屏蔽：bilibili.com 显示浅色专注提示页，男孩与企鹅坐在草地上，本次专注仍在继续" width="1607" height="979" loading="lazy" decoding="async" draggable="false"/>
           </div>
-        </div><p class="section-footnote">访问受限网站时，显示专注时光的提示页。</p>
+          <figcaption class="visually-hidden">自动拦截后：bilibili.com 显示专属提示页与剩余专注时间。</figcaption>
+        </figure>
       </div>
+      <ul class="impact-benefits blocking-benefits">${benefits.map(benefit => `<li class="impact-benefit"><span class="impact-icon blocking-benefit-icon ${benefit.color}">${icon(benefit.icon)}</span><div><h3>${benefit.title}</h3><p>${benefit.description}</p></div></li>`).join('')}</ul>
     </div>
   </section>`;
 }

@@ -14,6 +14,7 @@ const paths = {
   home: '<path d="m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9"/>',
   settings: '<path d="m9 3-1 3-3 1-2 4 2 2-1 3 3 3 3-1 2 3 4-1 1-3 3-1 1-4-2-2 1-3-3-3-3 1-2-2z"/><circle cx="12" cy="12" r="3"/>',
   globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 7h14M5 17h14"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
   list: '<path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   minus: '<path d="M5 12h14"/>',
@@ -32,6 +33,12 @@ const paths = {
   dumbbell: '<path d="M8 12h8M2 10v4m20-4v4M5 6v12m3-9v6m8-6v6m3-9v12M2 12h3m14 0h3"/>',
   briefcase: '<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/>',
+  moon: '<path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z" fill="currentColor" stroke="none"/>',
+  palette: '<path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1-4c-1-1 0-3 2-3h2a3 3 0 0 0 3-3c0-5-4-8-9-8Z"/><circle cx="7" cy="10" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/>',
+  person: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',
+  sliders: '<path d="M3 6h8m6 0h4M3 12h3m6 0h9M3 18h11m6 0h1"/><circle cx="14" cy="6" r="3"/><circle cx="9" cy="12" r="3"/><circle cx="17" cy="18" r="3"/>',
+  heart: '<path d="M20 5c-2-2-6-2-8 1C10 3 6 3 4 5c-4 5 1 10 8 15 7-5 12-10 8-15Z" fill="currentColor" stroke="none"/>',
+  sprout: '<path d="M12 21V13M12 13C5 13 3 9 3 4c6 0 9 3 9 9Zm0 0c7 0 9-4 9-9-6 0-9 3-9 9Z"/>',
 };
 export const icon = (name, className = '') => `<svg class="icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.globe}</svg>`;
 export const brand = (small = false) => `<span class="brand${small ? ' brand-small' : ''}"><img src="/assets/shiguang-logo.png" width="128" height="128" alt=""/><span>专注时光</span></span>`;

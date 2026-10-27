@@ -8,7 +8,7 @@ import { publicUrl, siteConfig } from '../src/site-config.js';
 
 const root = new URL('../', import.meta.url);
 const template = await readFile(new URL('index.html',root),'utf8');
-const expected = {features:['home','features','blocking','floating','goals','statistics','impact','closing'],download:['download'],membership:['pricing'],help:['faq']};
+const expected = {features:['home','features','blocking','floating','goals','statistics','impact','personalization','closing'],download:['download'],membership:['pricing'],help:['faq']};
 const assets = new Set(['assets/favicon.svg']);
 const mains = {};
 assert.deepEqual(pages.map(page=>page.id),['features','download','membership','help']);
@@ -56,8 +56,10 @@ for(const [tab,panel] of [['data-setting-tab','data-setting-panel'],['data-goal-
 assert.equal((mains.features.match(/data-stat-slide="/g)||[]).length,3);
 assert(mains.features.includes('data-stat-direction="-1"')&&mains.features.includes('data-stat-direction="1"'));
 assert(mains.features.includes('data-floating-desktop')&&mains.features.includes('data-floating-timer'));
-assert(mains.features.includes('已被屏蔽')&&mains.features.includes('data-blocking-time'));
-assert(mains.features.includes('goals-create-window')&&mains.features.includes('goals-manager-window')&&mains.features.includes('goals-quick-task'));
+assert(mains.features.includes('已被屏蔽')&&mains.features.includes('/assets/blocked01.png'));
+assert(!/data-blocking-(?:mode|trigger|result|time)/.test(mains.features));
+for (const asset of ['00a.png','00b.png','00c.png']) assert(mains.features.includes(`/assets/product/${asset}`));
+assert(mains.features.includes('goals-overview')&&mains.features.includes('goals-floating')&&mains.features.includes('goals-quick'));
 assert(!mains.features.includes('goals-connectors')&&!mains.features.includes('meteor-note'));
 if(!siteConfig.downloadUrl)assert(mains.download.includes('下载准备中')&&mains.download.includes('disabled')&&mains.download.includes('data-demo'));
 assert(!mains.download.includes('download-placeholder.svg'));

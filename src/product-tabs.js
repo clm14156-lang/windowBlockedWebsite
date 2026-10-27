@@ -1,5 +1,5 @@
-// Native buttons, roving focus and one visible panel; no scroll interception.
-export function initProductTabs(root, tabSelector, panelSelector) {
+// Native buttons, roving focus and one accessible panel; no scroll interception.
+export function initProductTabs(root, tabSelector, panelSelector, { onSelect } = {}) {
   if (!root) return null;
   const tabs = [...root.querySelectorAll(tabSelector)];
   const panels = [...root.querySelectorAll(panelSelector)];
@@ -16,6 +16,7 @@ export function initProductTabs(root, tabSelector, panelSelector) {
       panels[i].setAttribute('aria-hidden', String(!active));
       panels[i].inert = !active;
     });
+    onSelect?.(current);
     if (focus) tabs[current].focus({ preventScroll: true });
   }
   root.addEventListener('click', event => {
