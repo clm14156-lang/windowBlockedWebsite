@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { initHeroTheme, heroThemes } from '../src/hero-theme.js';
-import { hero } from '../src/components.js';
+import { personalizationPreview, personalizationCharacters } from '../src/personalization-preview.js';
 
 const element = dataset => ({ dataset, attributes:{}, textContent:'', classList:{toggle(name,value){this[name]=value;}}, setAttribute(name,value){this.attributes[name]=value;}, focus(){this.focused=true;}, closest(){return this;} });
 const buttons=heroThemes.map(theme=>element({heroMode:theme.id}));
@@ -56,10 +56,10 @@ expectMode('day');
 assert.equal(await controller.select('invalid'),false);
 assert.equal(initHeroTheme(null),null);
 
-const html=hero();
+const html=personalizationPreview();
 assert(html.includes('data-hero-theme="day"'));
 assert.equal((html.match(/data-hero-scene=/g)||[]).length,2);
 assert.equal((html.match(/data-hero-mode=/g)||[]).length,2);
-for(const theme of heroThemes)assert(html.includes(theme.id==='day'?'/assets/focus03.png':theme.background)&&html.includes(theme.character));
-assert.equal((html.match(/data-hero-time/g)||[]).length,1,'Theme changes retain the main clock without recreating the removed floating preview');
-console.log('Passed: default day, paired artwork, decoded-image switching, selected/ARIA state, rapid-click cancellation, image failure fallback, keyboard/click control and shared clock markup.');
+for(const theme of heroThemes){assert(html.includes(theme.background));for(const role of personalizationCharacters)assert(html.includes(role.artwork[theme.id].src));}
+assert.equal((html.match(/class="focus-time"/g)||[]).length,1,'Theme changes retain the personalization clock');
+console.log('Passed: paired artwork, decoded-image switching, selected/ARIA state, rapid-click cancellation, image failure fallback, keyboard/click control and retained personalization preview.');

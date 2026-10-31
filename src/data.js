@@ -1,9 +1,9 @@
 // Preview plans. Replace prices and entitlements before enabling checkout.
 export const plans = [
-  { id: 'free', name: '免费版', intro: '从最重要的事开始，建立自己的专注节奏。', price: '0', note: '体验基础专注功能', button: '体验免费版', features: [
+  { id: 'free', name: '免费版', intro: '减少干扰，专心做好眼前的事。', price: '0', note: '体验基础专注功能', button: '体验免费版', features: [
     ['网站与应用屏蔽', true], ['专注计时与悬浮窗口', true], ['基础专注记录', true], ['目标与任务管理', false], ['详细投入统计', false],
   ] },
-  { id: 'pro', name: '专业版', intro: '从计划到回顾，为长期投入准备完整工具。', price: '68', note: '年度方案 · 价格示意', button: '了解专业版', features: [
+  { id: 'pro', name: '专业版', intro: '管理目标，让每一次专注都有迹可循。', price: '68', note: '年度方案 · 价格示意', button: '了解专业版', features: [
     ['免费版的全部功能', true], ['目标与任务管理', true], ['目标进度追踪', true], ['专注日历与历史记录', true], ['详细投入趋势与分布', true],
   ] },
 ];

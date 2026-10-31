@@ -2,28 +2,25 @@ import { icon, brand } from './icons.js';
 import { plans, faqs } from './data.js';
 import { pages } from './routes.js';
 import { publicUrl, siteConfig } from './site-config.js';
-import { heroThemes } from './hero-theme.js';
 
 const primaryActions = () => `<div class="hero-actions"><button type="button" class="button button-orange hero-start" data-demo aria-haspopup="dialog">开始使用${icon('chevron')}</button><a class="button button-secondary hero-download" href="/download/">${icon('windows')}<span>立即下载</span>${icon('arrow', 'hero-download-arrow')}</a></div>`;
 
 export function header(page = 'features') {
   const nav = pages.map(item => `<a class="nav-item${item.id === page ? ' active' : ''}" href="${item.path}" data-nav="${item.id}"${item.id === page ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
-  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-demo aria-haspopup="dialog">领取免费体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
+  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-demo aria-haspopup="dialog">免费体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
 }
 
-export function heroShell(window) {
-  return `<section class="section hero-section" id="home" aria-labelledby="hero-title"><div class="hero-copy"><h1 id="hero-title">让专注，<span>自然发生。</span></h1><p>屏蔽分心的网站与应用，把目标拆成每天的行动。<br class="desktop-break"/>少一点打扰，把时间留给真正重要的事。</p>${primaryActions()}</div>
-    <div class="hero-scroll-track" data-hero-scroll-track><div class="hero-stage" data-hero-scroll-stage>
-      <div class="hero-product-viewport" data-hero-presentation data-presentation-state="home">
-        <div class="hero-product-plane">
-          <div class="hero-start-view" data-hero-start-view><img src="/assets/product/image1.png" alt="专注时光软件首页：开始专注、专注时长选择及当前屏蔽的网站与应用" width="867" height="756" fetchpriority="high" decoding="async" draggable="false"/></div>
-          <div class="hero-countdown-view" data-hero-focus-view aria-hidden="true" inert>${window}</div>
-        </div>
+export function heroShell() {
+  const benefits = [['shield','屏蔽干扰','远离分心的网站和应用'],['clock','轻巧悬浮','随时查看专注进度'],['target','目标与任务','让计划更有方向'],['chart','记录投入','看见你的进步']];
+  return `<section class="section hero-section" id="home" aria-labelledby="hero-title"><div class="hero-content"><div class="hero-copy"><h1 id="hero-title">让专注，<span>自然发生。</span></h1><p>屏蔽分心的网站与应用，把目标拆成每天的行动。<br class="desktop-break"/>少一点打扰，把时间留给真正重要的事。</p></div>
+    <div class="hero-scroll-track" data-hero-scroll-track>${primaryActions()}
+      <div class="hero-stage" data-hero-stage><div class="hero-home-preview"><img data-hero-main src="/assets/product/image1.png" alt="专注时光软件首页：开始专注、专注时长选择及当前屏蔽的网站与应用" width="867" height="756" fetchpriority="high" decoding="async" draggable="false"/></div>
+        <img class="hero-floating-preview" data-hero-floating src="/assets/product/xuanfuyemian.png" alt="悬浮专注窗口：倒计时、当前目标和任务列表" width="1108" height="1420" loading="eager" decoding="async" draggable="false" aria-hidden="true"/>
+        <ul class="hero-benefits" data-hero-benefits aria-label="专注时光的四项功能" aria-hidden="true">${benefits.map(([name,label,description]) => `<li><span class="hero-benefit-icon ${name}">${icon(name)}</span><strong>${label}</strong><p>${description}</p></li>`).join('')}</ul>
       </div>
-      <div class="hero-focus-controls" data-hero-focus-controls aria-hidden="true" inert><div class="hero-theme-switch" role="group" aria-label="软件演示的白天与夜晚模式">${heroThemes.map((theme,i) => `<button type="button" data-hero-mode="${theme.id}" aria-pressed="${i === 0}" aria-controls="hero-focus-window">${icon(i === 0 ? 'sun' : 'moon')}<span>${theme.label}</span></button>`).join('')}</div><span class="visually-hidden" role="status" aria-live="polite" data-hero-theme-status></span><div class="product-caption"><span>软件界面预览</span><span>试试计时与任务交互${icon('arrow')}</span></div></div>
-      <span class="visually-hidden" role="status" aria-live="polite" data-hero-presentation-status>软件首页预览，向下滚动显示专注倒计时。</span>
-    </div></div>
-    <div class="feature-index" aria-label="浏览产品功能">${[['shield','屏蔽干扰','blocking'],['clock','轻巧悬浮','floating'],['target','目标与任务','goals'],['chart','记录投入','statistics']].map(([name,label,id]) => `<a href="#${id}">${icon(name)}<span>${label}</span>${icon('chevron')}</a>`).join('')}</div></section>`;
+    </div>
+    <span class="visually-hidden" role="status" aria-live="polite" data-hero-showcase-status></span>
+  </div></section>`;
 }
 
 export function closing() {
@@ -39,16 +36,70 @@ export function closing() {
 }
 
 export function pricing() {
-  return `<section class="section pricing-section" id="pricing" aria-labelledby="pricing-title"><div class="section-inner"><header class="page-heading"><span class="section-kicker">方案与价格</span><h1 id="pricing-title">选择适合你的专注方式。</h1><p>先体验核心功能，再决定是否需要更完整的工具。</p></header><div class="pricing-grid">${plans.map(plan => `<article class="price-card ${plan.id === 'pro' ? 'recommended selected' : ''}" data-plan-card="${plan.id}"><button class="plan-select" data-plan="${plan.id}" aria-pressed="${plan.id === 'pro'}"><span>${plan.name}</span>${plan.id === 'pro' ? '<span class="recommend-badge">完整体验</span>' : '<span class="selection-mark" aria-hidden="true"></span>'}</button><p class="plan-intro">${plan.intro}</p><p class="plan-price"><span>¥</span><strong>${plan.price}</strong><small>${plan.id === 'pro' ? '/ 年' : '/ 免费体验'}</small></p><p class="plan-note">${plan.note}</p><ul class="plan-features">${plan.features.map(([text,enabled]) => `<li class="${enabled ? '' : 'unavailable'}">${icon(enabled ? 'check' : 'close')}<span>${text}</span></li>`).join('')}</ul><button class="button ${plan.id === 'pro' ? 'button-orange' : 'button-secondary'} plan-action" ${plan.id === 'pro' ? 'data-upgrade' : 'data-demo'}>${plan.button}${icon('arrow')}</button></article>`).join('')}</div><p class="commercial-note">${publicUrl(siteConfig.checkoutUrl) ? '正式价格、授权范围与服务条款以购买页面为准。' : '当前为方案预览，价格与权益为展示信息，购买入口暂未开放。'}</p><div class="pricing-bottom"><span>还不确定选哪一种？</span><a href="/help/">先看看常见问题${icon('arrow')}</a></div></div></section>`;
+  const advantages = [
+    ['shield', '减少分心干扰', '自定义网站与应用屏蔽清单。'],
+    ['windows', 'Windows 桌面体验', '专注计时，搭配轻巧悬浮窗。'],
+    ['refresh', '清晰记录投入', '查看趋势、日历与目标进展。'],
+    ['heart', '清楚的使用帮助', '常见问题，随时查阅。'],
+  ];
+  return `<section class="section pricing-section" id="pricing" aria-labelledby="pricing-title">
+    <div class="section-inner membership-inner">
+      <header class="page-heading membership-heading"><h1 id="pricing-title">简单开始，<span>按需升级</span>。</h1><p>基础专注功能免费使用，需要更多能力时再选择专业版。</p></header>
+      <div class="pricing-grid">${plans.map(plan => `<article class="price-card ${plan.id === 'pro' ? 'recommended selected' : ''}" data-plan-card="${plan.id}" aria-labelledby="plan-title-${plan.id}">
+        <h2 class="plan-title" id="plan-title-${plan.id}"><button type="button" class="plan-select" data-plan="${plan.id}" aria-pressed="${plan.id === 'pro'}"><span>${plan.name}</span>${plan.id === 'pro' ? '<span class="recommend-badge">推荐</span>' : ''}</button></h2>
+        <p class="plan-intro">${plan.intro}</p>
+        <p class="plan-price"><span>¥</span><strong>${plan.price}</strong><small>${plan.id === 'pro' ? '/ 年' : '/ 免费体验'}</small></p><p class="plan-note">${plan.note}</p>
+        <button type="button" class="button ${plan.id === 'pro' ? 'button-orange' : 'button-secondary'} plan-action" ${plan.id === 'pro' ? 'data-upgrade' : 'data-demo'}>${icon('windows')}<span>${plan.button}</span>${icon('chevron')}</button>
+        <div class="plan-inclusions"><h3>包含以下功能</h3><ul class="plan-features">${plan.features.map(([text,enabled]) => `<li class="${enabled ? '' : 'unavailable'}"><span class="plan-feature-marker" aria-hidden="true">${icon(enabled ? 'check' : 'close')}</span>${enabled ? '' : '<span class="visually-hidden">不包含：</span>'}<span>${text}</span></li>`).join('')}</ul></div>
+      </article>`).join('')}</div>
+      <div class="membership-notes"><p class="commercial-note">${publicUrl(siteConfig.checkoutUrl) ? '正式价格、授权范围与服务条款以购买页面为准。' : '当前为方案预览，价格与权益为展示信息，购买入口暂未开放。'}</p><div class="pricing-bottom"><a href="/help/">先看看常见问题${icon('arrow')}</a></div></div>
+    </div>
+    <ul class="membership-benefits" aria-label="专注时光产品与使用帮助">${advantages.map(([name,title,description]) => `<li><span class="membership-benefit-icon ${name}">${icon(name)}</span><div><h3>${title}</h3><p>${description}</p></div></li>`).join('')}</ul>
+  </section>`;
 }
 
 export function faq() {
-  return `<section class="section faq-section" id="faq" aria-labelledby="faq-title"><div class="section-inner help-layout"><header class="page-heading help-heading"><span class="section-kicker">帮助中心</span><h1 id="faq-title">每一步，都清楚。</h1><p>关于开始专注、任务管理和网页体验，<br class="desktop-break"/>你可能想知道的事。</p><a class="text-link" href="/download/">前往下载页${icon('arrow')}</a></header><div class="faq-list">${faqs.map(([title,body],i) => `<details class="faq-item"${i === 0 ? ' open' : ''}><summary><span>${title}</span><span class="faq-toggle">${icon('plus')}</span></summary><div class="faq-answer"><p>${body}</p></div></details>`).join('')}</div></div></section>`;
+  const categories = [
+    { icon:'download', title:'下载与安装', description:['软件下载、开放状态','安装前的常见问题'], href:'/download/' },
+    { icon:'shield', title:'专注与屏蔽', description:['屏蔽设置、专注计时','与悬浮窗口说明'], question:2 },
+    { icon:'list', title:'目标与任务', description:['目标关联、查看任务','专注中的任务记录'], question:4 },
+    { icon:'chart', title:'数据与统计', description:['专注记录、趋势回顾','网页数据保存说明'], question:6 },
+  ];
+  return `<section class="section faq-section" id="faq" aria-labelledby="faq-title">
+    <div class="section-inner help-inner">
+      <div class="help-intro">
+        <header class="page-heading help-heading"><span class="section-kicker">帮助中心</span><h1 id="faq-title">使用专注时光时，<span>有疑问？</span></h1><p>这里提供专注时光的使用指南和常见问题，<br/>帮助你快速解决在下载安装、网站屏蔽、任务管理和数据统计中遇到的问题。</p></header>
+        <figure class="help-art" aria-hidden="true"><img src="/assets/helpbackground.png" alt="" width="1983" height="793" decoding="async" fetchpriority="high" draggable="false"/></figure>
+      </div>
+      <nav class="help-categories" aria-label="帮助分类">${categories.map(category => `<a class="help-category" href="${category.href || '#faq-question-'+category.question}"${category.question ? ` data-help-question="faq-question-${category.question}" aria-controls="faq-question-${category.question}"` : ''}><span class="help-category-icon">${icon(category.icon)}</span><span class="help-category-copy"><strong>${category.title}</strong><span>${category.description.join('<br/>')}</span></span>${icon('chevron','help-category-arrow')}</a>`).join('')}</nav>
+      <div class="faq-section-heading"><h2 id="faq-list-title">常见问题</h2><span>共 ${faqs.length} 个问题</span></div>
+      <div class="faq-list" aria-labelledby="faq-list-title">${faqs.map(([title,body],i) => `<details class="faq-item" id="faq-question-${i+1}"><summary><span>${title}</span><span class="faq-toggle">${icon('plus')}</span></summary><div class="faq-answer"><p>${body}</p></div></details>`).join('')}</div>
+    </div>
+  </section>`;
 }
 
 export function downloadShell(window) {
   const download = publicUrl(siteConfig.downloadUrl);
-  return `<section class="section download-section" id="download" aria-labelledby="download-title"><div class="section-inner"><div class="download-layout"><div class="download-copy"><span class="section-kicker">专注时光 · Windows 版</span><h1 id="download-title">把专注，<br/>带回你的桌面。</h1><p>让网站、应用、任务和时间各归其位。<br/>给每一段投入，一个清楚的开始。</p><div class="download-card"><div class="download-card-heading"><span class="download-platform">${icon('windows')}</span><div><strong>专注时光 for Windows</strong><span>${download && siteConfig.version ? `版本 ${siteConfig.version}` : '安装包即将开放'}</span></div></div>${download ? `<a class="button button-orange" href="${download}" rel="noopener">下载 Windows 版${icon('download')}</a>` : `<button class="button button-orange" disabled>下载准备中${icon('download')}</button>`}<button class="text-link" data-demo>先在线体验${icon('arrow')}</button><p class="download-note">${download ? '请通过本页提供的官方地址获取安装包。' : '当前为下载入口预览，暂不提供安装包。'}</p></div></div><div class="download-preview">${window}<p class="product-caption">软件界面预览 · 日间主题</p></div></div><div class="download-guide"><h2>安装之后，只需三步。</h2><ol><li><span>01</span><div><h3>添加屏蔽清单</h3><p>选择需要暂时放下的网站与应用。</p></div></li><li><span>02</span><div><h3>选好目标和时长</h3><p>把这一段时间，交给一件重要的事。</p></div></li><li><span>03</span><div><h3>进入专注状态</h3><p>用悬浮计时与任务记录保持节奏。</p></div></li></ol></div></div></section>`;
+  const features = [
+    ['shield', '网站与应用屏蔽', '远离干扰，保持专注'],
+    ['chart', '专注计时', '记录每一段投入的时间'],
+    ['check', '任务与统计', '管理任务，见证进步'],
+  ];
+  return `<section class="section download-section" id="download" aria-labelledby="download-title">
+    <div class="section-inner download-inner">
+      <div class="download-layout">
+        <div class="download-copy">
+          <span class="download-eyebrow">专注时光 for Windows</span>
+          <h1 id="download-title">让<span>专注</span>，<br/>自然发生。</h1>
+          <p class="download-summary">屏蔽干扰 · 规划任务 · 记录进步</p>
+          <div class="download-actions">${download ? `<a class="button button-orange download-primary" href="${download}" rel="noopener" aria-describedby="download-status">${icon('windows')}<span>下载 Windows 版</span>${icon('download')}</a>` : `<button type="button" class="button button-orange download-primary" disabled aria-describedby="download-status">${icon('windows')}<span>下载准备中</span>${icon('download')}</button>`}</div>
+          <p class="download-note" id="download-status">${download && siteConfig.version ? `版本 ${siteConfig.version} · ` : ''}${download ? '请通过本页提供的官方地址获取安装包。' : '当前为下载入口预览，暂不提供安装包。'}</p>
+        </div>
+        <figure class="download-preview">${window}<figcaption class="visually-hidden">专注时光白天软件界面预览</figcaption></figure>
+      </div>
+      <ul class="download-features" aria-label="三项核心功能">${features.map(([name,title,description]) => `<li><span class="download-feature-icon${name==='check'?' is-task':''}">${icon(name)}</span><div><h2>${title}</h2><p>${description}</p></div></li>`).join('')}</ul>
+    </div>
+  </section>`;
 }
 
 export function footer() {

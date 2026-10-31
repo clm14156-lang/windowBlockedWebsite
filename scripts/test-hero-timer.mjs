@@ -47,13 +47,9 @@ assert.equal(properties['--hero-progress'], '100%');
 assert.equal(initHeroTimer(null, {}, () => ''), null);
 
 const home = hero();
-assert(home.includes('hero-focus') && home.includes('/assets/focus03.png') && home.includes('/assets/dark_background02.png'));
-assert(home.includes('下午好') && home.includes('day-sun'));
-assert.equal((home.match(/data-hero-time/g) || []).length, 1);
-assert.equal((home.match(/class="hero-scene-character"/g) || []).length, 2, 'One character per mode, with only one mode visible');
-assert(!home.includes('/assets/focus02.png'), 'The homepage must use the separate background and character artwork');
-assert(home.includes('data-hero-toggle') && home.includes('结束任务'));
-assert(!home.includes('hero-mini') && !home.includes('查看任务') && !home.includes('focus-toolbar-divider'));
+assert(home.includes('/assets/product/image1.png'));
+assert(!/data-hero-time|data-hero-toggle|hero-focus|hero-mini|focus-toolbar/.test(home),'No retired home countdown remains');
+assert.equal((downloadPage().match(/data-hero-time/g)||[]).length,2,'Download preview retains its shared main/compact timer');
 
 // Removing the optional floating preview must keep the main timer usable.
 const singleClock = element(), singleControl = element();
@@ -68,6 +64,6 @@ singleTimer.toggle(); assert(singleControl.innerHTML.includes('开始任务'));
 singleTimer.toggle(); singleState.heroTime=1; singleTimer.tick(); assert(singleControl.innerHTML.includes('重新开始'));
 singleTimer.toggle(); assert.equal(singleClock.textContent,'04:53');
 const desktop = floating();
-assert(desktop.includes('/assets/focus_scene01.png') && desktop.includes('夜深了') && !desktop.includes('hero-focus'), 'Other product demonstrations retain their original appearance');
+assert(desktop.includes('/assets/product/zhedie.png') && !desktop.includes('data-floating-time') && !desktop.includes('hero-focus'), 'Three-mode screenshot cards stay outside the download countdown state');
 assert(downloadPage().includes('/assets/focus02.png') && !downloadPage().includes('data-hero-theme'), 'Keep the download page outside the homepage theme change');
-console.log('Passed: main-only timer and optional compact preview, task control labels, stop/resume/restart, new day scene and unchanged floating/download demonstrations.');
+console.log('Passed: retained download timer and optional compact preview, stop/resume/restart, no retired home countdown, and separate floating screenshot cards.');

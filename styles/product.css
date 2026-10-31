@@ -201,7 +201,7 @@
   background:#729de66b;
   flex-shrink:0;
 }
-.focus-toolbar button,.focus-toolbar-item{
+.focus-toolbar button{
   display:flex;
   align-items:center;
   justify-content:center;
@@ -217,7 +217,6 @@
   white-space:nowrap;
 }
 .focus-toolbar button{transition:color .2s,background .2s}
-.floating-focus .focus-toolbar{cursor:default}
 .focus-toolbar button:hover{
   color:#fff;
   background:#a9caff12;

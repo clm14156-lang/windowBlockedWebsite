@@ -9,7 +9,7 @@
     "start": "node scripts/server.mjs",
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node scripts/check.mjs && node scripts/test-product-tabs.mjs && node scripts/test-setup-carousel.mjs && node scripts/test-floating.mjs && node scripts/test-hero-timer.mjs && node scripts/test-hero-theme.mjs && node scripts/test-hero-presentation.mjs && node scripts/test-personalization.mjs && node scripts/test-statistics-carousel.mjs && node scripts/test-routes.mjs"
+    "test": "node scripts/check.mjs && node scripts/test-help-center.mjs && node scripts/test-download.mjs && node scripts/test-membership.mjs && node scripts/test-screen-layout.mjs && node scripts/test-product-tabs.mjs && node scripts/test-setup-carousel.mjs && node scripts/test-floating.mjs && node scripts/test-hero-timer.mjs && node scripts/test-hero-theme.mjs && node scripts/test-hero-presentation.mjs && node scripts/test-personalization.mjs && node scripts/test-statistics-carousel.mjs && node scripts/test-routes.mjs"
   },
   "engines": { "node": ">=18" }
 }

@@ -1,0 +1,71 @@
+/* Help content and its footer only. Existing header/navigation styles are untouched. */
+#faq{--text:#0d2346;--muted:#7485a0;--orange:#ff7d28;color:var(--text);padding-top:calc(var(--nav-height) + clamp(24px,2vw,32px));padding-bottom:40px;background:linear-gradient(135deg,#fff8f280,transparent 45%),linear-gradient(240deg,#fff3e580,transparent 48%),#fff}
+#faq .help-inner{width:min(1120px,calc(100% - 64px))}
+#faq .help-intro{position:relative}
+#faq .help-heading{position:relative;z-index:1;width:calc(100% - 280px);max-width:760px;text-align:left;margin:0}
+#faq .section-kicker{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;color:var(--orange);font-size:14px;font-weight:600;line-height:1.5;letter-spacing:0}
+#faq .section-kicker::before{content:"";width:3px;height:13px;border-radius:2px;background:var(--orange)}
+#faq .help-heading h1{margin:0 0 14px;font-size:clamp(32px,3.15vw,48px);font-weight:700;line-height:1.25;letter-spacing:-.035em;color:var(--text)}
+#faq .help-heading h1 span{color:var(--orange);white-space:nowrap}
+#faq .help-heading p{margin:0;font-size:18px;line-height:1.65;color:var(--muted)}
+/* The wide original has roomy blank edges. Preserve its ratio and show the subject. */
+#faq .help-art{position:absolute;top:-40px;right:0;width:400px;aspect-ratio:8/5;margin:0;overflow:hidden;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 98%,transparent)}
+#faq .help-art img{position:absolute;left:50%;top:0;width:165%;max-width:none;height:auto;aspect-ratio:1983/793;object-fit:contain;transform:translateX(-48%)}
+#faq .help-categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:40px}
+#faq .help-category{display:grid;grid-template-columns:60px minmax(0,1fr) 14px;align-items:start;gap:14px;min-width:0;min-height:108px;padding:14px 12px;border:1px solid #e9edf3;border-radius:14px;background:#ffffffed;box-shadow:0 4px 14px #26395005;transition:border-color 220ms,box-shadow 220ms}
+#faq .help-category:hover{border-color:#ffceaa;box-shadow:0 6px 18px #d8914c0d}
+#faq .help-category-icon{display:grid;place-items:center;align-self:center;width:60px;height:60px;border-radius:50%;background:#fff3e7;color:var(--orange)}
+#faq .help-category-icon .icon{width:34px;height:34px;stroke-width:1.8}
+#faq .help-category-copy{min-width:0}
+#faq .help-category-copy strong{display:block;font-size:19px;font-weight:600;line-height:1.4;color:var(--text)}
+#faq .help-category-copy>span{display:block;margin-top:4px;font-size:14px;line-height:1.6;color:var(--muted)}
+#faq .help-category-arrow{width:16px;height:16px;margin-top:8px;color:#8194ae}
+#faq .faq-section-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:36px 0 12px}
+#faq .faq-section-heading h2{margin:0;font-size:24px;font-weight:650;line-height:1.4;color:var(--text)}
+#faq .faq-section-heading>span{font-size:14px;line-height:1.5;color:var(--muted)}
+#faq .faq-list{display:grid;gap:6px;border:0}
+#faq .faq-item{border:1px solid #e6ebf2;border-radius:8px;background:#ffffffb3;scroll-margin-top:12px}
+#faq .faq-item:target{border-color:#ffc693;box-shadow:0 0 0 2px #ff7d2807}
+#faq .faq-item summary{min-height:40px;padding:8px 14px;gap:20px;font-size:16px;font-weight:500;line-height:1.5;color:var(--text)}
+#faq .faq-item summary>span:first-child{min-width:0}
+#faq .faq-toggle{flex-shrink:0;color:#8d9db5}
+#faq .faq-toggle .icon{width:17px;height:17px}
+#faq .faq-item[open] .faq-toggle{color:var(--orange)}
+#faq .faq-answer{padding:0 44px 16px 14px}
+#faq .faq-answer p{margin:0;font-size:15px;line-height:1.85;color:var(--muted)}
+.page-help + .site-footer{--text:#0d2346;--muted:#7485a0;border-top-color:#e6ebf2;padding:20px max(32px,calc((100% - 1120px)/2)) 24px;background:#fff}
+.page-help + .site-footer .footer-main{align-items:center;flex-wrap:wrap;gap:24px}
+.page-help + .site-footer .footer-brand{display:flex;align-items:center;gap:24px}
+.page-help + .site-footer .brand{font-size:22px;color:var(--text)}
+.page-help + .site-footer .brand img{width:38px;height:38px}
+.page-help + .site-footer .footer-brand p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.page-help + .site-footer .footer-links{padding-top:0;gap:26px}
+.page-help + .site-footer .footer-links a,.page-help + .site-footer .footer-links button{font-size:13px;color:var(--muted)}
+.page-help + .site-footer .footer-links a:hover,.page-help + .site-footer .footer-links button:hover{color:#ff7d28}
+.page-help + .site-footer .footer-bottom{margin-top:18px;padding-left:160px;font-size:12px;color:var(--muted)}
+@media(max-width:1100px){
+  #faq .help-art{top:-24px;width:340px}
+  #faq .help-categories{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  #faq .help-inner{width:calc(100% - 40px)}
+  #faq .help-intro{display:flex;flex-direction:column;gap:20px}
+  #faq .help-heading{width:100%;max-width:none}
+  #faq .help-heading h1{font-size:clamp(30px,6vw,42px)}
+  #faq .help-heading p{font-size:15px;line-height:1.8}
+  #faq .help-art{position:relative;top:auto;right:auto;align-self:center;width:min(100%,400px)}
+  #faq .help-categories{gap:16px;margin-top:28px}
+  #faq .help-category{grid-template-columns:52px minmax(0,1fr) 14px;gap:12px}
+  #faq .help-category-icon{width:52px;height:52px}
+  #faq .help-category-icon .icon{width:29px;height:29px}
+  #faq .help-category-copy strong{font-size:18px}
+  #faq .faq-section-heading{margin-top:28px}#faq .faq-section-heading h2{font-size:22px}
+  #faq .faq-item summary{font-size:15px}#faq .faq-answer p{font-size:14px}
+  .page-help + .site-footer{padding:24px 20px}
+  .page-help + .site-footer .footer-main{flex-direction:column;align-items:flex-start;gap:22px}
+  .page-help + .site-footer .footer-brand{flex-direction:column;align-items:flex-start;gap:12px}
+  .page-help + .site-footer .footer-links{gap:16px}
+  .page-help + .site-footer .footer-links a,.page-help + .site-footer .footer-links button{font-size:12px}
+  .page-help + .site-footer .footer-bottom{padding-left:0;flex-wrap:wrap;gap:12px;font-size:11px}
+}
+@media(max-width:600px){#faq .help-categories{grid-template-columns:1fr}}

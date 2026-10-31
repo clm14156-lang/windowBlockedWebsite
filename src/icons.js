@@ -28,6 +28,7 @@ const paths = {
   refresh: '<path d="M20 7v5h-5M4 17v-5h5M5 7a8 8 0 0 1 13-2l2 3M4 16l2 3a8 8 0 0 0 13-2"/>',
   book: '<path d="M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-1-9 1zm0 0v15"/>',
   pen: '<path d="m14 3 7 7-10 10-8 1 1-8zM3 21l7-7m7-8-4-3"/><circle cx="11" cy="13" r="2"/>',
+  pencil: '<path d="m16 3 5 5-12 12-6 1 1-6L16 3Zm-3 3 5 5M4 15l5 5M3 23h19"/>',
   notebook: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 17h16M8 3v14"/>',
   wrench: '<path d="m14 6 4 4 4-4a7 7 0 0 1-9 9l-7 7-4-4 7-7a7 7 0 0 1 9-9z"/>',
   dumbbell: '<path d="M8 12h8M2 10v4m20-4v4M5 6v12m3-9v6m8-6v6m3-9v12M2 12h3m14 0h3"/>',

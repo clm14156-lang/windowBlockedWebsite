@@ -1,14 +1,14 @@
 import { renderSite } from './components.js';
 import { icon, brand } from './icons.js';
-import { initFloatingDemo } from './floating-demo.js';
 import { resolvePage, notFoundPage } from './routes.js';
-import { initProductTabs } from './product-tabs.js';
 import { initSetupCarousel } from './setup-carousel.js';
 import { initStatisticsCarousel } from './statistics-carousel.js';
 import { heroDuration, initHeroTimer } from './hero-timer.js';
 import { initHeroTheme } from './hero-theme.js';
-import { initHeroPresentation } from './hero-presentation.js';
-import { focusCharacters } from './focus-characters.js';
+import { personalizationCharacters } from './personalization-preview.js';
+import { initPersonalizationTimer } from './personalization-timer.js';
+import { initHeroScrollShowcase } from './hero-scroll-showcase.js';
+import { initHelpCenter } from './help-center.js';
 import { publicUrl, siteConfig } from './site-config.js';
 
 const page = resolvePage(location.pathname) || notFoundPage;
@@ -27,7 +27,8 @@ const state = {
   demoTime: demoDuration, demoRunning: false, demoTab: 'timer',
   tasks: [false, false, false, false],
 };
-const heroTimer = initHeroTimer($('.hero-focus'), state, icon);
+const heroTimer = initHeroTimer($('.download-preview .hero-focus'), state, icon);
+const personalizationTimer = initPersonalizationTimer($('#personalization'));
 let toastTimeout;
 function toast(message) {
   clearTimeout(toastTimeout);
@@ -190,10 +191,6 @@ let scrollQueued = false;
 function updateScroll() {
   const header = $('#site-header');
   header.classList.toggle('scrolled', scrollY > 0);
-  const impact = $('#impact');
-  const impactBounds = impact?.getBoundingClientRect();
-  const marker = Math.min(innerHeight * .35, 280);
-  header.classList.toggle('impact-view', Boolean(impactBounds && impactBounds.top <= marker && impactBounds.bottom > marker));
   $('.back-top').hidden = scrollY < 650;
   scrollQueued = false;
 }
@@ -201,21 +198,21 @@ window.addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = tr
 updateScroll();
 window.addEventListener('resize', () => { if (innerWidth > 700) { $('#mobile-nav').hidden = true; $('.mobile-menu').setAttribute('aria-expanded', 'false'); $('.mobile-menu').setAttribute('aria-label', '打开导航'); $('.mobile-menu').innerHTML = icon('menu'); } updateScroll(); });
 
-// All clocks are lightweight frontend demos, paused while the document is hidden.
+// Render clocks only while visible. The personalization clock tracks elapsed time.
 setInterval(() => {
   if (document.hidden) return;
   heroTimer?.tick();
+  personalizationTimer?.tick();
   if (dialog.open && dialogKind === 'demo' && state.demoRunning && state.demoTime > 0) {
     state.demoTime--;
     if ($('[data-demo-clock]')) $('[data-demo-clock]').textContent = formatTime(state.demoTime);
     if (state.demoTime === 0) { state.demoRunning = false; if (state.demoTab === 'timer') $('#demo-panel').innerHTML = renderDemoPanel(); toast('这一段专注完成了，休息一下吧。'); }
   }
 }, 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) personalizationTimer?.tick(); });
 
-if ($('#floating')) initFloatingDemo($('#floating'));
+initHeroScrollShowcase($('#home'));
 initSetupCarousel($('#features'));
-initProductTabs($('#goals'), '[data-goal-tab]', '[data-goal-panel]');
-initHeroTheme($('#home'));
-initHeroPresentation($('#home'));
-initHeroTheme($('#personalization'), { characters: focusCharacters });
+initHeroTheme($('#personalization'), { characters: personalizationCharacters });
 if ($('#statistics')) initStatisticsCarousel($('#statistics'));
+initHelpCenter($('#faq'));

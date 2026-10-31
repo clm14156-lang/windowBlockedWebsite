@@ -1,0 +1,11 @@
+Use case: text-localization / ui-mockup
+Asset type: a revised desktop website section mockup for 专注时光.
+Input image 1 is the edit target. Preserve the entire existing section design, wide approximately 2.05:1 canvas, pale white-blue-warm background, orange brand accent, dark navy Chinese type, two browser-window illustrations, orange connecting arrow, rounded corners, shadows, and three bottom feature groups. Do not redesign the page or add navigation, buttons, modules, illustrations, or new branding. Keep all browser artwork, characters, countdown, browser UI, and bottom content unchanged.
+
+Change ONLY the main heading and the short introduction at the top:
+Main heading (verbatim): "让干扰止步，让专注继续。"
+Render "让干扰止步，" in the existing bold dark navy, and "让专注继续。" in the existing brand orange #FF7D28. Center it using the original heading style and scale.
+Introduction (verbatim, two centered lines):
+"专注期间，自动拦截你设定的网站与应用。"
+"访问时显示专注提示页和剩余时间，帮助你回到当前任务。"
+Use the existing muted gray-blue body typography, with comfortable line spacing. Keep the small orange "WEBSITE BLOCKING" label above the title. Ensure the exact Chinese text is legible and correctly spelled, with no missing or extra characters. Make room for the two-line description while retaining the original balanced composition and complete browser images and footer benefits. This is a clean new-copy page effect image, not a photographed screen.

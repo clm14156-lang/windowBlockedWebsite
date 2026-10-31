@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { createPreviewServer } from './server.mjs';
 import { pages } from '../src/routes.js';
+import { header } from '../src/site-shell.js';
+
+const normalizeHeader = html => html.replace(/nav-item active/g, 'nav-item').replace(/ aria-current="page"/g, '');
+const sharedHeader = normalizeHeader(header('features'));
 
 const server = createPreviewServer();
 server.listen(0, '127.0.0.1');
@@ -15,6 +19,11 @@ try {
     const html = await response.text();
     assert(html.includes(`<title>${page.title}</title>`));
     assert(html.includes(`class="page-${page.id}`));
+    assert.equal((html.match(/<header\b[^>]*\bid="site-header"/g) || []).length, 1, `${page.id}: render one shared navigation header`);
+    const pageHeader = html.match(/<header\b[\s\S]*?<\/header>/)[0];
+    assert.equal(normalizeHeader(pageHeader), sharedHeader, `${page.id}: only the active navigation item may differ`);
+    assert.equal((pageHeader.match(/aria-current="page"/g) || []).length, 2, 'Desktop and mobile navigation highlight the same current page');
+    assert(pageHeader.includes(`href="${page.path}" data-nav="${page.id}" aria-current="page"`));
     for (const alias of [page.path.slice(0, -1), `${page.path}index.html`]) {
       const redirect = await fetch(base + alias, { redirect: 'manual' });
       assert.equal(redirect.status, 301);

@@ -8,11 +8,11 @@ import { publicUrl, siteConfig } from '../src/site-config.js';
 
 const root = new URL('../', import.meta.url);
 const template = await readFile(new URL('index.html',root),'utf8');
-const expected = {features:['home','features','blocking','floating','goals','statistics','impact','personalization','closing'],download:['download'],membership:['pricing'],help:['faq']};
+const expected = {features:['home','features','floating','personalization','blocking','goals','statistics','impact','closing'],download:['download'],membership:['pricing'],help:['faq']};
 const assets = new Set(['assets/favicon.svg']);
 const mains = {};
 assert.deepEqual(pages.map(page=>page.id),['features','download','membership','help']);
-for (const stylesheet of ['styles.css','styles/product.css']) {
+for (const stylesheet of ['styles.css','styles/product.css','styles/screens.css','styles/membership.css','styles/download.css','styles/help.css']) {
   const css = await readFile(new URL(stylesheet,root),'utf8');
   for (const match of css.matchAll(/url\(['"]?(\/assets\/[^'"\)]+)['"]?\)/g)) assets.add(match[1].slice(1));
   assert(template.includes(`href="/${stylesheet}"`));
@@ -49,13 +49,19 @@ for(const retired of ['blocking','goals']) {
   for(const path of [`/${retired}`,`/${retired}/`,`/${retired}/index.html`])assert.equal(resolvePage(path),null);
   assert.throws(()=>renderSite(retired),/Unknown page/);
 }
-for(const [tab,panel] of [['data-setting-tab','data-setting-panel'],['data-goal-tab','data-goal-panel']]) {
-  assert.equal((mains.features.match(new RegExp(`${tab}="`,'g'))||[]).length,3);
-  assert.equal((mains.features.match(new RegExp(`${panel}="`,'g'))||[]).length,3);
-}
+for(const attribute of ['data-setting-tab','data-setting-panel'])assert.equal((mains.features.match(new RegExp(`${attribute}="`,'g'))||[]).length,3);
+assert(!/data-goal-(?:tab|panel)|goal-step-number|goals-tabs/.test(mains.features));
+assert.equal((mains.features.match(/class="goal-benefit"/g)||[]).length,3);
+const goalsSection=mains.features.match(/<section\b[^>]*id="goals"[\s\S]*?<\/section>/)[0];
+assert(!/<button\b|role="tab(?:list|panel)?"|aria-selected=|\binert\b|is-active/.test(goalsSection),'Goals are static, with all three preview images visible and described');
+for(const figure of goalsSection.matchAll(/<figure\b([^>]*)>/g))assert(!/aria-hidden=|\binert\b|\bhidden\b/.test(figure[1]));
+assert.equal((goalsSection.match(/<figure\b/g)||[]).length,3);
+for(const text of ['让目标有方向，','每一天都有进展。','专注投入，一目了然','任务管理，有条不紊','专注过程中，随时记录'])assert(goalsSection.includes(text));
 assert.equal((mains.features.match(/data-stat-slide="/g)||[]).length,3);
 assert(mains.features.includes('data-stat-direction="-1"')&&mains.features.includes('data-stat-direction="1"'));
-assert(mains.features.includes('data-floating-desktop')&&mains.features.includes('data-floating-timer'));
+assert.equal((mains.features.match(/data-floating-card=/g)||[]).length,3);
+for(const asset of ['zhuanzhu_shouye.png','zhuanzhu_xuanfu.png','zhedie.png'])assert(mains.features.includes(`/assets/product/${asset}`));
+assert(!/data-floating-(?:desktop|timer|track)/.test(mains.features));
 assert(mains.features.includes('已被屏蔽')&&mains.features.includes('/assets/blocked01.png'));
 assert(!/data-blocking-(?:mode|trigger|result|time)/.test(mains.features));
 for (const asset of ['00a.png','00b.png','00c.png']) assert(mains.features.includes(`/assets/product/${asset}`));

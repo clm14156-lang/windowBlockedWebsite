@@ -12,8 +12,8 @@ export function blockingPreview() {
     <div class="section-inner blocking-inner">
       <header class="section-heading-block blocking-heading">
         <span class="section-kicker">WEBSITE BLOCKING</span>
-        <h2 id="blocking-title">分心的网站，<span>到此为止。</span></h2>
-        <p>访问已屏蔽的网站时，自动显示专注提示页，让注意力回到手头的事情。</p>
+        <h2 id="blocking-title">让干扰止步，<span>让专注继续。</span></h2>
+        <p>专注期间，自动拦截你设定的网站与应用。<br class="desktop-break"/>访问时显示专注提示页和剩余时间，帮助你回到当前任务。</p>
       </header>
       <div class="blocking-comparison" role="group" aria-label="访问分心网站后自动拦截的前后对比">
         <figure class="blocking-comparison-item blocking-before">

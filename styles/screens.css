@@ -1,0 +1,42 @@
+/* Content-driven sections: spacing scales with the content, never viewport height. */
+:root{
+  --section-space:clamp(3rem,4vw,5rem);
+  --section-gap:clamp(1.5rem,2vw,2.5rem);
+  --section-detail-gap:clamp(.75rem,1vw,1.125rem);
+}
+html{scroll-padding-top:calc(var(--nav-height) + 1rem)}
+.section{
+  min-height:0;
+  height:auto;
+  box-sizing:border-box;
+  display:block;
+  padding-block:var(--section-space);
+  scroll-margin-top:0;
+}
+main>.section:first-child{padding-top:calc(var(--nav-height) + var(--section-space))}
+.hero-content{width:100%;margin-inline:auto}
+#home .hero-copy{margin-block:0}
+#home .hero-stage{margin-top:var(--section-gap)}
+#home .hero-scroll-track{margin-top:var(--section-gap)}
+
+.section .section-heading-block,.section .page-heading,.section .floating-copy{margin-bottom:var(--section-gap)}
+#features .section-heading-block,#blocking .blocking-heading,#statistics .statistics-heading{margin-bottom:var(--section-gap)}
+.setting-steps{gap:var(--section-detail-gap);grid-auto-rows:1fr}
+.setting-step{height:100%}
+.setting-step-card{min-height:0;height:100%;padding-block:var(--section-detail-gap)}
+.setting-steps::before{top:calc((100% - 2*var(--section-detail-gap))/6);bottom:calc((100% - 2*var(--section-detail-gap))/6)}
+.setting-carousel-footer{margin-top:var(--section-detail-gap)}
+#blocking .blocking-benefits,#statistics .stat-features{margin-top:var(--section-gap)}
+#goals .goals-benefits{margin-top:var(--section-gap)}
+#statistics .statistics-navigation{margin-top:var(--section-detail-gap)}
+#statistics .statistics-note{margin-top:var(--section-detail-gap)}
+#impact .impact-cards,#impact .impact-outro{margin-top:var(--section-gap)}
+.personalization-benefits{margin-top:var(--section-gap);padding-top:var(--section-detail-gap)}
+.personalization-showcase .hero-theme-switch{margin-top:var(--section-detail-gap)}
+.download-guide{margin-top:var(--section-gap);padding-top:var(--section-gap)}
+.pricing-bottom{margin-top:var(--section-gap)}
+.section .help-heading{margin-bottom:0}
+/* Reserve only the painted landscape foreground, with a content-sized upper bound. */
+#closing .closing-landscape{width:min(100%,104.5rem);margin-inline:auto}
+#closing .closing-inner{padding-top:0;padding-bottom:clamp(14rem,23vw,26rem)}
+#closing .closing-download{margin-top:var(--section-gap)}
