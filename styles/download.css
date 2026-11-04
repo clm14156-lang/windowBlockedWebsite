@@ -6,17 +6,17 @@
 #download .download-inner{width:min(1360px,calc(100% - 80px))}
 #download .download-layout{grid-template-columns:minmax(0,.34fr) minmax(0,.66fr);gap:48px;align-items:center;padding-top:32px}
 #download .download-copy{min-width:0;padding-left:12px}
-#download .download-eyebrow{display:block;margin:0 0 22px;color:var(--muted);font-size:20px;font-weight:500;line-height:1.5;letter-spacing:-.01em}
-#download .download-copy h1{margin:0 0 18px;font-size:clamp(52px,5.6vw,80px);font-weight:700;line-height:1.16;letter-spacing:-.045em;color:var(--text)}
-#download .download-copy h1 span{color:var(--orange)}
-#download .download-summary{margin:0;font-size:clamp(18px,1.8vw,26px);line-height:1.6;color:var(--muted);letter-spacing:-.025em}
+#download .download-eyebrow{display:block;margin:0 0 22px}
+#download .download-copy h1{margin:0 0 18px}
+
+#download .download-summary{margin:0}
 #download .download-actions{display:flex;margin-top:28px}
-#download .download-primary{width:min(100%,425px);min-height:76px;padding:18px 28px;gap:14px;border-radius:999px;font-size:24px;font-weight:500;border-color:var(--orange);background:var(--orange);color:#fff;box-shadow:0 9px 22px #fd7e0514}
+#download .download-primary{width:min(100%,425px);min-height:76px;padding:18px 28px;gap:14px;border-radius:999px;border-color:var(--orange);background:var(--orange);color:#fff;box-shadow:0 9px 22px #fd7e0514}
 #download .download-primary .icon{width:28px;height:28px}
 #download .download-primary .icon:last-child{width:23px;height:23px}
 #download .download-primary:not(:disabled):hover{background:#ef7300;border-color:#ef7300;box-shadow:0 11px 26px #fd7e051c}
 #download .download-primary:disabled{opacity:.8;box-shadow:none}
-#download .download-note{max-width:425px;margin:18px 0 0;font-size:14px;line-height:1.7;color:var(--muted);text-align:center}
+#download .download-note{max-width:425px;margin:18px 0 0;text-align:center}
 #download .download-preview{min-width:0;width:100%;margin:0}
 #download .download-preview>.hero-focus{width:100%;max-width:none;box-shadow:0 16px 44px #20334e0d,0 2px 8px #20334e06}
 #download .download-features{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:64px 0 0;padding:0}
@@ -26,22 +26,21 @@
 #download .download-feature-icon .icon{width:46px;height:46px;stroke-width:1.7}
 #download .download-feature-icon.is-task{flex-basis:38px;width:38px;height:38px;margin-inline:5px;border:2px solid currentColor;border-radius:6px}
 #download .download-feature-icon.is-task .icon{width:25px;height:25px;stroke-width:2}
-#download .download-features h2{margin:0 0 6px;font-size:20px;line-height:1.5;font-weight:600;color:var(--text)}
-#download .download-features p{margin:0;font-size:16px;line-height:1.7;color:var(--muted)}
+#download .download-features h2{margin:0 0 6px}
+#download .download-features p{margin:0}
 @media(max-width:1100px){
   #download .download-layout{gap:32px;grid-template-columns:minmax(0,.38fr) minmax(0,.62fr)}
   #download .download-copy{padding-left:0}
-  #download .download-copy h1{font-size:clamp(42px,5vw,56px)}
-  #download .download-eyebrow{font-size:17px}
-  #download .download-primary{min-height:64px;padding:15px 20px;font-size:20px;gap:10px}
+
+  #download .download-primary{min-height:64px;padding:15px 20px;gap:10px}
   #download .download-primary .icon{width:24px;height:24px}
   #download .download-features li{gap:18px;padding:0 16px}
-  #download .download-features h2{font-size:18px}#download .download-features p{font-size:14px}
+
 }
 @media(max-width:900px){
   #download .download-layout{grid-template-columns:1fr;gap:36px;padding-top:12px}
   #download .download-copy{max-width:600px;margin-inline:auto;text-align:center}
-  #download .download-copy h1{font-size:clamp(42px,7vw,68px)}
+
   #download .download-actions{justify-content:center}
   #download .download-note{margin-inline:auto}
   #download .download-preview{max-width:760px;margin-inline:auto}
@@ -51,11 +50,10 @@
 @media(max-width:700px){
   #download .download-inner{width:calc(100% - 40px)}
   #download .download-preview{width:calc(100% - 16px)}
-  #download .download-eyebrow{font-size:16px;margin-bottom:16px}
-  #download .download-copy h1{font-size:clamp(40px,9vw,56px)}
-  #download .download-summary{font-size:17px}
-  #download .download-primary{font-size:19px;min-height:60px}
-  #download .download-note{font-size:12px}
+  #download .download-eyebrow{margin-bottom:16px}
+
+  #download .download-primary{min-height:60px}
+
   #download .download-features{grid-template-columns:1fr;gap:24px}
   #download .download-features li{flex-direction:row;justify-content:flex-start;gap:22px;padding:0;text-align:left}
   #download .download-features li+li{border-left:0}

@@ -8,6 +8,7 @@ import { renderDocument } from './document.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const portIndex = process.argv.indexOf('--port');
 const port = Number(process.env.PORT || (portIndex >= 0 ? process.argv[portIndex + 1] : 5173));
+const previewConfig = { accountApiBaseUrl: process.env.FOCUSTIME_API_BASE_URL || 'http://localhost:5080' };
 const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.json': 'application/json; charset=utf-8' };
 export function createPreviewServer() {
   return http.createServer(async (req, res) => {
@@ -19,7 +20,7 @@ export function createPreviewServer() {
         res.writeHead(301, { Location: page.path }).end(); return;
       }
       const template = await readFile(path.join(root, 'index.html'), 'utf8');
-      const html = renderDocument(template, page);
+      const html = renderDocument(template, page, previewConfig);
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
       res.end(req.method === 'HEAD' ? undefined : html); return;
     }
@@ -38,7 +39,7 @@ export function createPreviewServer() {
     if (!path.extname(pathname) || pathname.endsWith('/index.html') || pathname === '/404.html') {
       const template = await readFile(path.join(root,'index.html'),'utf8');
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
-      res.end(req.method === 'HEAD' ? undefined : renderDocument(template,notFoundPage));
+      res.end(req.method === 'HEAD' ? undefined : renderDocument(template, notFoundPage, previewConfig));
     } else res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('资源不存在');
   }
   });

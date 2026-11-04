@@ -9,6 +9,7 @@ import { personalizationCharacters } from './personalization-preview.js';
 import { initPersonalizationTimer } from './personalization-timer.js';
 import { initHeroScrollShowcase } from './hero-scroll-showcase.js';
 import { initHelpCenter } from './help-center.js';
+import { renderRegistration, initRegistrationForm, renderPasswordRecovery, initPasswordRecovery } from './registration.js';
 import { publicUrl, siteConfig } from './site-config.js';
 
 const page = resolvePage(location.pathname) || notFoundPage;
@@ -40,9 +41,15 @@ function toast(message) {
 const dialog = $('#product-dialog');
 let lastFocused;
 let dialogKind = '';
+let registrationController = null;
 function openDialog(kind, content) {
   if (!dialog.open) lastFocused = document.activeElement;
+  registrationController?.destroy();
+  registrationController = null;
   dialogKind = kind;
+  dialog.classList.toggle('registration-dialog', kind === 'registration');
+  if (kind === 'registration') dialog.setAttribute('aria-describedby', 'registration-subtitle');
+  else dialog.removeAttribute('aria-describedby');
   $('#dialog-content').innerHTML = content;
   if (!dialog.open) { dialog.showModal(); document.body.style.overflow = 'hidden'; }
   const first = $('input, [data-demo-run], [data-confirm-plan], [type="submit"]', $('#dialog-content'));
@@ -50,6 +57,11 @@ function openDialog(kind, content) {
 }
 function closeDialog() { dialog.close(); }
 dialog.addEventListener('close', () => {
+  registrationController?.destroy();
+  registrationController = null;
+  dialog.classList.remove('registration-dialog');
+  dialog.removeAttribute('aria-describedby');
+  dialogKind = '';
   document.body.style.overflow = '';
   state.demoRunning = false;
   if (lastFocused?.isConnected) lastFocused.focus({ preventScroll: true });
@@ -59,6 +71,20 @@ dialog.addEventListener('click', event => {
   const bounds = dialog.getBoundingClientRect();
   if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
 });
+
+function showRegistration() {
+  openDialog('registration', renderRegistration() + renderPasswordRecovery());
+  const registration = initRegistrationForm($('#registration-form'), {
+    onSuccess: message => { closeDialog(); toast(message); },
+  });
+  const recovery = initPasswordRecovery(dialog);
+  registrationController = {
+    destroy() {
+      registration.destroy();
+      recovery.destroy();
+    },
+  };
+}
 
 function selectPlan(plan, announce = true) {
   state.selectedPlan = plan;
@@ -126,7 +152,8 @@ function applyChartData(data, period) {
 document.addEventListener('click', event => {
   const target = event.target.closest('button, a');
   if (!target) return;
-  if (target.matches('[data-demo]')) showDemo(target.dataset.demo);
+  if (target.matches('[data-registration]')) showRegistration();
+  else if (target.matches('[data-demo]')) showDemo(target.dataset.demo);
   else if (target.matches('[data-dialog-close]')) closeDialog();
   else if (target.matches('[data-upgrade]')) showUpgrade();
   else if (target.matches('[data-plan]')) selectPlan(target.dataset.plan);
@@ -152,7 +179,7 @@ document.addEventListener('click', event => {
     target.setAttribute('aria-expanded', String(open)); target.setAttribute('aria-label', open ? '关闭导航' : '打开导航'); target.innerHTML = icon(open ? 'close' : 'menu'); $('#mobile-nav').hidden = !open;
   }
   else if (target.matches('.back-top')) window.scrollTo({ top: 0, behavior: 'smooth' });
-  else if (target.matches('[data-privacy]')) openDialog('privacy', `<span class="demo-label">本网站隐私说明</span><h2 id="dialog-title">体验之后，不留下多余的信息。</h2><p class="dialog-description">本说明适用于专注时光官网的浏览和交互演示。</p><ul class="dialog-feature-list"><li>${icon('shield')}演示计时、任务勾选和方案选择保存在当前页面内存中。</li><li>${icon('refresh')}刷新页面后，演示状态会重置。</li><li>${icon('globe')}网站未接入第三方广告、分析脚本、注册或支付表单。</li></ul><p class="dialog-note">网站托管服务可能保留正常访问日志。正式软件及未来购买服务的数据处理规则，应以届时提供的独立说明为准。</p>`);
+  else if (target.matches('[data-privacy]')) openDialog('privacy', `<span class="demo-label">本网站隐私说明</span><h2 id="dialog-title">体验之后，不留下多余的信息。</h2><p class="dialog-description">本说明适用于专注时光官网的浏览、交互演示和账号表单。</p><ul class="dialog-feature-list"><li>${icon('shield')}演示计时、任务勾选和方案选择保存在当前页面内存中。</li><li>${icon('refresh')}刷新页面后，演示状态会重置。</li><li>${icon('globe')}注册和找回密码由账号服务处理，密码以哈希形式存储。</li></ul><p class="dialog-note">网站托管服务可能保留正常访问日志。正式软件及未来购买服务的数据处理规则，应以届时提供的独立说明为准。</p>`);
   if (target.matches('a[href^="#"], .trial-button') || target.closest('#mobile-nav')) {
     if (target.closest('#mobile-nav') && dialog.open) lastFocused = $('.mobile-menu');
     $('#mobile-nav').hidden = true; $('.mobile-menu').setAttribute('aria-expanded', 'false'); $('.mobile-menu').setAttribute('aria-label', '打开导航'); $('.mobile-menu').innerHTML = icon('menu');

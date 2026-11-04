@@ -1,0 +1,325 @@
+/* Shared marketing typography. Software UI and raster screenshot text stay independent. */
+:root{
+  --font-sans:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  --text-primary:#0d2346;--text-body:#64758c;--text-caption:#8492a6;--text-accent:#ff7d28;
+  --weight-regular:400;--weight-medium:500;--weight-semibold:600;--weight-bold:700;
+  --type-page:3.5rem;--type-section:2.75rem;--type-plan:1.75rem;--type-card:1.375rem;--type-feature:1.25rem;
+  --type-lead:1.25rem;--type-body:1rem;--type-caption:.875rem;--type-small:.75rem;
+  --type-button:1rem;--type-button-large:1.125rem;--type-brand:1.25rem;--type-nav:.875rem;
+  --type-modal:1.5rem;--type-modal-value:1.75rem;--type-price:4rem;--type-currency:1.75rem;--type-number:1.75rem;
+  --leading-page:1.25;--leading-section:1.3;--leading-title:1.4;--leading-lead:1.6;--leading-body:1.75;--leading-caption:1.6;
+  --type-title-gap:1rem;--type-copy-gap:.5rem;
+  --type-registration-title:1.875rem;
+}
+@media(max-width:1199px){
+  :root{--type-page:2.75rem;--type-section:2.25rem;--type-plan:1.625rem;--type-card:1.25rem;--type-feature:1.125rem;--type-lead:1.125rem;--type-price:3.5rem;--type-currency:1.5rem;--type-number:1.5rem}
+}
+@media(max-width:767px){
+  :root{--type-page:2.25rem;--type-section:1.875rem;--type-plan:1.5rem;--type-card:1.125rem;--type-feature:1.125rem;--type-lead:1rem;--type-body:.9375rem;--type-caption:.8125rem;--type-button:.9375rem;--type-button-large:1rem;--type-brand:1.125rem;--type-modal:1.375rem;--type-modal-value:1.5rem;--type-price:3.25rem;--type-number:1.375rem;--type-title-gap:.75rem}
+}
+
+@media(max-width:767px){:root{--type-registration-title:1.5rem}}
+
+/* page */
+.hero-copy h1,
+.page-heading h1,
+.download-copy h1,
+.not-found-section h1,
+#closing h2{
+  font-size:var(--type-page);font-weight:var(--weight-bold);line-height:var(--leading-page);letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* section */
+.section-heading-block h2,
+.section-copy h2,
+.feature-copy h2,
+.impact-copy h2{
+  font-size:var(--type-section);font-weight:var(--weight-bold);line-height:var(--leading-section);letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* plan */
+.plan-title{
+  font-size:var(--type-plan);font-weight:var(--weight-semibold);line-height:1.35;letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* card */
+#floating .floating-card h3,
+#impact .impact-card-summary h3,
+.personalization-characters>h3,
+#faq .help-category-copy strong,
+#faq .faq-section-heading h2,
+#impact .impact-outro h3{
+  font-size:var(--type-card);font-weight:var(--weight-semibold);line-height:var(--leading-title);letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* feature */
+.setting-step strong,
+.impact-benefit h3,
+#floating .floating-benefits h3,
+#goals .goal-benefit h3,
+#statistics .stat-feature strong,
+#home .hero-benefits strong,
+.personalization-benefit-copy strong,
+#download .download-features h2,
+#pricing .membership-benefits h3,
+#pricing .plan-inclusions h3,
+.download-guide h2,
+.download-guide h3,
+.download-card-heading strong{
+  font-size:var(--type-feature);font-weight:var(--weight-semibold);line-height:var(--leading-title);letter-spacing:0;color:var(--text-primary);
+}
+
+/* lead */
+.hero-copy>p,
+.section-heading-block>p,
+.section-copy>p,
+.feature-copy .lead,
+.impact-description,
+.page-heading>p,
+.download-summary,
+.not-found-section p,
+#closing p,
+#impact .impact-outro p{
+  font-size:var(--type-lead);font-weight:var(--weight-regular);line-height:var(--leading-lead);letter-spacing:0;color:var(--text-body);
+}
+
+/* body */
+.setting-step-description,
+.feature-checklist,
+#floating .floating-card-heading p,
+.impact-benefit p,
+#floating .floating-benefits p,
+#goals .goal-benefit p,
+#statistics .stat-feature-text>span,
+#impact .impact-card-summary p,
+#impact .impact-points li,
+#home .hero-benefits p,
+.personalization-characters>p,
+.personalization-benefit-copy p,
+.plan-intro,
+.plan-features li,
+.faq-item summary,
+.faq-answer p,
+#download .download-features p,
+#pricing .membership-benefits p,
+.dialog-description,
+.dialog-feature-list li,
+.demo-timer>p,
+.demo-tasks label,
+.dialog-form label,
+.dialog-form input{
+  font-size:var(--type-body);font-weight:var(--weight-regular);line-height:var(--leading-body);letter-spacing:0;color:var(--text-body);
+}
+
+/* Emphasized body text inside compact dialogs. */
+.dialog-summary b{
+  font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:var(--leading-body);letter-spacing:0;color:var(--text-primary);
+}
+
+/* caption */
+.section-footnote,
+.product-caption,
+.text-link,
+.plan-note,
+.download-note,
+#download .download-note,
+.download-card-heading div>span,
+#faq .help-category-copy>span,
+#faq .faq-section-heading>span,
+.character-option-name,
+.dialog-note,
+.dialog-summary p,
+.dialog-summary small,
+.demo-tasks small,
+.toast,
+.download-guide p,
+.footer-brand p,
+.footer-links a,
+.footer-links button{
+  font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:var(--leading-caption);letter-spacing:0;color:var(--text-caption);
+}
+
+/* small */
+.hero-meta,
+.commercial-note,
+.pricing-bottom,
+.statistics-note,
+.demo-status,
+.footer-bottom,
+.download-guide li>span{
+  font-size:var(--type-small);font-weight:var(--weight-regular);line-height:1.5;letter-spacing:0;color:var(--text-caption);
+}
+
+/* label */
+.section-kicker,
+.eyebrow,
+.hero-eyebrow,
+.demo-label{
+  font-size:var(--type-small);font-weight:var(--weight-medium);line-height:1.5;letter-spacing:0;color:var(--text-accent);
+}
+
+/* platform */
+.download-eyebrow{
+  font-size:var(--type-caption);font-weight:var(--weight-medium);line-height:1.5;letter-spacing:0;color:var(--text-body);
+}
+
+/* button */
+.button,
+.hero-theme-switch button,
+.demo-tabs button{
+  font-size:var(--type-button);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;
+}
+
+/* largeButton */
+.download-primary,
+.plan-action,
+.closing-download{
+  font-size:var(--type-button-large);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;
+}
+
+/* brand */
+.brand{
+  font-size:var(--type-brand);font-weight:var(--weight-bold);line-height:1.2;letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* nav */
+.nav-item{
+  font-size:var(--type-nav);font-weight:var(--weight-medium);line-height:1.4;letter-spacing:0;color:var(--text-body);
+}
+
+/* activeNav */
+.nav-item.active{
+  font-size:var(--type-nav);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-primary);
+}
+
+/* selectedCharacter */
+.character-option[aria-pressed="true"] .character-option-name{
+  font-size:var(--type-caption);font-weight:var(--weight-semibold);line-height:var(--leading-caption);letter-spacing:0;color:var(--text-accent);
+}
+
+/* badge */
+.recommend-badge{
+  font-size:var(--type-small);font-weight:var(--weight-semibold);line-height:1.5;letter-spacing:0;color:var(--text-accent);
+}
+
+/* step */
+.setting-step-number,
+.setting-carousel-count{
+  font-size:var(--type-small);font-weight:var(--weight-medium);line-height:1;letter-spacing:0;
+}
+
+/* number */
+#floating .floating-step-number{
+  font-size:var(--type-number);font-weight:var(--weight-medium);line-height:1;letter-spacing:0;
+}
+
+/* flow */
+#blocking .blocking-flow-label{
+  font-size:var(--type-small);font-weight:var(--weight-medium);line-height:1.5;letter-spacing:0;
+}
+
+/* modal */
+.dialog-shell h2{
+  font-size:var(--type-modal);font-weight:var(--weight-semibold);line-height:1.35;letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* modalValue */
+.dialog-summary>strong{
+  font-size:var(--type-modal-value);font-weight:var(--weight-bold);line-height:1.2;letter-spacing:0;color:var(--text-primary);
+}
+
+/* price */
+.plan-price>strong{
+  font-size:var(--type-price);font-weight:var(--weight-bold);line-height:1;letter-spacing:-.02em;color:var(--text-primary);
+}
+
+/* currency */
+.plan-price>span{
+  font-size:var(--type-currency);font-weight:var(--weight-semibold);line-height:1.2;letter-spacing:0;color:var(--text-primary);
+}
+
+/* billing */
+.plan-price>small{
+  font-size:var(--type-body);font-weight:var(--weight-regular);line-height:1.4;letter-spacing:0;color:var(--text-body);
+}
+
+/* priceRow */
+.plan-price{
+  font-size:var(--type-body);font-weight:var(--weight-regular);line-height:1.2;letter-spacing:0;color:var(--text-primary);
+}
+
+/* status */
+#statistics [data-stat-status].is-error,
+#personalization [data-hero-theme-status].is-error{
+  font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:var(--leading-caption);letter-spacing:0;
+}
+
+/* One emphasis color; inverse buttons and status colors retain their existing states. */
+.hero-copy h1 span,
+.setting-section h2 span,
+#blocking h2 span,
+#floating .floating-copy h2 span,
+#goals .goals-heading h2 span,
+#statistics .statistics-heading h2 span,
+#impact .impact-copy h2 span,
+.personalization-copy h2 span,
+#closing .closing-title-ending>span,
+#download .download-copy h1 span,
+#pricing .membership-heading h1 span,
+#faq .help-heading h1 span,
+#pricing .recommended .plan-price>span,
+#pricing .recommended .plan-price>strong{color:var(--text-accent)}
+.button-secondary,
+.button-light,
+.button-soft,
+.button-glass,
+#home .hero-download,
+#pricing .plan-action.button-secondary{color:var(--text-primary)}
+
+/* Keep question labels dark and toast text readable on its dark surface. */
+.faq-item summary,.demo-tasks label,#pricing .plan-select{color:var(--text-primary)}
+.toast{color:#fff}
+
+/* Shared spacing for corresponding text roles. */
+.hero-copy h1,
+.page-heading h1,
+.download-copy h1,
+.not-found-section h1,
+#closing h2,
+.section-heading-block h2,
+.section-copy h2,
+.feature-copy h2,
+.impact-copy h2,
+#home .hero-copy h1,
+#download .download-copy h1,
+#pricing .membership-heading h1,
+#faq .help-heading h1,
+.setting-section .section-heading-block h2,
+#floating .floating-copy h2,
+#goals .goals-heading h2,
+#impact .impact-copy h2,
+.personalization-copy h2,
+#statistics .statistics-heading h2{margin-bottom:var(--type-title-gap)}
+#floating .floating-card h3,#impact .impact-card-summary h3,.impact-benefit h3,#floating .floating-benefits h3,#goals .goal-benefit h3,#statistics .stat-feature strong,#home .hero-benefits strong,#download .download-features h2,#pricing .membership-benefits h3,.personalization-characters>h3{margin-bottom:var(--type-copy-gap)}
+#faq .help-category-copy>span,.personalization-benefit-copy p{margin-top:var(--type-copy-gap)}
+#blocking .section-kicker{letter-spacing:.08em}
+
+/* Account-registration prototype; no typography changes outside this dialog. */
+.registration-dialog .brand{font-size:var(--type-card)}
+.registration-dialog .registration-heading h2{font-size:var(--type-registration-title);font-weight:var(--weight-bold);line-height:1.3;letter-spacing:-.02em;color:var(--text-primary)}
+.registration-dialog .registration-heading p,.registration-dialog .registration-input-row input{font-size:var(--type-body);font-weight:var(--weight-regular);line-height:1.6;letter-spacing:0;color:var(--text-body)}
+.registration-dialog .registration-input-row input{color:var(--text-primary)}
+.registration-dialog .registration-input-row input::placeholder{color:var(--text-caption);opacity:1}
+.registration-dialog .registration-agreement,.registration-dialog .registration-policy-panel p{font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:1.6;letter-spacing:0;color:var(--text-body)}
+.registration-dialog .registration-send,.registration-dialog .registration-agreement button,.registration-dialog .registration-policy-panel button{font-size:var(--type-caption);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-accent)}
+.registration-dialog .registration-error{font-size:var(--type-small);font-weight:var(--weight-regular);line-height:1.5;letter-spacing:0;color:#c14132}
+.registration-dialog .registration-status{font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:1.5;letter-spacing:0;color:var(--text-accent)}
+.registration-dialog .registration-policy-panel h3{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-primary)}
+.registration-dialog .registration-submit{font-size:var(--type-button-large);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:#fff}
+.registration-dialog .registration-recovery-entry,
+.registration-dialog .recovery-back{
+  font-size:var(--type-caption);
+  line-height:var(--leading-caption);
+  color:var(--text-body);
+}
+.registration-dialog [data-recovery-start]{font-weight:var(--weight-semibold);color:#fd7e05}

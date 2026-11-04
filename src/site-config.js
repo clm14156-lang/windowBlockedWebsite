@@ -6,7 +6,18 @@ export const siteConfig = {
   downloadUrl: '',
   checkoutUrl: '',
   version: '',
+  accountApiBaseUrl: '',
 };
+
+export function accountApiOrigin(value, allowLoopbackHttp = false) {
+  try {
+    const url = new URL(value);
+    const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    if (url.protocol !== 'https:' && !(allowLoopbackHttp && loopback && url.protocol === 'http:')) return '';
+    if (url.username || url.password || url.pathname !== '/' || url.search || url.hash) return '';
+    return url.origin;
+  } catch { return ''; }
+}
 
 export function publicUrl(value) {
   if (!value) return '';

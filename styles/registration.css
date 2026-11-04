@@ -1,0 +1,97 @@
+/* Registration prototype only; the page, navigation and other dialogs are untouched. */
+.product-dialog.registration-dialog{width:560px;max-width:calc(100% - 32px);max-height:calc(100dvh - 32px);margin:auto;border:1px solid #e7e9ef;border-radius:24px;background:linear-gradient(135deg,#fffefc,#fff 48%,#fcfcff);box-shadow:0 24px 80px #14243d24}
+.registration-dialog::backdrop{background:#18233660;backdrop-filter:blur(5px)}
+.registration-dialog[open]{animation:registration-enter 220ms cubic-bezier(.2,.7,.3,1) both}
+.registration-dialog[open]::backdrop{animation:registration-backdrop 220ms ease-out both}
+.registration-dialog .dialog-shell{padding:26px 32px 30px}
+.registration-dialog .dialog-close{top:24px;right:24px;width:32px;height:32px;background:transparent;color:#89919e}
+.registration-dialog .dialog-close .icon{width:24px;height:24px}
+.registration-dialog .dialog-close:hover{background:#f1f3f7}
+.registration-dialog .registration-top{display:flex;align-items:center;min-height:36px;padding-right:40px}
+.registration-dialog .brand img{width:34px;height:34px}
+.registration-dialog .registration-heading{text-align:center;margin:24px 0 26px}
+.registration-dialog .registration-heading h2{display:flex;align-items:center;justify-content:center;gap:18px;margin:0}
+.registration-dialog .registration-heading h2::before,.registration-dialog .registration-heading h2::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--text-accent);flex:none}
+.registration-dialog .registration-heading p{margin:8px 0 0}
+.registration-dialog .registration-form{display:grid;gap:14px}
+.registration-dialog .registration-field{min-width:0}
+.registration-dialog .registration-input-row{display:flex;align-items:center;gap:12px;min-height:50px;padding:10px 15px;border:1px solid #e0e4eb;border-radius:14px;background:#ffffffb3;transition:border-color 160ms,box-shadow 160ms}
+.registration-dialog .registration-input-row>.icon{width:21px;height:21px;color:#9299a5}
+.registration-dialog .registration-input-row:focus-within{border-color:#ff9b52;box-shadow:0 0 0 3px #ff7d2810}
+.registration-dialog .has-error .registration-input-row{border-color:#d56455}
+.registration-dialog .registration-input-row input{width:100%;min-width:0;flex:1;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.registration-dialog .registration-input-row input:focus-visible{outline:none}
+.registration-dialog .registration-send{flex:none;min-width:108px;padding:8px 12px;border:1px solid #ffe3ce;border-radius:999px;background:#fff4eb;transition:background 160ms}
+.registration-dialog .registration-send:hover{background:#ffeadb}
+.registration-dialog .registration-send:disabled{opacity:.7;cursor:default}
+.registration-dialog .registration-password-toggle{display:grid;place-items:center;flex:none;width:28px;height:28px;padding:3px;border-radius:6px;background:transparent;color:#9299a5}
+.registration-dialog .registration-password-toggle:hover{color:#5d6d84;background:#f6f7f9}
+.registration-dialog .registration-password-toggle .icon{width:21px;height:21px}
+.registration-dialog .registration-error{margin:5px 2px 0}
+.registration-dialog .registration-status{margin:0;text-align:center}
+.registration-dialog .registration-agreement{display:flex;align-items:flex-start;gap:9px;margin-top:8px}
+.registration-dialog .registration-agreement>input{flex:none;width:18px;height:18px;margin:2px 0 0;accent-color:var(--text-accent);cursor:pointer}
+.registration-dialog .registration-agreement>div{min-width:0}
+.registration-dialog .registration-agreement label{cursor:pointer}
+.registration-dialog .registration-agreement button,.registration-dialog .registration-policy-panel button{padding:0;background:transparent}
+.registration-dialog .registration-agreement button:hover,.registration-dialog .registration-policy-panel button:hover{text-decoration:underline;text-underline-offset:3px}
+.registration-dialog .registration-submit{width:100%;min-height:54px;padding:13px 20px;margin-top:8px;border:0;background:linear-gradient(110deg,#ff971c,#ff7905);color:#fff;box-shadow:0 6px 18px #ff7d2814}
+.registration-dialog .registration-submit:hover{background:linear-gradient(110deg,#ff9010,#f77200);box-shadow:0 8px 22px #ff7d2820}
+.registration-dialog .registration-policy-panel{padding:14px 16px;border:1px solid #e8ebf0;border-radius:12px;background:#f9fafc}
+.registration-dialog .registration-policy-panel h3{margin:0 0 6px}
+.registration-dialog .registration-policy-panel p{margin:0 0 8px}
+
+.registration-dialog .registration-recovery-entry{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin:18px 0 0;
+  text-align:center;
+}
+.registration-dialog .registration-recovery-entry::before,
+.registration-dialog .registration-recovery-entry::after{
+  content:"";
+  flex:1 0 12px;
+  max-width:58px;
+  height:1px;
+  background:#e0e4eb;
+}
+.registration-dialog [data-recovery-start],
+.registration-dialog .recovery-back{padding:4px 0;background:transparent}
+.registration-dialog [data-recovery-start]:hover{text-decoration:underline;text-underline-offset:3px}
+.registration-dialog .recovery-back{display:inline-flex;align-items:center;gap:7px}
+.registration-dialog .recovery-back:hover{color:var(--text-primary)}
+.registration-dialog .recovery-back .icon{width:19px;height:19px;transform:rotate(180deg)}
+.registration-dialog .password-recovery .registration-heading h2::before,
+.registration-dialog .password-recovery .registration-heading h2::after{content:none}
+.registration-dialog .password-recovery .registration-heading{margin-block:28px 26px}
+.registration-dialog .recovery-email-form .registration-submit{margin-top:34px}
+.registration-dialog .recovery-code-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:10px}
+.registration-dialog .recovery-code-row .registration-send{min-height:50px;border-radius:14px}
+.registration-dialog .recovery-code-status{text-align:left;margin-top:-4px}
+.registration-dialog .recovery-success{padding-top:36px;text-align:center}
+.registration-dialog .recovery-success-icon{
+  display:grid;
+  place-items:center;
+  width:76px;
+  height:76px;
+  margin-inline:auto;
+  border-radius:50%;
+  background:#e3f8e6;
+  color:#17983d;
+}
+.registration-dialog .recovery-success-icon .icon{width:39px;height:39px;stroke-width:2.4}
+.registration-dialog .recovery-success .registration-heading{margin-block:20px 10px}
+.registration-dialog .recovery-success .registration-submit{margin-top:26px}
+
+@keyframes registration-enter{from{opacity:0;transform:translateY(5px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes registration-backdrop{from{opacity:0}to{opacity:1}}
+@media(max-width:480px){
+  .registration-dialog .dialog-shell{padding:22px 20px 24px}
+  .registration-dialog .dialog-close{top:20px;right:18px}
+  .registration-dialog .registration-heading{margin:22px 0}
+  .registration-dialog .registration-input-row{padding:10px 12px;gap:9px}
+  .registration-dialog .registration-send{min-width:100px;padding:8px 10px}
+}
+@media(prefers-reduced-motion:reduce){.registration-dialog[open],.registration-dialog[open]::backdrop{animation:none}}

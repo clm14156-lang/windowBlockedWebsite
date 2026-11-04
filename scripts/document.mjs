@@ -1,9 +1,9 @@
 import { renderSite } from '../src/components.js';
-import { publicUrl, siteConfig } from '../src/site-config.js';
+import { accountApiOrigin, publicUrl, siteConfig } from '../src/site-config.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-export function renderDocument(template, page) {
+export function renderDocument(template, page, { accountApiBaseUrl = process.env.FOCUSTIME_API_BASE_URL || siteConfig.accountApiBaseUrl } = {}) {
   const preload = page.preload ? `<link rel="preload" as="image" href="${page.preload}" />` : '';
   const origin = publicUrl(siteConfig.origin);
   const canonical = origin && page.path ? new URL(page.path, origin).href : '';
@@ -12,6 +12,6 @@ export function renderDocument(template, page) {
     .replace(/<title>[^<]*<\/title>/, `<title>${page.title}</title>`)
     .replace(/(<meta name="description" content=")[^"]*("\s*\/?>)/, `$1${page.description}$2`)
     .replace(/<link rel="preload"[^>]*>/, preload)
-    .replace('<!-- page-metadata -->', metadata)
+    .replace('<!-- page-metadata -->', `${metadata}<meta name="focustime-api-base" content="${escape(accountApiOrigin(accountApiBaseUrl, true))}" />`)
     .replace('<div id="app"></div>', `<div id="app">${renderSite(page.id)}</div>`);
 }

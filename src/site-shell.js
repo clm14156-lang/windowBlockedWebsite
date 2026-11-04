@@ -7,7 +7,7 @@ const primaryActions = () => `<div class="hero-actions"><button type="button" cl
 
 export function header(page = 'features') {
   const nav = pages.map(item => `<a class="nav-item${item.id === page ? ' active' : ''}" href="${item.path}" data-nav="${item.id}"${item.id === page ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
-  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-demo aria-haspopup="dialog">免费体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
+  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-registration aria-haspopup="dialog" aria-controls="product-dialog">免费体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
 }
 
 export function heroShell() {
@@ -26,7 +26,6 @@ export function heroShell() {
 export function closing() {
   const download = publicUrl(siteConfig.downloadUrl) || '/download/';
   return `<section class="section closing-section" id="closing" aria-labelledby="closing-title">
-    <picture class="closing-landscape" aria-hidden="true"><source srcset="/assets/last_page.webp" type="image/webp"/><img src="/assets/last_page.png" alt="" width="1672" height="941" loading="lazy" decoding="async" draggable="false"/></picture>
     <div class="closing-inner">
       <h2 id="closing-title"><span class="closing-title-intro">愿你拥有，</span><span class="closing-title-ending"><span>不被打扰</span>的时光。</span></h2>
       <p>把纷扰留在外面，把这一刻留给自己。</p>

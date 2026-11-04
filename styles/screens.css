@@ -36,7 +36,6 @@ main>.section:first-child{padding-top:calc(var(--nav-height) + var(--section-spa
 .download-guide{margin-top:var(--section-gap);padding-top:var(--section-gap)}
 .pricing-bottom{margin-top:var(--section-gap)}
 .section .help-heading{margin-bottom:0}
-/* Reserve only the painted landscape foreground, with a content-sized upper bound. */
-#closing .closing-landscape{width:min(100%,104.5rem);margin-inline:auto}
+/* Preserve foreground spacing while the background fills the entire section. */
 #closing .closing-inner{padding-top:0;padding-bottom:clamp(14rem,23vw,26rem)}
 #closing .closing-download{margin-top:var(--section-gap)}
