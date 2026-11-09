@@ -378,16 +378,17 @@
 
 /* Billing selector and simulated payment */
 .billing-option-label{font-size:var(--type-billing);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
-.payment-method,.payment-scan{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
-.payment-plan-note,.payment-account,.payment-timing,.payment-safety,.payment-text-button,.payment-sync{
+.payment-method{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
+.payment-scan{font-size:var(--type-feature);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
+.payment-account,.payment-timing,.payment-text-button{
   font-size:var(--type-caption);line-height:var(--leading-caption);
 }
 .payment-heading h2{font-size:var(--type-modal);line-height:var(--leading-title)}
-.payment-heading p,.payment-success p,.payment-benefits{font-size:var(--type-body);line-height:var(--leading-caption)}
-.payment-order h3,.payment-methods h3,.payment-order-summary h4{font-size:var(--type-card);line-height:var(--leading-title)}
+.payment-success p{font-size:var(--type-body);line-height:var(--leading-caption)}
+.payment-order h3{font-size:var(--type-card);line-height:var(--leading-title)}
 .payment-total{font-size:var(--type-card);line-height:1.1;font-weight:var(--weight-semibold)}
 .payment-total strong{font-size:var(--type-section);font-weight:var(--weight-bold)}
-.payment-total small,.payment-code-frame figcaption,.payment-order-number{font-size:var(--type-small);line-height:var(--leading-caption)}
+.payment-code-frame figcaption{font-size:var(--type-small);line-height:var(--leading-caption)}
 .payment-error{font-size:var(--type-caption);line-height:var(--leading-caption)}
 .payment-mark{font-size:var(--type-body);font-weight:var(--weight-bold);line-height:1}
 .payment-code-art .payment-mark{font-size:var(--type-card)}

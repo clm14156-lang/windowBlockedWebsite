@@ -1,8 +1,7 @@
 import { heroThemes } from './hero-theme.js';
 
-// Paired scene layers serve the personalization preview and its theme transitions.
-export function themeScenes(characters, selectedCharacter = characters[0]?.id) {
-  return heroThemes.map((theme, i) => `<div class="hero-scene-layer${i === 0 ? ' is-active' : ''}" data-hero-scene="${theme.id}" aria-hidden="${i !== 0}">
+export function themeScenes(characters, selectedCharacter = characters[0]?.id, themes = heroThemes) {
+  return themes.map((theme, i) => `<div class="hero-scene-layer${i === 0 ? ' is-active' : ''}" data-hero-scene="${theme.id}" aria-hidden="${i !== 0}">
     <picture>${theme.backgroundWebp ? `<source srcset="${theme.backgroundWebp}" type="image/webp"/>` : ''}<img class="hero-scene-background" src="${theme.background}" alt="" width="1448" height="1086" loading="lazy" decoding="async" draggable="false"/></picture>
     ${characters.map(character => {
       const art = character.artwork[theme.id];

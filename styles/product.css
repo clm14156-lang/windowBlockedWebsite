@@ -284,6 +284,8 @@
 .hero-focus .night-greeting h3{color:var(--text)}
 .hero-focus .night-greeting p{color:var(--muted)}
 .hero-focus .focus-time{top:22.8%;color:#142839;font-size:8.7cqw}
+.personalization-preview .night-greeting,.download-focus .night-greeting{top:9%;left:5%}
+.personalization-preview .focus-time,.download-focus .focus-time{top:27%;font-size:8cqw;font-weight:500}
 .hero-focus .focus-task{color:var(--muted)}
 .hero-focus .focus-toolbar{border-top-color:#ffffffe0}
 .hero-focus .focus-toolbar-divider{background:#65847566}

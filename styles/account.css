@@ -196,8 +196,7 @@
 }
 .account-badge.is-free { color: #5833a7; background: #f1eaff; }
 .account-badge.is-paid { color: #167443; background: #def6e7; }
-.account-badge.is-pending { color: #a24604; background: #ffefda; }
-.account-badge.is-closed { color: #4b586d; background: #edf0f5; }
+.account-badge.is-refunded { color: #4b586d; background: #edf0f5; }
 .account-content .button { min-height: 38px; padding: 8px 16px; }
 .account-content .button .icon { width: 16px; height: 16px; }
 .account-primary, .account-order-filters button[aria-pressed="true"] {

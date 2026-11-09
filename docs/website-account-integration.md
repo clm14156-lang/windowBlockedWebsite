@@ -27,7 +27,7 @@ node scripts/server.mjs --port 5175 --api-url http://127.0.0.1:5082
 
 ## 接口
 
-「我的订单」继续读取同源会话代理下的 `GET /api/website-session/orders`。后端订单列表额外返回只读的 `membershipExpiresAtUtc`，取自该订单实际关联的会员权益，包含续费叠加后的真实到期时间；`expiresAtUtc` 仍表示订单支付截止时间。已支付订单显示支付时间与会员有效期，待支付/已过期订单显示创建时间与支付截止/失效时间。未完成权益开通或缺失日期时显示待处理/待确认，不猜测日期，不改变订单金额、状态或支付规则。
+「我的订单」通过 `GET /api/website-session/orders` 读取历史记录。代理向后端传入 `historyOnly=true`，后端先筛选已支付和已退款订单，再取最近 50 条。页面按状态展示 `paidAtUtc` 或退款凭据的 `refundedAtUtc`，金额为原订单金额。缺少历史时间时显示「待确认」。
 
 「账号与安全」保留邮箱、密码及设备三项，并在底部单独提供注销账号。设备数从 `GET /api/website-session/devices` 获取，统计后端返回的有效登录设备，不将读取故障显示为零台。修改邮箱、密码及设备管理均连接真实后端，盾牌素材沿用 `assets/account-shield.svg`。
 

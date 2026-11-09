@@ -135,11 +135,12 @@ export function createWebsiteSession({ accountApiBaseUrl, websiteOrigin }) {
       const securityAction = ['email/current/code', 'email/current/verify', 'email/new/code', 'email/complete',
         'password', 'closure/code', 'closure/verify', 'closure/complete'].some(path => operation === `security/${path}`);
       const deviceLogout = area === 'devices' && uuid.test(orderId || '') && operation === `devices/${orderId}/logout`;
-      const resource = operation === 'devices' ? 'me/devices' : operation === 'membership' ? 'me/membership' : operation === 'orders' ? 'me/membership-orders' :
+      const method = req.method;
+      const resource = operation === 'devices' ? 'me/devices' : operation === 'membership' ? 'me/membership' :
+        operation === 'orders' ? (method === 'GET' ? 'me/membership-orders?historyOnly=true' : 'me/membership-orders') :
         orderAction ? `me/membership-orders/${orderId}/${action}` : securityAction ? `me/${operation}` :
           deviceLogout ? `me/devices/${orderId}/sessions` : operation === 'devices/logout-others' ? 'me/devices/logout-others' : '';
       if (!['register', 'login', 'me', 'logout'].includes(operation) && !resource) throw fail(404, 'not_found');
-      const method = req.method;
       const allowed = operation === 'orders' ? ['GET', 'POST'] : [operation === 'me' || operation === 'membership' || operation === 'devices' ? 'GET' : 'POST'];
       if (!allowed.includes(method)) throw fail(405, 'method_not_allowed');
       const host = req.headers.host || '';

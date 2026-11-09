@@ -7,21 +7,22 @@ import { goalsPreview } from './goals-preview.js';
 import { impactSection } from './impact-section.js';
 import { heroDuration } from './hero-timer.js';
 import { personalizationPreview } from './personalization-preview.js';
+import { focusCharacters } from './focus-characters.js';
+import { heroThemes } from './hero-theme.js';
+import { themeScenes } from './theme-scenes.js';
 import { accountCenter } from './account-center.js';
 import { header, heroShell, closing, pricing, faq, downloadShell, footer, overlays, notFound } from './site-shell.js';
 export { header, closing, pricing, faq, footer, overlays } from './site-shell.js';
 
-const controls = (maximizable = true) => `<span class="window-controls" aria-hidden="true"><i>−</i>${maximizable ? '<i>□</i>' : ''}<i>×</i></span>`;
-
 function focusWindow() {
   const heroLabel = `${String(Math.floor(heroDuration / 60)).padStart(2, '0')}:${String(heroDuration % 60).padStart(2, '0')}`;
-  const scene = `<picture><source srcset="/assets/focus02.webp" type="image/webp"/><img src="/assets/focus02.png" alt="" width="1536" height="1024" draggable="false"/></picture>`;
-  return `<div class="focus-window hero-focus" role="group" aria-label="专注计时演示窗口">
-    <div class="focus-scene" aria-hidden="true">${scene}</div>
-    <div class="focus-topbar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>${controls(false)}</div>
-    <div class="night-greeting"><span class="day-sun" aria-hidden="true">${icon('sun')}</span><div><h3>下午好</h3><p>把这一段时间，留给重要的事。</p></div></div>
-    <div class="focus-time" data-hero-time>${heroLabel}</div>
-    <p class="focus-task">${icon('language')}<span>学习英语</span></p>
+  const [day] = heroThemes;
+  const [girl] = focusCharacters;
+  return `<div class="focus-window hero-focus download-focus" role="group" aria-label="专注计时演示窗口">
+    <div class="focus-scene hero-themed-scene" aria-hidden="true">${themeScenes([girl], girl.id, [day])}</div>
+    <div class="focus-topbar" aria-hidden="true"><span class="window-dots"><i></i><i></i><i></i></span><span class="window-controls"><i>−</i><i>□</i><i>×</i></span></div>
+    <div class="night-greeting"><span class="day-sun" aria-hidden="true">${icon('sun')}</span><div><h3>${day.greeting}</h3><p>${day.note}</p></div></div>
+    <div class="focus-time" data-hero-time role="timer" aria-label="专注倒计时" aria-live="off">${heroLabel}</div>
     <div class="focus-toolbar">
       <span class="focus-toolbar-label">${icon('stop', 'focus-stop-icon')}<span>结束专注</span></span>
       <span class="focus-toolbar-divider" aria-hidden="true"></span>

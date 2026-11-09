@@ -1,4 +1,4 @@
-/* Download-only presentation; the existing software preview remains intact. */
+/* Download page and its fixed daytime software preview. */
 #download{--orange:#fd7e05;--text:#0d1b30;--muted:#718092;color:var(--text);background:linear-gradient(180deg,#fffdfb,#fff 78%,#fcfdff)}
 #download::before,#download::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
 #download::before{clip-path:ellipse(68% 35% at -14% 38%);background:linear-gradient(135deg,#fff0dccc,#fff7ed80 58%,#ffffff00)}
@@ -19,6 +19,8 @@
 #download .download-note{max-width:425px;margin:18px 0 0;text-align:center}
 #download .download-preview{min-width:0;width:100%;margin:0}
 #download .download-preview>.hero-focus{width:100%;max-width:none;box-shadow:0 16px 44px #20334e0d,0 2px 8px #20334e06}
+#download .download-focus{aspect-ratio:31/20;background:#edf7fc;border:1px solid #d5e1e9}
+#download .download-focus .hero-scene-character{bottom:14.5%}
 #download .download-features{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:64px 0 0;padding:0}
 #download .download-features li{min-width:0;display:flex;justify-content:center;align-items:center;gap:24px;padding:0 24px}
 #download .download-features li+li{border-left:1px solid #e6eaf0}

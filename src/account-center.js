@@ -5,13 +5,12 @@ import { billingPlans, formatAccountDate, formatOrderAmount } from './data.js';
 
 const sections = [
   { id: 'overview', label: '账户概览', icon: 'home', description: '查看你的账号与会员状态。' },
-  { id: 'orders', label: '我的订单', icon: 'receipt', description: '查看会员购买记录与支付状态。' },
+  { id: 'orders', label: '我的订单', icon: 'receipt', description: '查看会员支付与退款记录。' },
   { id: 'security', label: '账号与安全', icon: 'shield', description: '管理你的登录信息与设备，保障账号安全。' },
 ];
 const orderStatuses = {
-  paid: { label: '已支付' },
-  pending: { label: '待支付' },
-  expired: { label: '已过期' },
+  paid: '已支付',
+  refunded: '已退款',
 };
 
 const sectionUrl = id => `${accountPage.path}#${id}`;
@@ -90,24 +89,19 @@ export function overview(profile) {
 const orderTime = value => Number.isFinite(Date.parse(value)) ? `<time datetime="${escapeText(value)}">${formatAccountDate(value)}</time>` : '待确认';
 
 export function orderTimes(order) {
-  if (order.status !== 'paid') return `<p>创建时间：${orderTime(order.createdAtUtc)}</p><p>${order.status === 'expired' ? '失效时间' : '支付截止'}：${orderTime(order.expiresAtUtc)}</p>`;
-  const paid = Number.isFinite(Date.parse(order.paidAtUtc));
-  let validity = '待确认';
-  if (Number.isFinite(Date.parse(order.membershipExpiresAtUtc))) validity = orderTime(order.membershipExpiresAtUtc);
-  else if (order.activationStatus === 'activated' && order.membershipGrantId && order.plan === 'lifetime') validity = '永久有效';
-  else if (order.activationStatus !== 'activated') validity = '开通待处理';
-  return `<p>${paid ? '支付时间' : '创建时间'}：${orderTime(paid ? order.paidAtUtc : order.createdAtUtc)}</p><p>${validity.startsWith('<time') ? '有效期至' : '有效期'}：${validity}</p>`;
+  return order.status === 'refunded'
+    ? `<p>退款时间：${orderTime(order.refundedAtUtc)}</p>`
+    : `<p>支付时间：${orderTime(order.paidAtUtc)}</p>`;
 }
 
 export function orderList(orders) {
-  if (!orders.length) return '<div class="account-card account-orders-empty"><p>暂无会员订单。</p></div>';
-  return `<ul class="account-card account-orders" id="account-orders-list">${orders.map(order => {
-    const label = orderStatuses[order.status]?.label || '状态未知';
-    const tone = order.status === 'paid' ? 'paid' : order.status === 'pending' ? 'pending' : 'closed';
+  const history = orders.filter(order => Object.hasOwn(orderStatuses, order?.status));
+  if (!history.length) return '<div class="account-card account-orders-empty"><p>暂无会员订单。</p></div>';
+  return `<ul class="account-card account-orders" id="account-orders-list">${history.map(order => {
     return `<li class="account-order" data-order-status="${escapeText(order.status)}">
       <div class="account-order-identity">${tile('crown')}<div><h2>专业版 · ${escapeText(order.planName || billingPlans[order.plan]?.name || '会员')}</h2><p class="account-order-number">订单号：${escapeText(order.orderNumber)}</p></div></div>
       <div class="account-order-times">${orderTimes(order)}</div>
-      <div class="account-order-summary"><strong class="account-order-amount">${amount(order)}</strong><span class="account-badge is-${tone}">${label}</span></div>
+      <div class="account-order-summary"><strong class="account-order-amount">${amount(order)}</strong><span class="account-badge is-${order.status}">${orderStatuses[order.status]}</span></div>
     </li>`;
   }).join('')}</ul>`;
 }

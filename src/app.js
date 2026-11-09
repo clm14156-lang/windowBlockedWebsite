@@ -141,22 +141,17 @@ function selectBillingPlan(button) {
   membershipPricing?.select(button.dataset.billingPlan);
 }
 
-async function showMembershipPayment(planId, email) {
+async function showMembershipPayment(planId, email, trigger) {
   const previousController = dialogController, wasOpen = dialog.open;
   await membershipPricing?.refresh();
   if (wasOpen ? !dialog.open || dialogController !== previousController : dialog.open) return;
   const plan = membershipPricing?.get(planId);
   if (!plan?.available) { toast('套餐暂不可购买，请重新选择。'); return; }
   openDialog('payment', renderMembershipPayment(plan));
+  lastFocused = trigger;
   dialogController = initMembershipPayment($('#dialog-content'), {
     planId, catalogPlan: plan,
     email,
-    close: closeDialog,
-    changePlan() {
-      lastFocused = $('[data-billing-plan][aria-pressed="true"]');
-      closeDialog();
-      lastFocused.scrollIntoView({ block: 'center', behavior: 'instant' });
-    },
     complete(status) {
       account.updateMembership(status);
       openDialog('payment', renderMembershipPaymentSuccess());
@@ -173,8 +168,8 @@ async function showUpgrade(button) {
   button.disabled = !membershipPricing?.get(planId)?.available;
   button.removeAttribute('aria-busy');
   if (dialog.open) return;
-  if (email) showMembershipPayment(planId, email);
-  else showLogin(email => showMembershipPayment(planId, email));
+  if (email) showMembershipPayment(planId, email, button);
+  else showLogin(email => showMembershipPayment(planId, email, button));
   lastFocused = button;
 }
 

@@ -1,7 +1,6 @@
-import { billingPlans, formatOrderAmount, plans } from './data.js';
+import { billingPlans, formatOrderAmount } from './data.js';
 import { icon } from './icons.js';
 import { requestAccount } from './account-api.js';
-import { planPresentation } from './membership-catalog.js';
 
 const methods = {
   wechat: {
@@ -17,8 +16,6 @@ const methods = {
     mark: '<span aria-hidden="true">支</span>',
   },
 };
-const benefits = plans.find(plan => plan.id === 'pro').features.slice(1);
-
 function mockCode(seed) {
   // Decorative pattern only. These modules encode no QR payload.
   const size = 29;
@@ -39,42 +36,27 @@ const methodMark = id => `<span class="payment-mark" data-provider="${id}">${met
 const code = id => `${mockCode(methods[id].seed)}${methodMark(id)}`;
 
 export function renderMembershipPayment(plan) {
+  const planName = plan.name.replace(/[&<>]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[char]));
   return `<header class="payment-heading">
-    <h2 id="dialog-title" data-dialog-focus tabindex="-1"><img src="/assets/shiguang-logo.png" width="36" height="36" alt="专注时光"/>确认支付</h2>
-    <p id="payment-subtitle">开发测试支付 · 后端确认后将开通会员</p>
+    <h2 id="dialog-title" data-dialog-focus tabindex="-1">确认支付</h2>
   </header>
-  <div class="payment-columns">
-    <section class="payment-order" aria-labelledby="payment-order-title">
-      <h3 id="payment-order-title"><span class="payment-vip-mark" aria-hidden="true">◆</span> 专注 VIP</h3>
-      <div class="payment-order-summary">
-        <h4 data-payment-plan>${plan.name}</h4>
-        <p class="payment-total"><span>¥</span><strong data-payment-amount>—</strong><small data-payment-unit></small></p>
-        <p class="payment-plan-note" data-payment-note></p>
-        <p class="payment-order-number" data-payment-number hidden></p>
-        <ul class="payment-benefits">${benefits.map(([label]) => `<li><span aria-hidden="true">${icon('check')}</span>${label}</li>`).join('')}</ul>
-      </div>
-      <p class="payment-account">${icon('person')}<span>当前账号</span><strong data-payment-email></strong></p>
-    </section>
-    <section class="payment-methods" aria-labelledby="payment-methods-title">
-      <h3 id="payment-methods-title">支付方式</h3>
-      <div class="payment-method-switch" role="group" aria-label="选择支付方式">${Object.entries(methods).map(([id, method]) => `<button class="payment-method" type="button" data-payment-method="${id}" aria-pressed="${id === 'wechat'}" disabled>${methodMark(id)}<span>${method.name}</span><span class="payment-method-indicator" aria-hidden="true">${icon('check')}</span></button>`).join('')}</div>
-      <figure class="payment-code-frame">
-        <div class="payment-code-art" role="img" aria-label="演示二维码" data-payment-code>${code('wechat')}</div>
-        <figcaption>演示二维码</figcaption>
-      </figure>
-      <p class="payment-scan" data-payment-scan aria-live="polite">请使用微信扫码支付</p>
-      <p class="payment-timing">${icon('clock')}<span data-payment-time>正在创建订单…</span></p>
-      <span class="visually-hidden" role="status" data-payment-expiry></span>
-      <p class="payment-safety">${icon('shield')}演示支付，无实际扣款</p>
-    </section>
-  </div>
+  <section class="payment-order" aria-labelledby="payment-order-title">
+    <div class="payment-order-summary">
+      <h3 id="payment-order-title" data-payment-plan>${planName}</h3>
+      <p class="payment-account">开通账号：<span data-payment-email></span></p>
+    </div>
+    <p class="payment-total"><span>¥</span><strong data-payment-amount>—</strong></p>
+  </section>
+  <div class="payment-method-switch" role="group" aria-label="选择支付方式">${Object.entries(methods).map(([id, method]) => `<button class="payment-method" type="button" data-payment-method="${id}" aria-pressed="${id === 'wechat'}" disabled>${methodMark(id)}<span>${method.name}</span><span class="payment-method-indicator" aria-hidden="true">${icon('check')}</span></button>`).join('')}</div>
+  <figure class="payment-code-frame">
+    <div class="payment-code-art" role="img" aria-label="演示二维码" data-payment-code>${code('wechat')}</div>
+    <figcaption>演示二维码</figcaption>
+  </figure>
+  <p class="payment-scan" id="payment-subtitle" data-payment-scan aria-live="polite">微信扫码支付演示</p>
+  <p class="payment-timing">${icon('clock')}<span data-payment-time>正在创建订单…</span></p>
+  <span class="visually-hidden" role="status" data-payment-expiry></span>
   <p class="payment-error" data-payment-error role="alert" hidden></p>
-  <div class="payment-actions">
-    <button class="payment-text-button" type="button" data-payment-action="change">更换套餐</button>
-    <button class="payment-text-button" type="button" data-payment-action="cancel">取消支付</button>
-    <button class="button button-orange payment-primary" type="button" data-payment-action="complete" disabled>正在创建订单…</button>
-  </div>
-    <p class="payment-sync">${icon('refresh')}开通后，Windows 客户端使用同一账号获取会员权益</p>`;
+  <button class="button button-orange payment-primary payment-confirm" type="button" data-payment-action="complete" disabled>正在创建订单…</button>`;
 }
 
 export function renderMembershipPaymentSuccess() {
@@ -97,7 +79,7 @@ function errorMessage(error) {
   return '请求未完成，请检查网络后重试。';
 }
 
-export function initMembershipPayment(root, { planId, catalogPlan, email, close, changePlan, complete, api = requestAccount }) {
+export function initMembershipPayment(root, { planId, catalogPlan, email, complete, api = requestAccount }) {
   const controls = [...root.querySelectorAll('[data-payment-method]')];
   const qr = root.querySelector('[data-payment-code]');
   const scan = root.querySelector('[data-payment-scan]');
@@ -131,7 +113,7 @@ export function initMembershipPayment(root, { planId, catalogPlan, email, close,
     }
     const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
     const seconds = String(remaining % 60).padStart(2, '0');
-    time.innerHTML = `订单将在 <strong>${minutes}:${seconds}</strong> 后失效`;
+    time.innerHTML = `剩余支付时间 <strong>${minutes}:${seconds}</strong>`;
   }
 
   function syncControls() {
@@ -140,7 +122,6 @@ export function initMembershipPayment(root, { planId, catalogPlan, email, close,
   }
 
   function renderOrder(next) {
-    const plan = next && { id: next.plan, name: next.planName, durationDays: next.durationDays, durationMonths: next.durationMonths };
     const remaining = Date.parse(next?.expiresAtUtc) - Date.parse(next?.serverTimeUtc);
     if (!next?.id || !Object.hasOwn(billingPlans, next.plan) || !Object.hasOwn(methods, next.method) ||
         !next.planName || (next.plan !== 'lifetime' && !(next.durationDays > 0 || next.durationMonths > 0)) ||
@@ -148,16 +129,11 @@ export function initMembershipPayment(root, { planId, catalogPlan, email, close,
       throw new Error('Invalid order response');
     order = next;
     deadline = Date.now() + remaining;
-    const number = root.querySelector('[data-payment-number]');
-    number.textContent = `订单编号 ${order.orderNumber}`;
-    number.hidden = false;
-    root.querySelector('[data-payment-plan]').textContent = plan.name;
+    root.querySelector('[data-payment-plan]').textContent = order.planName;
     root.querySelector('[data-payment-amount]').textContent = formatOrderAmount(order.amountFen);
-    root.querySelector('[data-payment-unit]').textContent = planPresentation(plan).unit ? `/ ${planPresentation(plan).unit}` : '';
-    root.querySelector('[data-payment-note]').textContent = planPresentation(plan).note;
     for (const option of controls) option.setAttribute('aria-pressed', String(option.dataset.paymentMethod === order.method));
     qr.innerHTML = code(order.method);
-    scan.textContent = `请使用${methods[order.method].scan}扫码支付`;
+    scan.textContent = `${methods[order.method].scan}扫码支付演示`;
     updateTime();
   }
 
@@ -204,9 +180,7 @@ export function initMembershipPayment(root, { planId, catalogPlan, email, close,
         methodUnconfirmed = false;
         renderOrder(result);
       });
-    } else if (button.dataset.paymentAction === 'change') changePlan();
-    else if (button.dataset.paymentAction === 'cancel') close();
-    else if (button === confirm) {
+    } else if (button === confirm) {
       if (!order) { void create(); return; }
       updateTime();
       if (confirm.disabled) return;
