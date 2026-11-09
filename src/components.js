@@ -7,6 +7,7 @@ import { goalsPreview } from './goals-preview.js';
 import { impactSection } from './impact-section.js';
 import { heroDuration } from './hero-timer.js';
 import { personalizationPreview } from './personalization-preview.js';
+import { accountCenter } from './account-center.js';
 import { header, heroShell, closing, pricing, faq, downloadShell, footer, overlays, notFound } from './site-shell.js';
 export { header, closing, pricing, faq, footer, overlays } from './site-shell.js';
 
@@ -22,11 +23,10 @@ function focusWindow() {
     <div class="focus-time" data-hero-time>${heroLabel}</div>
     <p class="focus-task">${icon('language')}<span>学习英语</span></p>
     <div class="focus-toolbar">
-      <button data-hero-toggle aria-pressed="true">${icon('stop', 'focus-stop-icon')}<span>结束专注</span></button>
+      <span class="focus-toolbar-label">${icon('stop', 'focus-stop-icon')}<span>结束专注</span></span>
       <span class="focus-toolbar-divider" aria-hidden="true"></span>
-      <button data-demo="tasks">${icon('list')}<span>查看任务 (4)</span></button>
+      <span class="focus-toolbar-label">${icon('list')}<span>查看任务 (4)</span></span>
     </div>
-    <button class="mini-timer hero-mini" data-demo aria-label="体验悬浮专注计时器，剩余 ${heroLabel}"><span class="timer-ring" aria-hidden="true"></span><span data-hero-time>${heroLabel}</span></button>
   </div>`;
 }
 
@@ -63,7 +63,9 @@ export function renderSite(page = 'features') {
     'not-found': notFound,
     membership: pricing,
     help: faq,
+    account: accountCenter,
   }[page];
   if (!content) throw new Error(`Unknown page: ${page}`);
+  if (page === 'account') return `${header(page)}<main id="main" class="page-account" hidden>${content()}</main>${overlays()}`;
   return `${header(page)}<main id="main" class="page-${page}${page !== 'features' ? ' standalone-page' : ''}">${content()}</main>${footer()}${overlays()}`;
 }

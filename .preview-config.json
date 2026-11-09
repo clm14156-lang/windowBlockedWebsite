@@ -1,0 +1,4 @@
+{
+  "port": 5175,
+  "accountApiBaseUrl": "http://127.0.0.1:5082"
+}

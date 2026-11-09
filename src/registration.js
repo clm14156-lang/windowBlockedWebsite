@@ -1,22 +1,22 @@
 import { brand, icon } from './icons.js';
 import { AccountApiError, requestAccount } from './account-api.js';
 
-function field(name, label, leadingIcon, type = 'text', trailing = '', prefix = 'register') {
+export function field(name, label, leadingIcon, type = 'text', trailing = '', prefix = 'register', options = {}) {
   const id = `${prefix}-${name}`;
-  const autocomplete = { account: 'username', email: 'email', code: 'one-time-code' }[name] || 'new-password';
+  const { placeholder = label, autocomplete = { account: 'username', email: 'email', code: 'one-time-code' }[name] || 'new-password' } = options;
   const account = name === 'account' || name === 'email';
   return `<div class="registration-field" data-registration-field="${name}">
     <label class="visually-hidden" for="${id}">${label}</label>
-    <div class="registration-input-row">${icon(leadingIcon)}<input id="${id}" name="${name}" type="${type}" placeholder="${label}" autocomplete="${autocomplete}"${name === 'code' ? ' inputmode="numeric"' : ''}${account ? ' autocapitalize="none" spellcheck="false"' : ''} required aria-describedby="${id}-error"/>${trailing}</div>
+    <div class="registration-input-row">${icon(leadingIcon)}<input id="${id}" name="${name}" type="${type}" placeholder="${placeholder}" autocomplete="${autocomplete}"${name === 'code' ? ' inputmode="numeric"' : ''}${account ? ' autocapitalize="none" spellcheck="false"' : ''} required aria-describedby="${id}-error"/>${trailing}</div>
     <p class="registration-error" id="${id}-error" data-registration-error="${name}" aria-live="polite" hidden></p>
   </div>`;
 }
 
-function toggle(name, label, prefix = 'register') {
+export function toggle(name, label, prefix = 'register') {
   return `<button type="button" class="registration-password-toggle" data-registration-password="${name}" aria-label="显示${label}" aria-controls="${prefix}-${name}" aria-pressed="false">${icon('eyeOff')}</button>`;
 }
 
-function setPasswordVisibility(input, button, label, visible) {
+export function setPasswordVisibility(input, button, label, visible) {
   input.type = visible ? 'text' : 'password';
   button.setAttribute('aria-pressed', String(visible));
   button.setAttribute('aria-label', `${visible ? '隐藏' : '显示'}${label}`);
@@ -40,11 +40,10 @@ export function renderRegistration() {
       <aside class="registration-policy-panel" data-registration-policy-panel hidden><h3 data-registration-policy-title></h3><p data-registration-policy-copy></p><button type="button" data-registration-policy-close>收起</button></aside>
       <button type="submit" class="button registration-submit">注册并开始体验</button>
     </form>
-    <p class="registration-recovery-entry"><span>已有账号，忘记密码？ <button type="button" data-recovery-start>找回密码</button></span></p>
   </div>`;
 }
 
-function emailError(input) {
+export function emailError(input) {
   if (!input.value.trim()) return '请输入邮箱';
   if (input.validity.typeMismatch || input.value.trim().length > 256) return '请输入有效的邮箱地址';
   return '';
@@ -59,7 +58,7 @@ function passwordError(value) {
     ? '' : '密码须为 8–128 个字符，包含字母和数字';
 }
 
-function fieldError(form, input, message = '') {
+export function fieldError(form, input, message = '') {
   const error = form.querySelector(`[data-registration-error="${input.name}"]`);
   error.textContent = message;
   error.hidden = !message;
@@ -203,11 +202,11 @@ export function initRegistrationForm(form, {
     if (first) { fields[first].focus(); return; }
     busy('submit');
     try {
-      const user = await api('register', { email: values.account.trim(), challengeId: challenge.id,
+      const session = await api('register', { email: values.account.trim(), challengeId: challenge.id,
         code: values.code.trim(), password: values.password }, request.signal);
       if (disposed) return;
-      if (!user?.id) throw new AccountApiError('request_failed');
-      onSuccess('注册成功，可以使用该账号登录 Windows 客户端');
+      if (!session?.user?.id || !session.user.email || !(Date.parse(session.expiresAtUtc) > Date.now())) throw new AccountApiError('request_failed');
+      onSuccess(session);
     } catch (failure) {
       if (disposed) return;
       const [name, message] = requestError(failure);
@@ -274,7 +273,6 @@ export function initPasswordRecovery(dialog, {
 } = {}) {
   const registration = dialog.querySelector('[data-registration-view]');
   const registrationForm = registration.querySelector('form');
-  const start = registration.querySelector('[data-recovery-start]');
   const recovery = dialog.querySelector('[data-recovery-view]');
   const panels = {
     email: recovery.querySelector('[data-recovery-step="email"]'),
@@ -356,7 +354,7 @@ export function initPasswordRecovery(dialog, {
     dialog.setAttribute('aria-labelledby', titleId);
     dialog.setAttribute('aria-describedby', registering ? 'registration-subtitle' : `recovery-${next}-subtitle`);
     dialog.scrollTop = 0;
-    const focus = { registration: start, email, reset: code }[next] || recovery.querySelector(`#${titleId}`);
+    const focus = { registration: registrationForm.querySelector('input'), email, reset: code }[next] || recovery.querySelector(`#${titleId}`);
     focus.focus();
     if (next === 'reset') startCountdown();
   }
@@ -441,11 +439,14 @@ export function initPasswordRecovery(dialog, {
     } finally { if (!disposed) busy(''); }
   }
 
+  function startRecovery() {
+    if (step === 'registration' && registrationForm.getAttribute('aria-busy') !== 'true') show('email');
+  }
+
   function handleClick(event) {
     const button = event.target.closest('button');
     if (pending) return;
-    if (step === 'registration' && button === start && registrationForm.getAttribute('aria-busy') !== 'true') show('email');
-    else if (button?.hasAttribute('data-recovery-back')) {
+    if (button?.hasAttribute('data-recovery-back')) {
       if (step === 'reset') {
         if (ticket) challenge = ticket = null;
         clearReset();
@@ -475,6 +476,7 @@ export function initPasswordRecovery(dialog, {
   ];
   for (const [target, type, listener] of listeners) target.addEventListener(type, listener);
   return {
+    start: startRecovery,
     destroy() {
       disposed = true;
       request.abort();

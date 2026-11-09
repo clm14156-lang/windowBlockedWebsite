@@ -4,23 +4,25 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolvePage, notFoundPage } from '../src/routes.js';
 import { renderDocument } from './document.mjs';
+import { createWebsiteSession } from './website-session.mjs';
+import { resolvePreviewConfig } from './preview-config.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const portIndex = process.argv.indexOf('--port');
-const port = Number(process.env.PORT || (portIndex >= 0 ? process.argv[portIndex + 1] : 5173));
-const previewConfig = { accountApiBaseUrl: process.env.FOCUSTIME_API_BASE_URL || 'http://localhost:5080' };
+const previewConfig = resolvePreviewConfig();
 const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.json': 'application/json; charset=utf-8' };
-export function createPreviewServer() {
+export function createPreviewServer({ accountApiBaseUrl = previewConfig.accountApiBaseUrl, websiteOrigin = previewConfig.websiteOrigin } = {}) {
+  const session = createWebsiteSession({ accountApiBaseUrl, websiteOrigin });
   return http.createServer(async (req, res) => {
   try {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+    if (pathname.startsWith('/api/website-session/')) return await session(req, res, pathname);
     const page = resolvePage(pathname);
     if (page) {
       if (pathname !== '/' && pathname !== page.path && pathname !== '/index.html') {
         res.writeHead(301, { Location: page.path }).end(); return;
       }
       const template = await readFile(path.join(root, 'index.html'), 'utf8');
-      const html = renderDocument(template, page, previewConfig);
+      const html = renderDocument(template, page, { accountApiBaseUrl });
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
       res.end(req.method === 'HEAD' ? undefined : html); return;
     }
@@ -39,12 +41,20 @@ export function createPreviewServer() {
     if (!path.extname(pathname) || pathname.endsWith('/index.html') || pathname === '/404.html') {
       const template = await readFile(path.join(root,'index.html'),'utf8');
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
-      res.end(req.method === 'HEAD' ? undefined : renderDocument(template, notFoundPage, previewConfig));
+      res.end(req.method === 'HEAD' ? undefined : renderDocument(template, notFoundPage, { accountApiBaseUrl }));
     } else res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('资源不存在');
   }
   });
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  createPreviewServer().listen(port, '127.0.0.1', () => console.log(`专注官网 Local: http://127.0.0.1:${port}`));
+  const server = createPreviewServer();
+  server.on('error', error => {
+    console.error(error.code === 'EADDRINUSE' ? `端口 ${previewConfig.port} 已被占用，请关闭旧官网服务或使用 --port 指定其他端口。` : error.message);
+    process.exitCode = 1;
+  });
+  server.listen(previewConfig.port, '127.0.0.1', () => {
+    console.log(`专注官网 Local: http://127.0.0.1:${previewConfig.port}/features/`);
+    console.log(`账号后端：${previewConfig.accountApiBaseUrl || '未配置'}`);
+  });
 }

@@ -201,7 +201,7 @@
   background:#729de66b;
   flex-shrink:0;
 }
-.focus-toolbar button{
+.focus-toolbar button,.focus-toolbar-label{
   display:flex;
   align-items:center;
   justify-content:center;
@@ -287,7 +287,7 @@
 .hero-focus .focus-task{color:var(--muted)}
 .hero-focus .focus-toolbar{border-top-color:#ffffffe0}
 .hero-focus .focus-toolbar-divider{background:#65847566}
-.hero-focus .focus-toolbar button{color:#344b58}
+.hero-focus .focus-toolbar button,.hero-focus .focus-toolbar-label{color:#344b58}
 .hero-focus .focus-toolbar button:hover{color:#1c3440;background:#ffffff30}
 .hero-focus .focus-toolbar .focus-stop-icon{color:#344b58;filter:none}
 .hero-focus > .hero-mini{

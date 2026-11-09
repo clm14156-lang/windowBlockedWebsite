@@ -6,8 +6,10 @@ export const pages = [
 ];
 
 export const notFoundPage = { id: 'not-found', title: '页面未找到 — 专注时光', description: '该页面暂时不在这里，返回专注时光首页继续浏览。' };
+export const accountPage = { id: 'account', path: '/account/', title: '个人中心 — 专注时光', description: '查看专注时光演示账号、会员权益、订单与安全设置。' };
+export const sitePages = [...pages, accountPage];
 
 export function resolvePage(pathname) {
   if (pathname === '/' || pathname === '/index.html') return pages[0];
-  return pages.find(page => [page.path, page.path.slice(0, -1), `${page.path}index.html`].includes(pathname)) || null;
+  return sitePages.find(page => [page.path, page.path.slice(0, -1), `${page.path}index.html`].includes(pathname)) || null;
 }

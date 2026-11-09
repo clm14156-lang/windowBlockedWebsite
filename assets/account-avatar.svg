@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <defs>
+    <linearGradient id="background" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#ecf0fc"/><stop offset="1" stop-color="#d5dff5"/>
+    </linearGradient>
+    <linearGradient id="shirt" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#6086bd"/><stop offset="1" stop-color="#36578f"/>
+    </linearGradient>
+    <clipPath id="circle"><circle cx="40" cy="40" r="40"/></clipPath>
+  </defs>
+  <g clip-path="url(#circle)">
+    <circle cx="40" cy="40" r="40" fill="url(#background)"/>
+    <path fill="#fff" opacity=".36" d="M0 53 29 29l8 14L14 80H0zm60-30 20 6v26L59 43z"/>
+    <path fill="url(#shirt)" d="M8 80c2-15 13-19 25-23h14c12 4 23 8 25 23Z"/>
+    <path fill="#f1ab8a" d="M33 48h14v11a7 7 0 0 1-14 0z"/>
+    <path fill="#ffc4a3" d="M25 32c-6-2-6 8 1 9 2 10 9 15 14 15s12-5 14-15c7-1 7-11 1-9V22H25Z"/>
+    <path fill="#282e3b" d="M24 35c-4-9-2-17 4-19 3-7 19-8 25 1 6 2 6 12 2 19l-3-7-2-5c-6 4-13 2-19-1l-3 4-2 9Z"/>
+    <path fill="#fff" opacity=".08" d="M24 28c-1-7 3-11 8-12 6-4 14-3 19 2-8-3-21-2-27 10Z"/>
+  </g>
+</svg>

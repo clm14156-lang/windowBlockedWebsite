@@ -1,4 +1,4 @@
-/* Registration prototype only; the page, navigation and other dialogs are untouched. */
+/* Shared account dialog and form styles. */
 .product-dialog.registration-dialog{width:560px;max-width:calc(100% - 32px);max-height:calc(100dvh - 32px);margin:auto;border:1px solid #e7e9ef;border-radius:24px;background:linear-gradient(135deg,#fffefc,#fff 48%,#fcfcff);box-shadow:0 24px 80px #14243d24}
 .registration-dialog::backdrop{background:#18233660;backdrop-filter:blur(5px)}
 .registration-dialog[open]{animation:registration-enter 220ms cubic-bezier(.2,.7,.3,1) both}
@@ -40,26 +40,12 @@
 .registration-dialog .registration-policy-panel{padding:14px 16px;border:1px solid #e8ebf0;border-radius:12px;background:#f9fafc}
 .registration-dialog .registration-policy-panel h3{margin:0 0 6px}
 .registration-dialog .registration-policy-panel p{margin:0 0 8px}
+.registration-dialog [data-registration-view] .registration-heading{margin:20px 0}
+.registration-dialog [data-registration-view] .registration-form{gap:12px}
+.registration-dialog [data-registration-view] .registration-agreement{margin-top:6px}
+.registration-dialog [data-registration-view] .registration-submit{margin-top:6px}
 
-.registration-dialog .registration-recovery-entry{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  margin:18px 0 0;
-  text-align:center;
-}
-.registration-dialog .registration-recovery-entry::before,
-.registration-dialog .registration-recovery-entry::after{
-  content:"";
-  flex:1 0 12px;
-  max-width:58px;
-  height:1px;
-  background:#e0e4eb;
-}
-.registration-dialog [data-recovery-start],
 .registration-dialog .recovery-back{padding:4px 0;background:transparent}
-.registration-dialog [data-recovery-start]:hover{text-decoration:underline;text-underline-offset:3px}
 .registration-dialog .recovery-back{display:inline-flex;align-items:center;gap:7px}
 .registration-dialog .recovery-back:hover{color:var(--text-primary)}
 .registration-dialog .recovery-back .icon{width:19px;height:19px;transform:rotate(180deg)}
@@ -95,3 +81,23 @@
   .registration-dialog .registration-send{min-width:100px;padding:8px 10px}
 }
 @media(prefers-reduced-motion:reduce){.registration-dialog[open],.registration-dialog[open]::backdrop{animation:none}}
+
+/* Login uses the same shell and field states as registration. */
+.product-dialog.login-dialog{background:var(--surface);--text-accent:var(--action-orange)}
+.login-dialog .login-logo{width:40px;height:40px;margin:0 auto}
+.login-dialog .registration-heading{margin:12px 0 26px}
+.login-dialog .registration-heading h2::before,.login-dialog .registration-heading h2::after{content:none}
+.login-dialog .registration-form{gap:16px}
+.login-dialog .registration-input-row{min-height:52px;border-radius:999px;background:#fafbfc}
+.login-dialog .registration-input-row:focus-within{border-color:var(--action-orange);box-shadow:0 0 0 3px #fd7e0510}
+.login-link{padding:4px 0;background:transparent;color:var(--text-body)}
+.login-link:hover{text-decoration:underline;text-underline-offset:3px}
+.login-recovery{flex:none;min-height:24px;padding:2px 3px 2px 16px;border-left:1px solid #dbe0e8;white-space:nowrap}
+.login-recovery:hover{color:var(--text-primary)}
+.login-recovery:focus-visible{outline-offset:2px;border-radius:2px}
+.login-dialog .registration-submit{margin-top:10px;background:var(--action-orange);box-shadow:0 6px 18px #fd7e0514}
+.login-dialog .registration-submit:hover{background:var(--action-orange-hover);box-shadow:0 6px 18px #fd7e0520;transform:none}
+.login-register{display:flex;align-items:center;justify-content:center;gap:8px;margin:18px 0 0;text-align:center;color:var(--text-body)}
+.login-register .login-link{color:var(--action-orange)}
+.login-register .login-link:hover{color:var(--action-orange-hover)}
+@media(max-width:480px){.login-recovery{padding-left:12px}}

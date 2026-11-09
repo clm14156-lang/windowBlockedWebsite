@@ -1,5 +1,5 @@
-import { renderSite } from './components.js';
-import { icon, brand } from './icons.js';
+import { pricing, renderSite } from './components.js';
+import { icon } from './icons.js';
 import { resolvePage, notFoundPage } from './routes.js';
 import { initSetupCarousel } from './setup-carousel.js';
 import { initStatisticsCarousel } from './statistics-carousel.js';
@@ -10,11 +10,18 @@ import { initPersonalizationTimer } from './personalization-timer.js';
 import { initHeroScrollShowcase } from './hero-scroll-showcase.js';
 import { initHelpCenter } from './help-center.js';
 import { renderRegistration, initRegistrationForm, renderPasswordRecovery, initPasswordRecovery } from './registration.js';
-import { publicUrl, siteConfig } from './site-config.js';
+import { renderLogin, initLoginForm } from './login.js';
+import { initAccountCenter } from './account-center.js';
+import { renderAccountSecurity, initAccountSecurity } from './account-security.js';
+import { billingPlans, defaultBillingPlan } from './data.js';
+import { initMembershipPayment, renderMembershipPayment, renderMembershipPaymentSuccess } from './membership-payment.js';
+import { initMembershipPricing } from './membership-catalog.js';
 
 const page = resolvePage(location.pathname) || notFoundPage;
 const app = document.querySelector('#app');
 if (!app.childElementCount) app.innerHTML = renderSite(page.id);
+// Reconcile older preview markup before binding the database-backed catalog controls.
+else if (page.id === 'membership' && !app.querySelector('[data-catalog-status]')) app.querySelector('#pricing').outerHTML = pricing();
 document.title = page.title;
 document.querySelector('meta[name="description"]').content = page.description;
 history.scrollRestoration = 'auto';
@@ -24,11 +31,12 @@ const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': 
 const formatTime = seconds => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 const demoDuration = 30 * 60;
 const state = {
-  selectedPlan: 'pro', heroTime: heroDuration, heroRunning: true,
+  billingPlan: defaultBillingPlan, heroTime: heroDuration, heroRunning: true,
   demoTime: demoDuration, demoRunning: false, demoTab: 'timer',
   tasks: [false, false, false, false],
 };
-const heroTimer = initHeroTimer($('.download-preview .hero-focus'), state, icon);
+const membershipPricing = initMembershipPricing($('#pricing'), { onSelect(id) { state.billingPlan = id; } });
+const heroTimer = initHeroTimer($('.download-preview .hero-focus'), state);
 const personalizationTimer = initPersonalizationTimer($('#personalization'));
 let toastTimeout;
 function toast(message) {
@@ -41,25 +49,48 @@ function toast(message) {
 const dialog = $('#product-dialog');
 let lastFocused;
 let dialogKind = '';
-let registrationController = null;
+let dialogController = null;
 function openDialog(kind, content) {
   if (!dialog.open) lastFocused = document.activeElement;
-  registrationController?.destroy();
-  registrationController = null;
+  dialogController?.destroy();
+  dialogController = null;
   dialogKind = kind;
-  dialog.classList.toggle('registration-dialog', kind === 'registration');
-  if (kind === 'registration') dialog.setAttribute('aria-describedby', 'registration-subtitle');
+  const accountForm = kind === 'registration' || kind === 'login';
+  dialog.classList.toggle('registration-dialog', accountForm);
+  dialog.classList.toggle('login-dialog', kind === 'login');
+  dialog.classList.toggle('membership-payment-dialog', kind === 'payment');
+  dialog.classList.toggle('account-security-dialog', kind === 'security');
+  if (accountForm) dialog.setAttribute('aria-describedby', `${kind}-subtitle`);
+  else if (kind === 'payment') dialog.setAttribute('aria-describedby', 'payment-subtitle');
   else dialog.removeAttribute('aria-describedby');
   $('#dialog-content').innerHTML = content;
   if (!dialog.open) { dialog.showModal(); document.body.style.overflow = 'hidden'; }
-  const first = $('input, [data-demo-run], [data-confirm-plan], [type="submit"]', $('#dialog-content'));
+  dialog.scrollTop = 0;
+  const first = $('input, [data-demo-run], [data-dialog-focus], [type="submit"]', $('#dialog-content'));
   (first || $('[data-dialog-close]')).focus({ preventScroll: true });
 }
-function closeDialog() { dialog.close(); }
+function closeDialog() { if (dialogController?.canClose?.() !== false) dialog.close(); }
+const account = initAccountCenter({ toast, showSecurity });
+
+function showSecurity(kind, profile) {
+  openDialog('security', renderAccountSecurity(kind));
+  dialogController = initAccountSecurity($('[data-security-root]'), {
+    kind, profile, close:closeDialog,
+    sessionUpdated(session) {
+      account.updateSession(session);
+      account.refreshDevices();
+      lastFocused = $(`[data-account-security="${kind}"]`);
+    },
+    devicesUpdated() { account.refreshDevices(); },
+    closed() { location.replace('/features/'); },
+  });
+}
+
+dialog.addEventListener('cancel', event => { if (dialogController?.canClose?.() === false) event.preventDefault(); });
 dialog.addEventListener('close', () => {
-  registrationController?.destroy();
-  registrationController = null;
-  dialog.classList.remove('registration-dialog');
+  dialogController?.destroy();
+  dialogController = null;
+  dialog.classList.remove('registration-dialog', 'login-dialog', 'membership-payment-dialog', 'account-security-dialog');
   dialog.removeAttribute('aria-describedby');
   dialogKind = '';
   document.body.style.overflow = '';
@@ -72,30 +103,79 @@ dialog.addEventListener('click', event => {
   if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
 });
 
-function showRegistration() {
+function showLogin(continuePurchase) {
+  openDialog('login', renderLogin());
+  dialogController = initLoginForm($('#login-form'), session => {
+    if (continuePurchase) {
+      account.signIn(session, { focus: false });
+      continuePurchase(session.user.email);
+      return;
+    }
+    lastFocused = null;
+    closeDialog();
+    account.signIn(session);
+  });
+}
+
+function showRegistration(startInRecovery = false) {
   openDialog('registration', renderRegistration() + renderPasswordRecovery());
   const registration = initRegistrationForm($('#registration-form'), {
-    onSuccess: message => { closeDialog(); toast(message); },
+    onSuccess: session => {
+      lastFocused = null;
+      closeDialog();
+      account.signIn(session);
+      toast('注册成功，已自动登录');
+    },
   });
   const recovery = initPasswordRecovery(dialog);
-  registrationController = {
+  dialogController = {
     destroy() {
       registration.destroy();
       recovery.destroy();
     },
   };
+  if (startInRecovery) recovery.start();
 }
 
-function selectPlan(plan, announce = true) {
-  state.selectedPlan = plan;
-  $$('[data-plan-card]').forEach(card => card.classList.toggle('selected', card.dataset.planCard === plan));
-  $$('[data-plan]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.plan === plan)));
-  if (announce) toast(`正在查看${plan === 'pro' ? '专业版' : '免费版'}方案`);
+function selectBillingPlan(button) {
+  membershipPricing?.select(button.dataset.billingPlan);
 }
-function showUpgrade() {
-  selectPlan('pro', false);
-  const checkout = publicUrl(siteConfig.checkoutUrl);
-  openDialog('upgrade', `<span class="demo-label">专业版方案</span><h2 id="dialog-title">为长期投入，准备完整工具。</h2><p class="dialog-description">从目标计划到专注回顾，保持清楚的节奏。</p><div class="dialog-summary"><div><b>专业版 · 年度方案</b><p>当前为价格与权益示意</p></div><strong>¥68<small> / 年</small></strong></div><ul class="dialog-feature-list">${['免费版的全部功能', '目标与任务管理、进度追踪', '详细统计、日历与历史记录'].map(t => `<li>${icon('check')}${t}</li>`).join('')}</ul><p class="dialog-note">${checkout ? '下单前请在购买页面确认正式价格、授权范围与服务条款。' : '购买入口暂未开放，此处不会创建订单或产生扣费。'}</p>${checkout ? `<a class="button button-orange dialog-full" href="${escapeHTML(checkout)}" rel="noopener">前往购买${icon('arrow')}</a>` : `<button class="button button-orange dialog-full" data-demo>先体验核心功能${icon('arrow')}</button>`}`);
+
+async function showMembershipPayment(planId, email) {
+  const previousController = dialogController, wasOpen = dialog.open;
+  await membershipPricing?.refresh();
+  if (wasOpen ? !dialog.open || dialogController !== previousController : dialog.open) return;
+  const plan = membershipPricing?.get(planId);
+  if (!plan?.available) { toast('套餐暂不可购买，请重新选择。'); return; }
+  openDialog('payment', renderMembershipPayment(plan));
+  dialogController = initMembershipPayment($('#dialog-content'), {
+    planId, catalogPlan: plan,
+    email,
+    close: closeDialog,
+    changePlan() {
+      lastFocused = $('[data-billing-plan][aria-pressed="true"]');
+      closeDialog();
+      lastFocused.scrollIntoView({ block: 'center', behavior: 'instant' });
+    },
+    complete(status) {
+      account.updateMembership(status);
+      openDialog('payment', renderMembershipPaymentSuccess());
+    },
+  });
+}
+
+async function showUpgrade(button) {
+  if (dialog.open || button.disabled) return;
+  const planId = state.billingPlan;
+  button.disabled = true;
+  button.setAttribute('aria-busy', 'true');
+  const email = await account.getEmail();
+  button.disabled = !membershipPricing?.get(planId)?.available;
+  button.removeAttribute('aria-busy');
+  if (dialog.open) return;
+  if (email) showMembershipPayment(planId, email);
+  else showLogin(email => showMembershipPayment(planId, email));
+  lastFocused = button;
 }
 
 function renderDemoPanel() {
@@ -153,10 +233,12 @@ document.addEventListener('click', event => {
   const target = event.target.closest('button, a');
   if (!target) return;
   if (target.matches('[data-registration]')) showRegistration();
+  else if (target.matches('[data-account-login]')) showLogin();
+  else if (target.matches('[data-login-recovery]')) showRegistration(true);
   else if (target.matches('[data-demo]')) showDemo(target.dataset.demo);
   else if (target.matches('[data-dialog-close]')) closeDialog();
-  else if (target.matches('[data-upgrade]')) showUpgrade();
-  else if (target.matches('[data-plan]')) selectPlan(target.dataset.plan);
+  else if (target.matches('[data-upgrade]')) void showUpgrade(target);
+  else if (target.matches('[data-billing-plan]')) selectBillingPlan(target);
   else if (target.matches('[data-demo-tab]')) {
     state.demoTab = target.dataset.demoTab;
     $$('[data-demo-tab]').forEach(b => { const active = b.dataset.demoTab === state.demoTab; b.classList.toggle('active', active); b.setAttribute('aria-selected', String(active)); });
@@ -169,10 +251,6 @@ document.addEventListener('click', event => {
     $('[data-demo-clock]').textContent = formatTime(state.demoTime);
   }
   else if (target.matches('[data-demo-reset]')) { state.demoRunning = false; state.demoTime = demoDuration; $('[data-demo-clock]').textContent = formatTime(state.demoTime); $('[data-demo-run]').innerHTML = `${icon('play')}开始专注`; }
-  else if (target.matches('[data-hero-toggle]')) {
-    heroTimer.toggle();
-    toast(state.heroRunning ? '已开始专注计时演示' : '本次专注已结束，随时可以重新开始');
-  }
   else if (target.matches('[data-chart-period]')) updateChart(target.dataset.chartPeriod);
   else if (target.matches('.mobile-menu')) {
     const open = target.getAttribute('aria-expanded') !== 'true';

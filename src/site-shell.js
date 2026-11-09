@@ -1,13 +1,14 @@
 import { icon, brand } from './icons.js';
-import { plans, faqs } from './data.js';
+import { plans, faqs, billingPlans, defaultBillingPlan } from './data.js';
 import { pages } from './routes.js';
 import { publicUrl, siteConfig } from './site-config.js';
+import { accountNavigation } from './account-center.js';
 
 const primaryActions = () => `<div class="hero-actions"><button type="button" class="button button-orange hero-start" data-demo aria-haspopup="dialog">开始使用${icon('chevron')}</button><a class="button button-secondary hero-download" href="/download/">${icon('windows')}<span>立即下载</span>${icon('arrow', 'hero-download-arrow')}</a></div>`;
 
 export function header(page = 'features') {
   const nav = pages.map(item => `<a class="nav-item${item.id === page ? ' active' : ''}" href="${item.path}" data-nav="${item.id}"${item.id === page ? ' aria-current="page"' : ''}>${item.label}</a>`).join('');
-  return `<header class="site-header" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav><button class="button button-small trial-button" data-registration aria-haspopup="dialog" aria-controls="product-dialog">免费体验${icon('arrow')}</button><button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
+  return `<header class="site-header${page === 'account' ? ' account-page-header' : ''}" id="site-header"><div class="nav-shell"><a class="brand-link" href="/features/" aria-label="专注时光首页">${brand()}</a><nav class="desktop-nav" aria-label="主导航">${nav}</nav>${accountNavigation()}<button class="mobile-menu" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav">${icon('menu')}</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="移动导航" hidden>${nav}</nav></header>`;
 }
 
 export function heroShell() {
@@ -35,6 +36,7 @@ export function closing() {
 }
 
 export function pricing() {
+  const billing = billingPlans[defaultBillingPlan];
   const advantages = [
     ['shield', '减少分心干扰', '自定义网站与应用屏蔽清单。'],
     ['windows', 'Windows 桌面体验', '专注计时，搭配轻巧悬浮窗。'],
@@ -44,14 +46,21 @@ export function pricing() {
   return `<section class="section pricing-section" id="pricing" aria-labelledby="pricing-title">
     <div class="section-inner membership-inner">
       <header class="page-heading membership-heading"><h1 id="pricing-title">简单开始，<span>按需升级</span>。</h1><p>基础专注功能免费使用，需要更多能力时再选择专业版。</p></header>
-      <div class="pricing-grid">${plans.map(plan => `<article class="price-card ${plan.id === 'pro' ? 'recommended selected' : ''}" data-plan-card="${plan.id}" aria-labelledby="plan-title-${plan.id}">
-        <h2 class="plan-title" id="plan-title-${plan.id}"><button type="button" class="plan-select" data-plan="${plan.id}" aria-pressed="${plan.id === 'pro'}"><span>${plan.name}</span>${plan.id === 'pro' ? '<span class="recommend-badge">推荐</span>' : ''}</button></h2>
+      <div class="billing-switch" data-membership-billing role="group" aria-label="选择专业版套餐">${Object.entries(billingPlans).map(([id, option]) => `
+        <button class="billing-option" type="button" data-billing-plan="${id}" aria-pressed="${id === defaultBillingPlan}" disabled>
+          <span class="billing-option-label">${icon(option.icon)}${option.label}</span>
+        </button>`).join('')}</div>
+      <div class="pricing-grid">${plans.map(plan => {
+        const pro = plan.id === 'pro';
+        return `<article class="price-card${pro ? ' recommended selected' : ''}" data-plan-card="${plan.id}" aria-labelledby="plan-title-${plan.id}">
+        <h2 class="plan-title" id="plan-title-${plan.id}">${plan.name}</h2>
         <p class="plan-intro">${plan.intro}</p>
-        <p class="plan-price"><span>¥</span><strong>${plan.price}</strong><small>${plan.id === 'pro' ? '/ 年' : '/ 免费体验'}</small></p><p class="plan-note">${plan.note}</p>
-        <button type="button" class="button ${plan.id === 'pro' ? 'button-orange' : 'button-secondary'} plan-action" ${plan.id === 'pro' ? 'data-upgrade' : 'data-demo'}>${icon('windows')}<span>${plan.button}</span>${icon('chevron')}</button>
+        <div aria-live="${pro ? 'polite' : 'off'}"><p class="plan-price"><span>¥</span><strong>${pro ? '—' : plan.price}</strong><small>${pro ? '' : '/ 免费体验'}</small></p><p class="plan-note">${pro ? '正在获取套餐…' : plan.note}</p></div>
+        <button type="button" class="button ${pro ? 'button-orange' : 'button-secondary'} plan-action" ${pro ? 'data-upgrade disabled aria-haspopup="dialog" aria-controls="product-dialog"' : 'data-demo'}>${icon(pro ? 'crown' : 'windows')}<span>${pro ? '正在获取套餐…' : plan.button}</span>${icon(pro ? 'arrow' : 'chevron')}</button>
         <div class="plan-inclusions"><h3>包含以下功能</h3><ul class="plan-features">${plan.features.map(([text,enabled]) => `<li class="${enabled ? '' : 'unavailable'}"><span class="plan-feature-marker" aria-hidden="true">${icon(enabled ? 'check' : 'close')}</span>${enabled ? '' : '<span class="visually-hidden">不包含：</span>'}<span>${text}</span></li>`).join('')}</ul></div>
-      </article>`).join('')}</div>
-      <div class="membership-notes"><p class="commercial-note">${publicUrl(siteConfig.checkoutUrl) ? '正式价格、授权范围与服务条款以购买页面为准。' : '当前为方案预览，价格与权益为展示信息，购买入口暂未开放。'}</p><div class="pricing-bottom"><a href="/help/">先看看常见问题${icon('arrow')}</a></div></div>
+      </article>`;
+      }).join('')}</div>
+      <div class="membership-notes"><p class="commercial-note" data-catalog-status role="status">正在获取最新套餐…</p><button class="payment-text-button" type="button" data-catalog-retry hidden>重新加载套餐</button><p class="commercial-note">真实购买入口暂未开放。开发测试环境支持模拟支付。</p><div class="pricing-bottom"><a href="/help/">先看看常见问题${icon('arrow')}</a></div></div>
     </div>
     <ul class="membership-benefits" aria-label="专注时光产品与使用帮助">${advantages.map(([name,title,description]) => `<li><span class="membership-benefit-icon ${name}">${icon(name)}</span><div><h3>${title}</h3><p>${description}</p></div></li>`).join('')}</ul>
   </section>`;

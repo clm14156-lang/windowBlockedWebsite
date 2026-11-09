@@ -10,15 +10,32 @@
   --leading-page:1.25;--leading-section:1.3;--leading-title:1.4;--leading-lead:1.6;--leading-body:1.75;--leading-caption:1.6;
   --type-title-gap:1rem;--type-copy-gap:.5rem;
   --type-registration-title:1.875rem;
+  --type-login-link:.8125rem;--type-billing:1.125rem;
+  --type-account-email:1.75rem;--type-account-membership:2.125rem;--type-account-meta:1.125rem;
+  --type-security-title:1.375rem;
 }
+
+.security-header h2{font-size:var(--type-security-title);font-weight:600;line-height:1.5;color:var(--text-primary)}
+.security-modal{font-size:var(--type-caption);font-weight:400;line-height:1.65}
+.security-modal input,.security-button{font-family:var(--font-sans);font-size:var(--type-body);line-height:1.5}
+.security-field>span:first-child,.security-button,.security-code-button{font-weight:500}
+.security-notice p>strong{font-weight:500}
+.security-steps small,.security-hint,.security-device-copy p,.security-device-note,.security-current-tag{font-size:var(--type-small)}
+.security-code-button{font-size:var(--type-caption)}
+.security-result h3{font-size:var(--type-security-title);font-weight:600;line-height:1.5;color:var(--text-primary)}
+.security-risk-copy h3,.security-list-title,.security-device-copy h4{font-size:var(--type-body);font-weight:600;line-height:1.5}
+.security-risk-banner,.security-final-risk h3{font-size:var(--type-body);font-weight:600;line-height:1.65}
+.account-closure h2{font-size:var(--type-card);font-weight:600;line-height:1.5;color:var(--text-primary)}
+.account-closure p{font-size:var(--type-body);line-height:1.75;color:var(--text-body)}
+.account-closure .account-danger-outline{font-size:var(--type-body);font-weight:500}
 @media(max-width:1199px){
-  :root{--type-page:2.75rem;--type-section:2.25rem;--type-plan:1.625rem;--type-card:1.25rem;--type-feature:1.125rem;--type-lead:1.125rem;--type-price:3.5rem;--type-currency:1.5rem;--type-number:1.5rem}
+  :root{--type-page:2.75rem;--type-section:2.25rem;--type-plan:1.625rem;--type-card:1.25rem;--type-feature:1.125rem;--type-lead:1.125rem;--type-price:3.5rem;--type-currency:1.5rem;--type-number:1.5rem;--type-account-email:1.5rem;--type-account-membership:1.75rem;--type-account-meta:1rem}
 }
 @media(max-width:767px){
   :root{--type-page:2.25rem;--type-section:1.875rem;--type-plan:1.5rem;--type-card:1.125rem;--type-feature:1.125rem;--type-lead:1rem;--type-body:.9375rem;--type-caption:.8125rem;--type-button:.9375rem;--type-button-large:1rem;--type-brand:1.125rem;--type-modal:1.375rem;--type-modal-value:1.5rem;--type-price:3.25rem;--type-number:1.375rem;--type-title-gap:.75rem}
 }
 
-@media(max-width:767px){:root{--type-registration-title:1.5rem}}
+@media(max-width:767px){:root{--type-registration-title:1.5rem;--type-billing:1rem;--type-account-email:1.125rem;--type-account-membership:1.375rem;--type-account-meta:.875rem}}
 
 /* page */
 .hero-copy h1,
@@ -189,17 +206,13 @@
 
 /* activeNav */
 .nav-item.active{
-  font-size:var(--type-nav);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-primary);
+  font-size:var(--type-nav);font-weight:var(--weight-medium);line-height:1.4;letter-spacing:0;color:var(--text-primary);
 }
+.account-login,.trial-button{font-size:var(--type-nav);font-weight:var(--weight-medium);line-height:1.4;letter-spacing:0}
 
 /* selectedCharacter */
 .character-option[aria-pressed="true"] .character-option-name{
   font-size:var(--type-caption);font-weight:var(--weight-semibold);line-height:var(--leading-caption);letter-spacing:0;color:var(--text-accent);
-}
-
-/* badge */
-.recommend-badge{
-  font-size:var(--type-small);font-weight:var(--weight-semibold);line-height:1.5;letter-spacing:0;color:var(--text-accent);
 }
 
 /* step */
@@ -304,7 +317,44 @@
 #faq .help-category-copy>span,.personalization-benefit-copy p{margin-top:var(--type-copy-gap)}
 #blocking .section-kicker{letter-spacing:.08em}
 
-/* Account-registration prototype; no typography changes outside this dialog. */
+/* Account navigation and dashboard */
+.account-user-link{font-size:var(--type-nav);font-weight:var(--weight-semibold)}
+.account-nav-item{font-size:var(--type-body);font-weight:var(--weight-medium)}
+.account-nav-item[aria-current="page"],.account-value,.account-safe{font-weight:var(--weight-semibold)}
+.account-menu-profile strong,.account-page-heading p{font-size:var(--type-body)}
+.account-page-heading h1{
+  font-size:var(--type-page);font-weight:var(--weight-bold);line-height:var(--leading-section);letter-spacing:-.02em;
+}
+.account-accent-title,.account-identity h2,.account-order-amount,.account-security-level h2,.account-security-tips h2{
+  font-size:var(--type-card);line-height:var(--leading-title);
+}
+.account-row-copy h2,.account-row-copy h3,.account-benefits h3{font-size:var(--type-feature);line-height:var(--leading-title)}
+.account-menu-profile small,.account-row-copy p,.account-benefits p,.account-identity p,.account-id,.account-security-level p,.account-security-tips ul{
+  font-size:var(--type-caption);line-height:var(--leading-caption);
+}
+.account-badge{font-size:var(--type-caption);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
+.account-content .button{font-size:var(--type-caption)}
+.account-membership-label{font-weight:var(--weight-bold)}
+.account-membership-hero h2{font-size:var(--type-plan)}
+.account-identity h2{font-size:var(--type-account-email);font-weight:var(--weight-bold);line-height:var(--leading-title)}
+.account-id{font-size:var(--type-account-meta);line-height:var(--leading-caption)}
+.account-membership-title h2{font-size:var(--type-account-membership);font-weight:var(--weight-bold);line-height:1.35;letter-spacing:-.02em}
+.account-membership-copy>p{font-size:var(--type-account-meta);line-height:var(--leading-lead)}
+.account-membership-badge{font-size:var(--type-account-meta);font-weight:var(--weight-semibold);line-height:1.5}
+.account-membership-card .account-membership-upgrade{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:1.4}
+.account-sidebar .account-accent-title{font-size:var(--type-plan);font-weight:var(--weight-bold)}
+.account-sidebar .account-nav-item{font-size:var(--type-button-large);font-weight:var(--weight-medium)}
+.account-page-heading p{font-size:var(--type-lead)}
+.account-order-identity h2,.account-setting-copy h2{font-size:var(--type-plan);font-weight:var(--weight-bold);line-height:1.35;color:var(--text-primary)}
+.account-order-number{font-size:var(--type-body);line-height:var(--leading-caption);color:var(--text-body)}
+.account-order-times,.account-setting-copy p{font-size:var(--type-account-meta);font-weight:var(--weight-regular);line-height:1.7;color:var(--text-body)}
+.account-order-amount{font-size:var(--type-plan);font-weight:var(--weight-bold);line-height:1.3}
+.account-order-summary .account-badge{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:1.5}
+.account-setting-details .account-value{font-size:var(--type-lead);font-weight:var(--weight-medium);line-height:1.5;color:var(--text-primary)}
+.account-setting-details .button{font-size:var(--type-body);font-weight:var(--weight-medium);line-height:1.4}
+@media(max-width:370px){.account-row .account-value{font-size:var(--type-caption)}}
+
+/* Account-registration dialog */
 .registration-dialog .brand{font-size:var(--type-card)}
 .registration-dialog .registration-heading h2{font-size:var(--type-registration-title);font-weight:var(--weight-bold);line-height:1.3;letter-spacing:-.02em;color:var(--text-primary)}
 .registration-dialog .registration-heading p,.registration-dialog .registration-input-row input{font-size:var(--type-body);font-weight:var(--weight-regular);line-height:1.6;letter-spacing:0;color:var(--text-body)}
@@ -316,10 +366,28 @@
 .registration-dialog .registration-status{font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:1.5;letter-spacing:0;color:var(--text-accent)}
 .registration-dialog .registration-policy-panel h3{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-primary)}
 .registration-dialog .registration-submit{font-size:var(--type-button-large);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:#fff}
-.registration-dialog .registration-recovery-entry,
 .registration-dialog .recovery-back{
   font-size:var(--type-caption);
   line-height:var(--leading-caption);
   color:var(--text-body);
 }
-.registration-dialog [data-recovery-start]{font-weight:var(--weight-semibold);color:#fd7e05}
+
+.login-register,.login-link{font-size:var(--type-login-link);line-height:var(--leading-caption)}
+.login-link{font-weight:var(--weight-medium)}
+.login-register .login-link{font-weight:var(--weight-semibold)}
+
+/* Billing selector and simulated payment */
+.billing-option-label{font-size:var(--type-billing);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
+.payment-method,.payment-scan{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:var(--leading-title)}
+.payment-plan-note,.payment-account,.payment-timing,.payment-safety,.payment-text-button,.payment-sync{
+  font-size:var(--type-caption);line-height:var(--leading-caption);
+}
+.payment-heading h2{font-size:var(--type-modal);line-height:var(--leading-title)}
+.payment-heading p,.payment-success p,.payment-benefits{font-size:var(--type-body);line-height:var(--leading-caption)}
+.payment-order h3,.payment-methods h3,.payment-order-summary h4{font-size:var(--type-card);line-height:var(--leading-title)}
+.payment-total{font-size:var(--type-card);line-height:1.1;font-weight:var(--weight-semibold)}
+.payment-total strong{font-size:var(--type-section);font-weight:var(--weight-bold)}
+.payment-total small,.payment-code-frame figcaption,.payment-order-number{font-size:var(--type-small);line-height:var(--leading-caption)}
+.payment-error{font-size:var(--type-caption);line-height:var(--leading-caption)}
+.payment-mark{font-size:var(--type-body);font-weight:var(--weight-bold);line-height:1}
+.payment-code-art .payment-mark{font-size:var(--type-card)}

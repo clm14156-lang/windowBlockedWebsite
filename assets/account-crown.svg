@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 164">
+  <defs>
+    <linearGradient id="gold" x1="52" y1="25" x2="174" y2="132" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff4ce"/><stop offset=".45" stop-color="#ffd180"/><stop offset="1" stop-color="#fba231"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#ffe9ac"/><stop offset="1" stop-color="#f7921a"/>
+    </linearGradient>
+    <radialGradient id="pearl" cx=".36" cy=".3" r=".7">
+      <stop stop-color="#fff8d8"/><stop offset="1" stop-color="#ffb543"/>
+    </radialGradient>
+    <radialGradient id="shadow">
+      <stop stop-color="#dc7c1b" stop-opacity=".25"/><stop offset="1" stop-color="#dc7c1b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="114" cy="142" rx="91" ry="17" fill="url(#shadow)"/>
+  <g transform="rotate(8 110 82)">
+    <path fill="url(#gold)" stroke="#fff7db" stroke-width="1.5" d="M39 61c33 25 40 24 72-38 32 62 39 63 72 38l-18 62H57z"/>
+    <path fill="#ffdc96" opacity=".5" d="M111 23c-31 62-39 63-72 38l18 62h54z"/>
+    <path fill="#fff4cc" opacity=".65" d="M46 74c27 16 42 8 64-39L96 73C79 92 68 92 46 74Z"/>
+    <rect x="53" y="116" width="116" height="15" rx="5" fill="url(#edge)"/>
+    <path fill="#f69216" d="M108 75a4 4 0 0 1 6 0l9 11a5 5 0 0 1 0 6l-9 11a4 4 0 0 1-6 0l-9-11a5 5 0 0 1 0-6Z"/>
+    <path fill="#ffb939" d="m111 74 12 12a5 5 0 0 1 0 6l-12 12 4-15z"/>
+    <g fill="url(#pearl)"><circle cx="39" cy="61" r="8"/><circle cx="111" cy="23" r="10"/><circle cx="183" cy="61" r="8"/></g>
+  </g>
+  <path fill="#ffb354" opacity=".65" d="M25 92h14m-7-7v14m151-68h14m-7-7v14" stroke="#ffb354" stroke-width="2" stroke-linecap="round"/>
+</svg>

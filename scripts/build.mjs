@@ -1,7 +1,7 @@
 import { mkdir, cp, readFile, writeFile, rm, lstat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { pages, notFoundPage } from '../src/routes.js';
+import { pages, sitePages, notFoundPage } from '../src/routes.js';
 import { publicUrl, siteConfig } from '../src/site-config.js';
 import { renderDocument } from './document.mjs';
 const root = new URL('../', import.meta.url);
@@ -19,7 +19,7 @@ for (const entry of ['styles.css', 'styles', 'src', 'assets']) {
 const template = await readFile(new URL('index.html', root), 'utf8');
 await writeFile(new URL('dist/index.html', root), renderDocument(template, pages[0]));
 await writeFile(new URL('dist/404.html', root), renderDocument(template,notFoundPage));
-for (const page of pages) {
+for (const page of sitePages) {
   const directory = new URL(`dist${page.path}`, root);
   await mkdir(directory, { recursive: true });
   await writeFile(new URL('index.html', directory), renderDocument(template, page));
