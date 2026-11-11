@@ -63,7 +63,6 @@
 #floating .floating-card h3,
 #impact .impact-card-summary h3,
 .personalization-characters>h3,
-#faq .help-category-copy strong,
 #faq .faq-section-heading h2,
 #impact .impact-outro h3{
   font-size:var(--type-card);font-weight:var(--weight-semibold);line-height:var(--leading-title);letter-spacing:-.02em;color:var(--text-primary);
@@ -141,7 +140,6 @@
 .download-note,
 #download .download-note,
 .download-card-heading div>span,
-#faq .help-category-copy>span,
 #faq .faq-section-heading>span,
 .character-option-name,
 .dialog-note,
@@ -314,7 +312,7 @@
 .personalization-copy h2,
 #statistics .statistics-heading h2{margin-bottom:var(--type-title-gap)}
 #floating .floating-card h3,#impact .impact-card-summary h3,.impact-benefit h3,#floating .floating-benefits h3,#goals .goal-benefit h3,#statistics .stat-feature strong,#home .hero-benefits strong,#download .download-features h2,#pricing .membership-benefits h3,.personalization-characters>h3{margin-bottom:var(--type-copy-gap)}
-#faq .help-category-copy>span,.personalization-benefit-copy p{margin-top:var(--type-copy-gap)}
+.personalization-benefit-copy p{margin-top:var(--type-copy-gap)}
 #blocking .section-kicker{letter-spacing:.08em}
 
 /* Account navigation and dashboard */

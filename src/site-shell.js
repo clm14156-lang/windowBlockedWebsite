@@ -67,21 +67,18 @@ export function pricing() {
 }
 
 export function faq() {
-  const categories = [
-    { icon:'download', title:'下载与安装', description:['软件下载、开放状态','安装前的常见问题'], href:'/download/' },
-    { icon:'shield', title:'专注与屏蔽', description:['屏蔽设置、专注计时','与悬浮窗口说明'], question:2 },
-    { icon:'list', title:'目标与任务', description:['目标关联、查看任务','专注中的任务记录'], question:4 },
-    { icon:'chart', title:'数据与统计', description:['专注记录、趋势回顾','网页数据保存说明'], question:6 },
-  ];
   return `<section class="section faq-section" id="faq" aria-labelledby="faq-title">
     <div class="section-inner help-inner">
       <div class="help-intro">
-        <header class="page-heading help-heading"><span class="section-kicker">帮助中心</span><h1 id="faq-title">使用专注时光时，<span>有疑问？</span></h1><p>这里提供专注时光的使用指南和常见问题，<br/>帮助你快速解决在下载安装、网站屏蔽、任务管理和数据统计中遇到的问题。</p></header>
+        <header class="page-heading help-heading"><h1 id="faq-title">有什么可以<span>帮你？</span></h1><p>快速找到答案，解决使用中的常见问题。</p></header>
         <figure class="help-art" aria-hidden="true"><img src="/assets/helpbackground.png" alt="" width="1983" height="793" decoding="async" fetchpriority="high" draggable="false"/></figure>
       </div>
-      <nav class="help-categories" aria-label="帮助分类">${categories.map(category => `<a class="help-category" href="${category.href || '#faq-question-'+category.question}"${category.question ? ` data-help-question="faq-question-${category.question}" aria-controls="faq-question-${category.question}"` : ''}><span class="help-category-icon">${icon(category.icon)}</span><span class="help-category-copy"><strong>${category.title}</strong><span>${category.description.join('<br/>')}</span></span>${icon('chevron','help-category-arrow')}</a>`).join('')}</nav>
       <div class="faq-section-heading"><h2 id="faq-list-title">常见问题</h2><span>共 ${faqs.length} 个问题</span></div>
-      <div class="faq-list" aria-labelledby="faq-list-title">${faqs.map(([title,body],i) => `<details class="faq-item" id="faq-question-${i+1}"><summary><span>${title}</span><span class="faq-toggle">${icon('plus')}</span></summary><div class="faq-answer"><p>${body}</p></div></details>`).join('')}</div>
+      <div class="faq-list" role="group" aria-labelledby="faq-list-title">${faqs.map(([title,paragraphs], i) => `
+        <details class="faq-item" id="faq-question-${i+1}" name="help-faq">
+          <summary><span>${title}</span><span class="faq-toggle">${icon('plus','faq-plus')}${icon('minus','faq-minus')}</span></summary>
+          <div class="faq-answer">${paragraphs.map(paragraph => `<p>${paragraph}</p>`).join('')}</div>
+        </details>`).join('')}</div>
     </div>
   </section>`;
 }

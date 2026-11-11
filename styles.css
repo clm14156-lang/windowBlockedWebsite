@@ -1,7 +1,7 @@
 @charset "UTF-8";
 :root{
   color-scheme:light;
-  --bg:#fbfbfb;--section-bg:#fbfbfb;--surface:#fff;--text:#242b35;--muted:#6b7280;--faint:#6b7280;
+  --bg:#fbfbfb;--section-bg:#fafafa;--surface:#fff;--text:#242b35;--muted:#6b7280;--faint:#6b7280;
   --orange:#bd572c;--orange-light:#ffa66e;--action-orange:#fd7e05;--action-orange-hover:#ed7200;--line:#e8eaed;--radius:20px;--nav-height:76px;
   --font:var(--font-sans);--ease:cubic-bezier(.22,1,.36,1);--duration:220ms;
 }
@@ -93,7 +93,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 @media(max-width:1200px){
   .setting-grid{grid-template-columns:minmax(300px,.38fr) minmax(0,.62fr);gap:32px}.setting-step{gap:14px}.setting-step-card{grid-template-columns:44px minmax(0,1fr);padding:18px 14px;gap:10px;min-height:clamp(144px,15vw,180px);border-radius:20px}.setting-step-icon{width:44px;height:44px}.setting-step-icon .icon{width:25px;height:25px}.setting-steps::before{top:calc(clamp(144px,15vw,180px)/2 + 4px);bottom:calc(clamp(144px,15vw,180px)/2)}
 }
-.blocking-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:linear-gradient(115deg,#edf4fc40,transparent 48%),linear-gradient(245deg,#fff2e640,transparent 52%),#fbfbfb}
+.blocking-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:var(--section-bg)}
 #blocking .blocking-inner{display:block}
 #blocking .blocking-heading{max-width:920px;margin:0 auto 52px}
 #blocking .section-kicker{color:var(--orange)}
@@ -120,7 +120,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 #blocking .blocking-benefit-icon.purple{background:#f1edfb;color:#9a78d5}
 .feature-checklist{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}.feature-checklist li{display:flex;gap:10px;align-items:center}.feature-checklist .icon{width:16px;height:16px;color:#ca825e}
 /* Three focus modes, using the original software artwork in a shared product flow. */
-#floating{--text:#0d2346;--muted:#718098;--orange:#ff7d28;color:var(--text);background:linear-gradient(120deg,#eaf5ff99,transparent 48%),radial-gradient(ellipse at 100% 0,#fff0df99,transparent 44%),linear-gradient(0deg,#fff8f180,transparent 38%),#fbfcfe}
+#floating{--text:#0d2346;--muted:#718098;--orange:#ff7d28;color:var(--text);background:var(--section-bg)}
 #floating .floating-layout{width:min(1536px,calc(100% - 72px))}
 #floating .floating-copy{max-width:none;text-align:center;margin:0 auto var(--section-gap)}
 #floating .section-kicker{display:inline-flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px}
@@ -135,7 +135,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 #floating .floating-card h3{margin:3px 0 8px}
 #floating .floating-card-heading p{margin:0}
 #floating .floating-visual-wrap{position:relative;margin-top:auto}
-#floating .floating-card-visual{display:grid;place-items:center;width:100%;aspect-ratio:6/5;margin:0;padding:12px;border-radius:17px;background:linear-gradient(135deg,#d1ebff,#b1d4f8 65%,#a4cbf7)}
+#floating .floating-card-visual{display:grid;place-items:center;width:100%;aspect-ratio:6/5;margin:0;padding:12px;border-radius:17px;background:#e9f4ff}
 #floating .floating-card-visual img{display:block;width:100%;height:100%;min-width:0;min-height:0;object-fit:contain}
 #floating [data-floating-card="focus"] .floating-card-visual img{border-radius:10px}
 #floating .floating-flow-arrow{position:absolute;z-index:3;left:calc(100% - 6px);top:38%;width:calc(var(--floating-card-gap) + 52px);height:56px;color:var(--orange);pointer-events:none}
@@ -179,7 +179,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
   #floating .floating-benefit-icon{flex-basis:50px;width:50px;height:50px}
 }
 /* Goals: the three original software windows stay visible as a single composition. */
-.goals-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:linear-gradient(115deg,#edf4fc33,transparent 48%),linear-gradient(245deg,#fff2e633,transparent 52%),#fbfbfb}
+.goals-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:var(--section-bg)}
 #goals .goals-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(40px,5vw,96px);align-items:center;width:min(1760px,calc(100% - 96px))}
 #goals .goals-heading{order:2;min-width:0}
 #goals .section-kicker{margin-bottom:22px}
@@ -218,7 +218,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
   #goals .goals-quick figcaption{font-size:clamp(9px,2.5vw,14px);padding:8px 10px 0}#goals .goals-floating{border-radius:12px}#goals .goals-quick{border-radius:10px}
 }
 /* Statistics: one centered software window with the same typography as other features. */
-.statistics-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:linear-gradient(110deg,#edf4fc33,transparent 48%),linear-gradient(250deg,#fff1e566,transparent 54%),#fbfbfb}
+.statistics-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:var(--section-bg)}
 #statistics .statistics-layout{display:block}
 #statistics .statistics-heading{max-width:1040px;margin:0 auto 30px}
 #statistics .statistics-copy-panels{display:grid;text-align:center}
@@ -260,7 +260,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 #statistics .statistics-note{text-align:center;margin-top:18px}
 #statistics [data-stat-status].is-error{position:static!important;display:block;width:auto;height:auto;margin:16px 0 0;overflow:visible;clip:auto;white-space:normal;color:#b96133;text-align:center}
 /* Three illustrated values retain the existing light, warm section background. */
-.impact-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;border-top:0;color:var(--text);background:linear-gradient(110deg,#e7f2fc99,transparent 43%),linear-gradient(250deg,#fff0dfb3,transparent 52%),#fbfbfb}
+.impact-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;border-top:0;color:var(--text);background:var(--section-bg)}
 .impact-inner{width:min(1320px,calc(100% - 64px));margin:auto}.impact-copy{text-align:center}
 #impact .section-kicker{display:inline-flex;align-items:center;justify-content:center;gap:14px;margin:0 0 18px}
 #impact .section-kicker::before{content:"";display:block;width:3px;height:1.05em;border-radius:2px;background:var(--orange)}
@@ -302,7 +302,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 #closing .closing-download:hover{background:#ff8b3c;box-shadow:0 11px 28px #f77d282b;transform:translateY(-2px)}
 #closing .closing-download:active{transform:none}
 /* Dedicated pages use the same typography and surfaces. */.page-heading{max-width:720px;margin:0 auto 54px;text-align:center}.page-heading h1{margin:0 0 20px}.page-heading>p{margin:0}.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:auto}.price-card{display:flex;flex-direction:column;border:1px solid #e3e6ea;border-radius:20px;background:#fff;padding:32px;position:relative}.price-card.recommended{border-color:#e8bc9e;box-shadow:0 8px 32px #a5662e08}.price-card.selected{outline:1px solid #e8bc9e}
-.plan-select{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0;background:none;text-align:left}.selection-mark{width:15px;height:15px;border:1px solid #d8dee6;border-radius:50%}.plan-intro{margin:16px 0 24px}.plan-price{display:flex;align-items:baseline;gap:5px;margin:0}.plan-price>small{margin-left:8px}.plan-note{margin:8px 0 28px}.plan-features{list-style:none;padding:24px 0 0;margin:0 0 30px;border-top:1px solid var(--line);display:grid;gap:14px}.plan-features li{display:flex;align-items:center;gap:10px}.plan-features .icon{color:#bc8867;width:17px;height:17px}.plan-features .unavailable{color:#b5bac3}.plan-features .unavailable .icon{color:#ccd1d8}.plan-action{margin-top:auto;width:100%}.commercial-note{text-align:center;margin:24px auto}.pricing-bottom{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:36px}.pricing-bottom a{display:flex;align-items:center;gap:6px;color:#bb714d}.pricing-bottom .icon{width:15px;height:15px}.help-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:96px}.help-heading{text-align:left;margin:0}.help-heading .text-link{margin-top:32px}.faq-list{border-top:1px solid var(--line)}.faq-item{border-bottom:1px solid var(--line)}.faq-item summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;cursor:pointer;list-style:none}.faq-item summary::-webkit-details-marker{display:none}.faq-toggle{color:#9aa2ac;display:flex;transition:transform .2s}.faq-toggle .icon{width:17px;height:17px}.faq-item[open] .faq-toggle{transform:rotate(45deg)}.faq-answer{padding:0 30px 24px 0}.faq-answer p{margin:0}.download-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:80px;align-items:center}.download-copy h1{margin:0 0 24px}.download-copy>p{margin:0}.download-card{margin-top:32px;max-width:390px;padding:24px;border:1px solid var(--line);border-radius:16px;background:#fff}.download-card-heading{display:flex;align-items:center;gap:14px;margin-bottom:22px}.download-platform{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#f4f5f7;color:#5b6674}.download-platform .icon{width:23px;height:23px}.download-card-heading strong{display:block}.download-card>.button{width:100%}.download-card>.text-link{display:flex;margin:16px auto 0}.download-note{text-align:center;margin:16px 0 0}.download-preview{min-width:0}.download-preview>.hero-focus{width:100%;max-width:none}.download-preview>.product-caption{display:block;margin-top:22px}.download-guide{margin-top:80px;border-top:1px solid var(--line);padding-top:36px}.download-guide h2{margin:0 0 28px}.download-guide ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:36px}.download-guide li{display:flex;gap:16px}.download-guide h3{margin:0 0 8px}.download-guide p{margin:0}
+.plan-select{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0;background:none;text-align:left}.selection-mark{width:15px;height:15px;border:1px solid #d8dee6;border-radius:50%}.plan-intro{margin:16px 0 24px}.plan-price{display:flex;align-items:baseline;gap:5px;margin:0}.plan-price>small{margin-left:8px}.plan-note{margin:8px 0 28px}.plan-features{list-style:none;padding:24px 0 0;margin:0 0 30px;border-top:1px solid var(--line);display:grid;gap:14px}.plan-features li{display:flex;align-items:center;gap:10px}.plan-features .icon{color:#bc8867;width:17px;height:17px}.plan-features .unavailable{color:#b5bac3}.plan-features .unavailable .icon{color:#ccd1d8}.plan-action{margin-top:auto;width:100%}.commercial-note{text-align:center;margin:24px auto}.pricing-bottom{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:36px}.pricing-bottom a{display:flex;align-items:center;gap:6px;color:#bb714d}.pricing-bottom .icon{width:15px;height:15px}.faq-list{border-top:1px solid var(--line)}.faq-item{border-bottom:1px solid var(--line)}.faq-item summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;cursor:pointer;list-style:none}.faq-item summary::-webkit-details-marker{display:none}.faq-toggle{color:#9aa2ac;display:flex}.faq-toggle .icon{width:17px;height:17px}.faq-answer{padding:0 30px 24px 0}.faq-answer p{margin:0}.download-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:80px;align-items:center}.download-copy h1{margin:0 0 24px}.download-copy>p{margin:0}.download-card{margin-top:32px;max-width:390px;padding:24px;border:1px solid var(--line);border-radius:16px;background:#fff}.download-card-heading{display:flex;align-items:center;gap:14px;margin-bottom:22px}.download-platform{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#f4f5f7;color:#5b6674}.download-platform .icon{width:23px;height:23px}.download-card-heading strong{display:block}.download-card>.button{width:100%}.download-card>.text-link{display:flex;margin:16px auto 0}.download-note{text-align:center;margin:16px 0 0}.download-preview{min-width:0}.download-preview>.hero-focus{width:100%;max-width:none}.download-preview>.product-caption{display:block;margin-top:22px}.download-guide{margin-top:80px;border-top:1px solid var(--line);padding-top:36px}.download-guide h2{margin:0 0 28px}.download-guide ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:36px}.download-guide li{display:flex;gap:16px}.download-guide h3{margin:0 0 8px}.download-guide p{margin:0}
 .not-found-section{text-align:center}.not-found-section .button{margin-top:20px}
 /* Footer and real, keyboard-accessible product dialogs. */
 .site-footer{border-top:1px solid var(--line);padding:40px max(32px,calc((100% - 1160px)/2)) 24px;background:var(--bg)}.footer-main{display:flex;align-items:flex-start;justify-content:space-between;gap:36px}.footer-brand p{margin:12px 0 0}.footer-links{display:flex;gap:24px;align-items:center;padding-top:8px;flex-wrap:wrap}.footer-links a,.footer-links button{background:none;padding:0}.footer-links a:hover,.footer-links button:hover{color:#b36c48}.footer-bottom{display:flex;justify-content:space-between;margin-top:40px}.footer-bottom p{margin:0}
@@ -411,7 +411,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
   #blocking .blocking-benefits{width:100%;gap:24px;margin-top:34px}#blocking .blocking-benefit-icon{width:48px;height:48px}#blocking .blocking-benefit-icon .icon{width:24px;height:24px}
   #statistics .statistics-heading{margin-bottom:26px}#statistics .statistics-showcase{--stat-card-width:min(640px,calc(100vw - 40px));width:100%;max-width:640px}#statistics .statistics-slide{border-radius:11px}#statistics .statistics-navigation{gap:17px;margin-top:16px}#statistics .stat-features{grid-template-columns:1fr;gap:24px;max-width:430px;margin:30px auto 0}#statistics .stat-feature{gap:16px;padding:0;border-radius:10px}#statistics .stat-feature+.stat-feature{border:0;border-radius:10px}.impact-benefits{grid-template-columns:1fr;gap:26px;max-width:390px;margin:34px auto 0}.impact-benefit h3{margin-bottom:5px}.impact-benefit p br{display:none}
   #impact .section-kicker{gap:10px;margin-bottom:18px}#impact .impact-copy h2{margin-bottom:20px}#impact .impact-card{border-radius:20px}#impact .impact-outro{max-width:460px;margin-top:34px}
-  #closing .closing-inner{width:calc(100% - 40px)}#closing h2{margin-bottom:18px}#closing p{max-width:480px;margin:auto}#closing .closing-download{min-width:0;min-height:56px;margin-top:28px;padding:13px 25px;gap:11px}#closing .closing-download .icon{width:21px;height:21px}#closing .closing-download>.icon:last-child{width:19px;height:19px}.page-heading{margin-bottom:36px}.pricing-grid{max-width:460px;grid-template-columns:1fr;gap:20px}.price-card{padding:28px}.commercial-note{max-width:320px}.pricing-bottom{gap:8px;flex-wrap:wrap}.help-layout{grid-template-columns:1fr;gap:28px}.help-heading .text-link{margin-top:22px}.faq-item summary{padding:20px 0}
+  #closing .closing-inner{width:calc(100% - 40px)}#closing h2{margin-bottom:18px}#closing p{max-width:480px;margin:auto}#closing .closing-download{min-width:0;min-height:56px;margin-top:28px;padding:13px 25px;gap:11px}#closing .closing-download .icon{width:21px;height:21px}#closing .closing-download>.icon:last-child{width:19px;height:19px}.page-heading{margin-bottom:36px}.pricing-grid{max-width:460px;grid-template-columns:1fr;gap:20px}.price-card{padding:28px}.commercial-note{max-width:320px}.pricing-bottom{gap:8px;flex-wrap:wrap}.faq-item summary{padding:20px 0}
   .download-layout{grid-template-columns:1fr;gap:44px}.download-card{max-width:none}.download-preview{width:calc(100% - 12px);margin:auto}.download-guide{margin-top:48px;padding-top:28px}.download-guide ol{grid-template-columns:1fr;gap:24px}.download-guide h3{margin-bottom:5px}
   .site-footer{padding:30px 20px 22px}.footer-main{flex-direction:column;gap:28px}.footer-links{padding:0;gap:18px;flex-wrap:wrap}.footer-bottom{margin-top:30px}.dialog-shell{padding:30px 24px}.demo-clock{font-size:58px}.demo-controls .button{padding:10px 18px}.back-top{right:16px;bottom:16px;width:32px;height:32px}
 }
@@ -420,7 +420,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 @media(max-width:370px){#impact .impact-card-body{padding:14px 16px 18px}#impact .impact-card-summary{grid-template-columns:48px minmax(0,1fr);gap:12px}#impact .impact-card-icon{width:48px;height:48px}#impact .impact-card-icon .icon{width:28px;height:28px}#impact .impact-points{padding:14px}}
 @media(max-width:370px){#closing .closing-download{padding:12px 20px;min-height:52px}}
 /* Personalization: centered copy, wide paired scenes and four original characters. */
-.personalization-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:linear-gradient(115deg,#edf4fc80,transparent 48%),radial-gradient(ellipse at 100% 0,#fff0dd99,transparent 48%),#fbfcfe}
+.personalization-section{--text:#0d2346;--muted:#64758c;--orange:#ff7d28;color:var(--text);background:var(--section-bg)}
 .personalization-inner{width:min(1280px,calc(100% - 80px))}
 .personalization-layout{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr);grid-template-areas:"intro showcase" "characters showcase";gap:40px;align-items:start}
 #personalization .personalization-copy{grid-area:intro;max-width:none;text-align:left;margin:0}
