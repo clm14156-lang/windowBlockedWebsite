@@ -164,7 +164,7 @@ export function createWebsiteSession({ accountApiBaseUrl, websiteOrigin }) {
         const deviceId = cookieValue(req, deviceCookie) || randomUUID();
         const device = { installationId: deviceId, name: '专注时光官网', operatingSystem: 'Web', clientVersion: '1.0' };
         const data = await upstream(`auth/${operation}`, operation === 'register'
-          ? { email: email.trim(), password, challengeId: body.challengeId, code: body.code, device }
+          ? { email: email.trim(), password, challengeId: body.challengeId, code: body.code, device, source: 'website' }
           : { email: email.trim(), password, device });
         const next = tokens(data);
         if (res.destroyed) {
@@ -180,7 +180,11 @@ export function createWebsiteSession({ accountApiBaseUrl, websiteOrigin }) {
         }
         const lifetime = remember ? Math.ceil((next.expires - Date.now()) / 1000) : undefined;
         res.setHeader('Set-Cookie', [cookie(sessionCookie, nextId, lifetime), cookie(deviceCookie, deviceId, 31536000)]);
-        return json(res, operation === 'register' ? 201 : 200, { user, expiresAtUtc: new Date(next.expires).toISOString() });
+        return json(res, operation === 'register' ? 201 : 200, {
+          user,
+          expiresAtUtc: new Date(next.expires).toISOString(),
+          ...(operation === 'register' && data.user.membershipStatus && { membership: data.user.membershipStatus }),
+        });
       }
       if (operation === 'logout') {
         res.setHeader('Set-Cookie', cookie(sessionCookie, '', 0));

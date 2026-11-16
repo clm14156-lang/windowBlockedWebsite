@@ -54,8 +54,8 @@ export function accountMembershipState(status, now = Date.now()) {
   const remainingDays = Math.max(1, Math.ceil((expires - now) / 86400000));
   if (status.isTrial === true) {
     if (!Number.isFinite(starts) || starts >= expires) return unavailable;
-    const days = Math.ceil((expires - starts) / 86400000);
-    return { type: 'trial', title: `专业版 · ${days}天体验`, badge: '体验中', expiresAtUtc: status.expiresAtUtc, remainingDays };
+    const durationDays = Math.ceil((expires - starts) / 86400000);
+    return { type: 'trial', title: '专业版·体验会员', expiresAtUtc: status.expiresAtUtc, remainingDays, durationDays };
   }
   if (!['monthly', 'annual'].includes(status.plan)) return unavailable;
   return { type: status.plan, title: `专业版 · ${billingPlans[status.plan].name}`, badge: '有效中', expiresAtUtc: status.expiresAtUtc, remainingDays };
@@ -69,7 +69,7 @@ export function renderAccountMembership(status, now = Date.now()) {
   return `<section class="account-membership-card is-${view.type}" data-account-membership aria-label="会员状态" aria-live="polite">
     <span class="account-membership-icon" aria-hidden="true">${icon('crown')}</span>
     <div class="account-membership-copy"><div class="account-membership-title"><h2>${view.title}</h2>${view.badge ? `<span class="account-membership-badge">${view.badge}</span>` : ''}</div>
-      ${view.expiresAtUtc ? `<p class="account-membership-expiry">${icon('calendar')}<span>到期时间：<time datetime="${escapeText(view.expiresAtUtc)}">${membershipDate(view.expiresAtUtc)}</time></span><span class="account-membership-remaining">（剩余${view.remainingDays}天）</span></p>` : `<p>${view.subtitle}</p>`}
+      ${view.expiresAtUtc ? `<p class="account-membership-expiry">${icon('calendar')}<span>${view.type === 'trial' ? '体验截止' : '到期时间'}：<time datetime="${escapeText(view.expiresAtUtc)}">${membershipDate(view.expiresAtUtc)}</time></span><span class="account-membership-remaining">（剩余${view.remainingDays}天）</span></p>` : `<p>${view.subtitle}</p>`}
     </div>
     ${pro ? '<img class="account-membership-crown" src="/assets/huangguan.png" width="432" height="350" alt="" />' : view.type === 'free' ? `<a class="button account-membership-upgrade" href="/membership/">开通专业版${icon('arrow')}</a>` : ''}
   </section>`;
@@ -256,7 +256,8 @@ export function initAccountCenter({ toast, showSecurity }) {
       main.hidden = !profile;
       if (profile) updateSection();
     }
-    renderMembership();
+    if (profile && session.membership) receiveMembership(session.membership);
+    else renderMembership();
     if (profile) void refreshMembership();
   }
 

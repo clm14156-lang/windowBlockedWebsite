@@ -73,12 +73,16 @@ export function faq() {
         <header class="page-heading help-heading"><h1 id="faq-title">有什么可以<span>帮你？</span></h1><p>快速找到答案，解决使用中的常见问题。</p></header>
         <figure class="help-art" aria-hidden="true"><img src="/assets/helpbackground.png" alt="" width="1983" height="793" decoding="async" fetchpriority="high" draggable="false"/></figure>
       </div>
-      <div class="faq-section-heading"><h2 id="faq-list-title">常见问题</h2><span>共 ${faqs.length} 个问题</span></div>
+      <div class="faq-section-heading"><h2 id="faq-list-title">常见问题</h2></div>
       <div class="faq-list" role="group" aria-labelledby="faq-list-title">${faqs.map(([title,paragraphs], i) => `
         <details class="faq-item" id="faq-question-${i+1}" name="help-faq">
           <summary><span>${title}</span><span class="faq-toggle">${icon('plus','faq-plus')}${icon('minus','faq-minus')}</span></summary>
           <div class="faq-answer">${paragraphs.map(paragraph => `<p>${paragraph}</p>`).join('')}</div>
         </details>`).join('')}</div>
+      <section class="help-support" aria-labelledby="help-support-title">
+        <h2 id="help-support-title">仍然需要帮助？</h2>
+        <button type="button" data-help-contact aria-haspopup="dialog" aria-controls="product-dialog">联系我们</button>
+      </section>
     </div>
   </section>`;
 }

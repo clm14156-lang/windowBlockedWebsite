@@ -140,7 +140,6 @@
 .download-note,
 #download .download-note,
 .download-card-heading div>span,
-#faq .faq-section-heading>span,
 .character-option-name,
 .dialog-note,
 .dialog-summary p,
@@ -360,6 +359,18 @@
 .registration-dialog .registration-input-row input::placeholder{color:var(--text-caption);opacity:1}
 .registration-dialog .registration-agreement,.registration-dialog .registration-policy-panel p{font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:1.6;letter-spacing:0;color:var(--text-body)}
 .registration-dialog .registration-send,.registration-dialog .registration-agreement button,.registration-dialog .registration-policy-panel button{font-size:var(--type-caption);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-accent)}
+.registration-dialog .registration-send[data-registration-send]{font-weight:var(--weight-regular)}
+.dialog-shell .registration-success-summary h2{font-size:var(--type-section);font-weight:var(--weight-bold);line-height:1.2;color:var(--text-primary)}
+@media(max-width:480px){.dialog-shell .registration-success-summary h2{font-size:var(--type-registration-title)}}
+.registration-success-summary p{font-size:var(--type-lead);line-height:var(--leading-title);color:var(--text-body)}
+.registration-success-later{font-size:var(--type-body)}
+#faq .help-support h2{font-size:var(--type-feature);font-weight:var(--weight-semibold);line-height:var(--leading-title);color:var(--text-primary)}
+#faq .help-support button{font-size:var(--type-body);font-weight:var(--weight-semibold)}
+.help-contact-dialog .help-contact-heading h2{font-size:var(--type-registration-title);font-weight:var(--weight-bold);line-height:var(--leading-title);color:var(--text-primary)}
+.help-contact-dialog h3{font-size:var(--type-feature);font-weight:var(--weight-semibold);line-height:var(--leading-title);color:var(--text-primary)}
+.help-contact-dialog p{font-size:var(--type-body);line-height:var(--leading-lead);color:var(--text-body)}
+.help-contact-dialog .help-contact-qr span{font-size:var(--type-small);font-weight:var(--weight-semibold);color:var(--text-primary)}
+.help-contact-dialog .help-contact-email p{font-weight:var(--weight-semibold);color:var(--action-orange)}
 .registration-dialog .registration-error{font-size:var(--type-small);font-weight:var(--weight-regular);line-height:1.5;letter-spacing:0;color:#c14132}
 .registration-dialog .registration-status{font-size:var(--type-caption);font-weight:var(--weight-regular);line-height:1.5;letter-spacing:0;color:var(--text-accent)}
 .registration-dialog .registration-policy-panel h3{font-size:var(--type-body);font-weight:var(--weight-semibold);line-height:1.4;letter-spacing:0;color:var(--text-primary)}

@@ -1,5 +1,6 @@
 import { brand, icon } from './icons.js';
 import { AccountApiError, requestAccount } from './account-api.js';
+import { accountMembershipState } from './account-center.js';
 
 export function field(name, label, leadingIcon, type = 'text', trailing = '', prefix = 'register', options = {}) {
   const id = `${prefix}-${name}`;
@@ -29,7 +30,7 @@ export function renderRegistration() {
     <header class="registration-heading"><h2 id="dialog-title">注册账号</h2><p id="registration-subtitle">创建账号，同步你的专注记录与设置</p></header>
     <form class="registration-form" id="registration-form" method="dialog" novalidate>
       ${field('account', '邮箱', 'mail', 'email')}
-      ${field('code', '验证码', 'shield', 'text', '<button type="button" class="registration-send" data-registration-send>发送验证码</button>')}
+      ${field('code', '验证码', 'shield', 'text', '<button type="button" class="registration-send" data-registration-send disabled>发送验证码</button>')}
       ${field('password', '密码', 'lock', 'password', toggle('password', '密码'))}
       ${field('confirmation', '确认密码', 'lock', 'password', toggle('confirmation', '确认密码'))}
       <p class="registration-status" role="status" aria-live="polite" data-registration-status hidden></p>
@@ -41,6 +42,23 @@ export function renderRegistration() {
       <button type="submit" class="button registration-submit">注册并开始体验</button>
     </form>
   </div>`;
+}
+
+export function renderRegistrationSuccess(membership) {
+  const serverTime = Date.parse(membership?.serverTimeUtc);
+  const status = Number.isFinite(serverTime) ? accountMembershipState(membership, serverTime) : null;
+  const days = status?.type === 'trial' ? status.durationDays : 0;
+  return `<section class="registration-success">
+    <header class="registration-success-summary">
+      <span class="registration-success-symbol" aria-hidden="true">${icon('check')}</span>
+      <div>
+        <h2 id="dialog-title" tabindex="-1" data-dialog-focus>注册成功</h2>
+        <p id="registration-success-subtitle">${days ? `已自动登录，并赠送 <strong>${days} 天</strong>高级会员体验` : '已自动登录。暂未确认体验会员状态。'}</p>
+      </div>
+    </header>
+    <button type="button" class="button registration-submit" data-dialog-close>${days ? '立即开始体验' : '完成'}</button>
+    ${days ? '<button type="button" class="registration-success-later" data-dialog-close>稍后再说</button>' : ''}
+  </section>`;
 }
 
 export function emailError(input) {
@@ -114,7 +132,7 @@ export function initRegistrationForm(form, {
   function tick() {
     if (disposed) return;
     const remaining = Math.max(0, Math.ceil((expires - now()) / 1000));
-    send.disabled = Boolean(pending) || remaining > 0;
+    send.disabled = Boolean(pending) || remaining > 0 || Boolean(emailError(fields.account));
     send.textContent = pending === 'send' ? '发送中…' : remaining ? `${remaining}秒后重发` : '发送验证码';
     if (!remaining && timer !== null) { cancel(timer); timer = null; }
   }
@@ -186,6 +204,7 @@ export function initRegistrationForm(form, {
         fields.code.value = '';
         error('code');
       }
+      tick();
     }
   }
   async function submit(event) {
@@ -218,6 +237,7 @@ export function initRegistrationForm(form, {
   form.addEventListener('input', input);
   form.addEventListener('change', input);
   form.addEventListener('submit', submit);
+  tick();
   return {
     destroy() {
       if (disposed) return;

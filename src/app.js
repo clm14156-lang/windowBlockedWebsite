@@ -8,8 +8,8 @@ import { initHeroTheme } from './hero-theme.js';
 import { personalizationCharacters } from './personalization-preview.js';
 import { initPersonalizationTimer } from './personalization-timer.js';
 import { initHeroScrollShowcase } from './hero-scroll-showcase.js';
-import { initHelpCenter } from './help-center.js';
-import { renderRegistration, initRegistrationForm, renderPasswordRecovery, initPasswordRecovery } from './registration.js';
+import { initHelpCenter, renderHelpContact } from './help-center.js';
+import { renderRegistration, initRegistrationForm, renderRegistrationSuccess, renderPasswordRecovery, initPasswordRecovery } from './registration.js';
 import { renderLogin, initLoginForm } from './login.js';
 import { initAccountCenter } from './account-center.js';
 import { renderAccountSecurity, initAccountSecurity } from './account-security.js';
@@ -47,6 +47,7 @@ function toast(message) {
 }
 
 const dialog = $('#product-dialog');
+const accountFormKinds = new Set(['registration', 'login']);
 let lastFocused;
 let dialogKind = '';
 let dialogController = null;
@@ -55,12 +56,14 @@ function openDialog(kind, content) {
   dialogController?.destroy();
   dialogController = null;
   dialogKind = kind;
-  const accountForm = kind === 'registration' || kind === 'login';
-  dialog.classList.toggle('registration-dialog', accountForm);
+  const accountDialog = accountFormKinds.has(kind) || kind === 'registration-success';
+  dialog.classList.toggle('registration-dialog', accountDialog);
+  dialog.classList.toggle('registration-success-dialog', kind === 'registration-success');
+  dialog.classList.toggle('help-contact-dialog', kind === 'help-contact');
   dialog.classList.toggle('login-dialog', kind === 'login');
   dialog.classList.toggle('membership-payment-dialog', kind === 'payment');
   dialog.classList.toggle('account-security-dialog', kind === 'security');
-  if (accountForm) dialog.setAttribute('aria-describedby', `${kind}-subtitle`);
+  if (accountDialog || kind === 'help-contact') dialog.setAttribute('aria-describedby', `${kind}-subtitle`);
   else if (kind === 'payment') dialog.setAttribute('aria-describedby', 'payment-subtitle');
   else dialog.removeAttribute('aria-describedby');
   $('#dialog-content').innerHTML = content;
@@ -86,11 +89,13 @@ function showSecurity(kind, profile) {
   });
 }
 
-dialog.addEventListener('cancel', event => { if (dialogController?.canClose?.() === false) event.preventDefault(); });
+dialog.addEventListener('cancel', event => {
+  if (accountFormKinds.has(dialogKind) || dialogController?.canClose?.() === false) event.preventDefault();
+});
 dialog.addEventListener('close', () => {
   dialogController?.destroy();
   dialogController = null;
-  dialog.classList.remove('registration-dialog', 'login-dialog', 'membership-payment-dialog', 'account-security-dialog');
+  dialog.classList.remove('registration-dialog', 'registration-success-dialog', 'help-contact-dialog', 'login-dialog', 'membership-payment-dialog', 'account-security-dialog');
   dialog.removeAttribute('aria-describedby');
   dialogKind = '';
   document.body.style.overflow = '';
@@ -98,7 +103,7 @@ dialog.addEventListener('close', () => {
   if (lastFocused?.isConnected) lastFocused.focus({ preventScroll: true });
 });
 dialog.addEventListener('click', event => {
-  if (event.target !== dialog) return;
+  if (event.target !== dialog || accountFormKinds.has(dialogKind)) return;
   const bounds = dialog.getBoundingClientRect();
   if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
 });
@@ -121,10 +126,9 @@ function showRegistration(startInRecovery = false) {
   openDialog('registration', renderRegistration() + renderPasswordRecovery());
   const registration = initRegistrationForm($('#registration-form'), {
     onSuccess: session => {
-      lastFocused = null;
-      closeDialog();
-      account.signIn(session);
-      toast('注册成功，已自动登录');
+      account.updateSession(session);
+      lastFocused = $('.account-user-link');
+      openDialog('registration-success', renderRegistrationSuccess(session.membership));
     },
   });
   const recovery = initPasswordRecovery(dialog);
@@ -230,6 +234,7 @@ document.addEventListener('click', event => {
   if (target.matches('[data-registration]')) showRegistration();
   else if (target.matches('[data-account-login]')) showLogin();
   else if (target.matches('[data-login-recovery]')) showRegistration(true);
+  else if (target.matches('[data-help-contact]')) openDialog('help-contact', renderHelpContact());
   else if (target.matches('[data-demo]')) showDemo(target.dataset.demo);
   else if (target.matches('[data-dialog-close]')) closeDialog();
   else if (target.matches('[data-upgrade]')) void showUpgrade(target);
